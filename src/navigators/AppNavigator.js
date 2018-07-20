@@ -1,30 +1,40 @@
-/*import { createSwitchNavigator, createStackNavigator } from 'react-navigation';
-import LoginForm from '../components/LoginForm';
-import EmployeeList from '../components/EmployeeList';
-import EmployeeCreate from '../components/EmployeeCreate';
-import EmployeeEdit from '../components/EmployeeEdit';
-import AuthLoadingScreen from '../components/AuthLoadingScreen';
+import {
+  createSwitchNavigator,
+  createStackNavigator,
+  createBottomTabNavigator
+} from 'react-navigation';
+import StartUpScreen from '../screens/StartUpScreen';
+import AuthMenuScreen from '../screens/AuthMenuScreen';
+import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen';
+import HomeScreen from '../screens/HomeScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
-const AuthStack = createStackNavigator({
-  login: { screen: LoginForm }
-});
+const AuthStack = createStackNavigator(
+  {
+    AuthMenu: { screen: AuthMenuScreen },
+    Login: { screen: LoginScreen },
+    Register: { screen: RegisterScreen }
+  },
+  {
+    initialRouteName: 'AuthMenu'
+  }
+);
 
-const AppStack = createStackNavigator({
-  employeeList: { screen: EmployeeList },
-  employeeCreate: { screen: EmployeeCreate },
-  employeeEdit: { screen: EmployeeEdit }
+const AppStack = createBottomTabNavigator({
+  Home: { screen: HomeScreen },
+  Settings: { screen: SettingsScreen }
 });
 
 const AppNavigator = createSwitchNavigator(
   {
-    AuthLoading: AuthLoadingScreen,
+    StartUp: StartUpScreen,
     Auth: AuthStack,
     App: AppStack
   },
   {
-    initialRouteName: 'AuthLoading'
+    initialRouteName: 'StartUp'
   }
 );
 
 export default AppNavigator;
-*/
