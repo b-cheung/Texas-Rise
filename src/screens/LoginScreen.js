@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { clearForm, inputUpdate, login } from '../actions';
-import { Card, CardSection, Input, Button, Spinner } from '../components';
+import { Card, CardSection, Button, Spinner, TextField } from '../components';
+import styles from './styles';
 
 class LoginScreen extends Component {
   static navigationOptions = {
@@ -43,18 +44,16 @@ class LoginScreen extends Component {
     return (
       <Card>
         <CardSection>
-          <Input
-            label="Email"
-            placeholder="user@email.com"
+          <TextField
+            placeholder="Email"
             onChangeText={value => this.props.inputUpdate({ prop: 'email', value })}
             value={this.props.email}
           />
         </CardSection>
         <CardSection>
-          <Input
+          <TextField
             secureTextEntry
-            label="Password"
-            placeholder="password"
+            placeholder="Password"
             onChangeText={value => this.props.inputUpdate({ prop: 'password', value })}
             value={this.props.password}
           />
@@ -65,14 +64,6 @@ class LoginScreen extends Component {
     );
   }
 }
-
-const styles = {
-  errorTextStyle: {
-    fontSize: 20,
-    alignSelf: 'center',
-    color: 'red'
-  }
-};
 
 const mapStateToProps = ({ auth }) => {
   const { email, password, error, loading } = auth;

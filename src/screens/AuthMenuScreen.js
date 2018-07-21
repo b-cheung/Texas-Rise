@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+// import { View, Text } from 'react-native';
 import NavigationService from '../navigators/NavigationService';
 import { Card, CardSection, Button } from '../components';
 

@@ -13,7 +13,7 @@ import {
 
 const INITIAL_STATE = {
   firstName: '',
-  lasttName: '',
+  lastName: '',
   gradeLevel: '',
   email: '',
   password: '',

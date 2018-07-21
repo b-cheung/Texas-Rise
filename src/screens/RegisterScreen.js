@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 import { clearForm, inputUpdate, register } from '../actions';
-import { Card, CardSection, Input, Button, Spinner } from '../components';
+import { TextField, Button, Spinner } from '../components';
+import styles from './styles';
 
 class RegisterScreen extends Component {
-  static navigationOptions = {
-    title: 'Register'
-  };
-
   componentWillMount() {
     this.props.clearForm();
   }
@@ -16,7 +13,7 @@ class RegisterScreen extends Component {
   componentWillUnmount() {
     this.props.clearForm();
   }
-  
+
   onButtonPress() {
     const { firstName, lastName, gradeLevel, email, password, confirmPassword } = this.props;
     this.props.register({
@@ -48,71 +45,54 @@ class RegisterScreen extends Component {
 
   render() {
     return (
-      <Card>
-        <CardSection>
-          <Input
-            label="First Name"
-            placeholder="Bob"
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+        <ScrollView style={{ flex: 1 }}>
+          <TextField
+            placeholder="First Name"
+            style={styles.input}
             onChangeText={value => this.props.inputUpdate({ prop: 'firstName', value })}
             value={this.props.firstName}
           />
-        </CardSection>
-        <CardSection>
-          <Input
-            label="Last Name"
-            placeholder="Chen"
+          <TextField
+            placeholder="Last Name"
+            style={styles.input}
             onChangeText={value => this.props.inputUpdate({ prop: 'lastName', value })}
             value={this.props.lastName}
           />
-        </CardSection>
-        <CardSection>
-          <Input
-            label="Grade Level"
-            placeholder="9"
+          <TextField
+            placeholder="Grade"
+            style={styles.input}
             onChangeText={value => this.props.inputUpdate({ prop: 'gradeLevel', value })}
             value={this.props.gradeLevel}
           />
-        </CardSection>
-        <CardSection>
-          <Input
-            label="Email"
-            placeholder="user@email.com"
+          <TextField
+            placeholder="Email"
+            style={styles.input}
             onChangeText={value => this.props.inputUpdate({ prop: 'email', value })}
             value={this.props.email}
           />
-        </CardSection>
-        <CardSection>
-          <Input
+          <TextField
             secureTextEntry
-            label="Password"
-            placeholder="password"
+            placeholder="Password"
+            style={styles.input}
             onChangeText={value => this.props.inputUpdate({ prop: 'password', value })}
             value={this.props.password}
           />
-        </CardSection>
-        <CardSection>
-          <Input
+          <TextField
             secureTextEntry
-            label="Confirm Password"
-            placeholder="password"
+            placeholder="Confirm Password"
+            style={styles.input}
             onChangeText={value => this.props.inputUpdate({ prop: 'confirmPassword', value })}
             value={this.props.confirmPassword}
           />
-        </CardSection>
-        {this.renderError()}
-        <CardSection>{this.renderButton()}</CardSection>
-      </Card>
+          {this.renderError()}
+          {this.renderButton()}
+          <View style={{ height: 60 }} />
+        </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }
-
-const styles = {
-  errorTextStyle: {
-    fontSize: 20,
-    alignSelf: 'center',
-    color: 'red'
-  }
-};
 
 const mapStateToProps = ({ auth }) => {
   const {
