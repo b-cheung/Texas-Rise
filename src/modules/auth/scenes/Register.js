@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 import { clearForm, inputUpdate, register } from '../actions';
-import { TextField, Button, Spinner } from '../components';
-import styles from './styles';
+import { TextField, Button, Spinner } from '../../components';
+import styles from '../styles';
 
 class RegisterScreen extends Component {
   componentWillMount() {
@@ -49,24 +49,28 @@ class RegisterScreen extends Component {
         <ScrollView style={{ flex: 1 }}>
           <TextField
             placeholder="First Name"
+            autoCapitalize="words"
             style={styles.input}
             onChangeText={value => this.props.inputUpdate({ prop: 'firstName', value })}
             value={this.props.firstName}
           />
           <TextField
             placeholder="Last Name"
+            autoCapitalize="words"
             style={styles.input}
             onChangeText={value => this.props.inputUpdate({ prop: 'lastName', value })}
             value={this.props.lastName}
           />
           <TextField
             placeholder="Grade"
+            autoCapitalize="none"
             style={styles.input}
             onChangeText={value => this.props.inputUpdate({ prop: 'gradeLevel', value })}
             value={this.props.gradeLevel}
           />
           <TextField
             placeholder="Email"
+            autoCapitalize="none"
             style={styles.input}
             onChangeText={value => this.props.inputUpdate({ prop: 'email', value })}
             value={this.props.email}
@@ -94,7 +98,7 @@ class RegisterScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = (state) => {
   const {
     firstName,
     lastName,
@@ -104,7 +108,7 @@ const mapStateToProps = ({ auth }) => {
     confirmPassword,
     error,
     loading
-  } = auth;
+  } = state.authReducer;
   return {
     firstName,
     lastName,

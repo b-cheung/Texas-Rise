@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { clearForm, inputUpdate, login } from '../actions';
-import { Card, CardSection, Button, Spinner, TextField } from '../components';
-import styles from './styles';
+import { Card, CardSection, Button, Spinner, TextField } from '../../components';
+import styles from '../styles';
 
-class LoginScreen extends Component {
+class Login extends Component {
   static navigationOptions = {
     title: 'Login'
   };
@@ -46,6 +46,7 @@ class LoginScreen extends Component {
         <CardSection>
           <TextField
             placeholder="Email"
+            autoCapitalize="none"
             onChangeText={value => this.props.inputUpdate({ prop: 'email', value })}
             value={this.props.email}
           />
@@ -65,8 +66,8 @@ class LoginScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ auth }) => {
-  const { email, password, error, loading } = auth;
+const mapStateToProps = (state) => {
+  const { email, password, error, loading } = state.authReducer;
   return { email, password, error, loading };
 };
 
@@ -77,4 +78,4 @@ export default connect(
     inputUpdate,
     login
   }
-)(LoginScreen);
+)(Login);

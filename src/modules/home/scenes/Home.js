@@ -1,0 +1,28 @@
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
+import { connect } from 'react-redux';
+
+class Home extends Component {
+  render() {
+    return (
+      <View>
+        <Text>{this.props.user.uid}}</Text>
+        <Text>{this.props.user.firstName}}</Text>
+        <Text>{this.props.user.lastName}}</Text>
+        <Text>{this.props.user.email}}</Text>
+        <Text>{this.props.user.role}}</Text>
+        <Text>{this.props.user.year}}</Text>
+      </View>
+    );
+  }
+}
+
+const mapStateToProps = state => {
+  const { user } = state;
+  return { user };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(Home);

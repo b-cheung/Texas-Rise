@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 // import { View, Text } from 'react-native';
-import NavigationService from '../navigators/NavigationService';
-import { Card, CardSection, Button } from '../components';
+import NavigationService from '../../../core/navigation/NavigationService';
+import { Card, CardSection, Button } from '../../components';
 
-class AuthMenuScreen extends Component {
+class Welcome extends Component {
   static navigationOptions = {
     title: 'Texas Rise'
   };
@@ -28,7 +28,6 @@ class AuthMenuScreen extends Component {
       </Card>
     );
   }
-
 }
 
-export default AuthMenuScreen;
+export default Welcome;
