@@ -3,7 +3,7 @@ import {
   createStackNavigator,
   createBottomTabNavigator
 } from 'react-navigation';
-import Splash from '../../modules/components/Splash';
+import Splash from '../../modules/auth/scenes/Splash';
 import Welcome from '../../modules/auth/scenes/Welcome';
 import Login from '../../modules/auth/scenes/Login';
 import Register from '../../modules/auth/scenes/Register';
@@ -21,20 +21,23 @@ const AuthStack = createStackNavigator(
   }
 );
 
-const AppStack = createBottomTabNavigator({
-  Home: { screen: Home },
-  Settings: { screen: Settings }
-});
-
-const RootNavigator = createSwitchNavigator(
+const AppStack = createBottomTabNavigator(
   {
-    Splash,
+    Home: { screen: Home },
+    Settings: { screen: Settings }
+  },
+  {
+    initialRouteName: 'Home'
+  }
+);
+
+export const RootNavigator = createSwitchNavigator(
+  {
+    StartUp: Splash,
     Auth: AuthStack,
     App: AppStack
   },
   {
-    initialRouteName: 'Splash'
+    initialRouteName: 'StartUp'
   }
 );
-
-export default RootNavigator;

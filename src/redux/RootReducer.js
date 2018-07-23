@@ -4,6 +4,16 @@ import { reducer as authReducer } from '../modules/auth';
 import { reducer as homeReducer } from '../modules/home';
 
 // Combine all the reducers
-const RootReducer = combineReducers({ authReducer, homeReducer });
+const appReducer = combineReducers({ authReducer, homeReducer });
 
-export default RootReducer;
+const rootReducer = (state, action) => {
+  console.log('rootReducer');
+  if (action.type === 'logout') {
+    console.log('action.type: logout');
+    state = undefined;
+  }
+
+  return appReducer(state, action);
+};
+
+export default rootReducer;

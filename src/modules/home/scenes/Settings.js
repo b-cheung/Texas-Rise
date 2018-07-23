@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { logout } from '../actions';
+import { logout } from '../../auth/actions';
 import { Card, CardSection, Button, Spinner } from '../../components';
 
 class SettingsScreen extends Component {
   onButtonPress() {
+    console.log('logout button pressed');
     this.props.logout();
   }
   

@@ -14,10 +14,3 @@ export const inputUpdate = ({ prop, value }) => {
   };
 };
 
-export const logout = () => {
-  return dispatch => {
-    dispatch({ type: types.LOGOUT });
-    fbAPI.logout();
-  };
-};
-

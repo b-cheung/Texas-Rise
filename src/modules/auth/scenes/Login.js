@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { clearForm, inputUpdate, login } from '../actions';
 import { Card, CardSection, Button, Spinner, TextField } from '../../components';
 import styles from '../styles';
+import NavigationService from '../../../core/navigation/NavigationService';
 
 class Login extends Component {
   static navigationOptions = {
@@ -11,10 +12,6 @@ class Login extends Component {
   };
 
   componentWillMount() {
-    this.props.clearForm();
-  }
-
-  componentWillUnmount() {
     this.props.clearForm();
   }
 
@@ -66,9 +63,9 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  const { email, password, error, loading } = state.authReducer;
-  return { email, password, error, loading };
+const mapStateToProps = state => {
+  const { email, password, error, loading, user } = state.authReducer;
+  return { email, password, error, loading, user };
 };
 
 export default connect(

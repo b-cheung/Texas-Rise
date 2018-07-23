@@ -3,16 +3,22 @@ import { NavigationActions } from 'react-navigation';
 let navigator;
 
 function setTopLevelNavigator(navigatorRef) {
+  console.log('setTopLevelNavigator');
   navigator = navigatorRef;
 }
 
 function navigate(routeName, params) {
-  navigator.dispatch(
-    NavigationActions.navigate({
-      routeName,
-      params
-    })
-  );
+  if (navigator !== undefined) {
+    console.log('navigate to', routeName);
+    navigator.dispatch(
+      NavigationActions.navigate({
+        routeName,
+        params
+      })
+    );
+  } else {
+    console.log('navigator is undefined');
+  }
 }
 
 function goBack(key) {

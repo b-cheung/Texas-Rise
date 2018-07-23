@@ -1,6 +1,5 @@
 import firebase from 'firebase';
 import 'firebase/firestore';
-import NavigationService from '../navigation/NavigationService';
 import * as fbCred from './FirebaseCredentials';
 
 // Initialize Firebase
@@ -13,12 +12,10 @@ const config = {
   messagingSenderId: fbCred.FIREBASE_MESSAGING_SENDER_ID
 };
 
+console.log('Initialize Firebase');
 firebase.initializeApp(config);
 
-firebase.auth().onAuthStateChanged(user => {
-  NavigationService.navigate(user ? 'App' : 'Auth');
-});
-
+console.log('Initialize Firebase auth');
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 export const settings = { timestampsInSnapshots: true };

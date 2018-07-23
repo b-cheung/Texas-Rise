@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 import { clearForm, inputUpdate, register } from '../actions';
+import NavigationService from '../../../core/navigation/NavigationService';
 import { TextField, Button, Spinner } from '../../components';
 import styles from '../styles';
 
@@ -10,17 +11,14 @@ class RegisterScreen extends Component {
     this.props.clearForm();
   }
 
-  componentWillUnmount() {
-    this.props.clearForm();
-  }
-
   onButtonPress() {
-    const { firstName, lastName, gradeLevel, email, password, confirmPassword } = this.props;
+    const { firstName, lastName, year, email, role, password, confirmPassword } = this.props;
     this.props.register({
       firstName,
       lastName,
-      gradeLevel,
+      year,
       email,
+      role,
       password,
       confirmPassword
     });
@@ -62,11 +60,11 @@ class RegisterScreen extends Component {
             value={this.props.lastName}
           />
           <TextField
-            placeholder="Grade"
+            placeholder="Year"
             autoCapitalize="none"
             style={styles.input}
-            onChangeText={value => this.props.inputUpdate({ prop: 'gradeLevel', value })}
-            value={this.props.gradeLevel}
+            onChangeText={value => this.props.inputUpdate({ prop: 'year', value })}
+            value={this.props.year}
           />
           <TextField
             placeholder="Email"
@@ -74,6 +72,13 @@ class RegisterScreen extends Component {
             style={styles.input}
             onChangeText={value => this.props.inputUpdate({ prop: 'email', value })}
             value={this.props.email}
+          />
+          <TextField
+            placeholder="Role"
+            autoCapitalize="none"
+            style={styles.input}
+            onChangeText={value => this.props.inputUpdate({ prop: 'role', value })}
+            value={this.props.role}
           />
           <TextField
             secureTextEntry
@@ -98,26 +103,30 @@ class RegisterScreen extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const {
     firstName,
     lastName,
-    gradeLevel,
+    year,
     email,
+    role,
     password,
     confirmPassword,
     error,
-    loading
+    loading,
+    user
   } = state.authReducer;
   return {
     firstName,
     lastName,
-    gradeLevel,
+    year,
     email,
+    role,
     password,
     confirmPassword,
     error,
-    loading
+    loading,
+    user
   };
 };
 
