@@ -1,6 +1,6 @@
 // Import libraries for making a component
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 
 // Functional component
 // Reusable component with props
@@ -14,7 +14,7 @@ const Header = props => {
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   viewStyle: {
     backgroundColor: '#F8F8F8',
     justifyContent: 'center',
@@ -30,7 +30,7 @@ const styles = {
   textStyles: {
     fontSize: 20
   }
-};
+});
 
 // Export component
 export { Header };

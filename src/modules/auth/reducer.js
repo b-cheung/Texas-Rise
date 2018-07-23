@@ -11,15 +11,6 @@ const FORM_INITIAL_STATE = {
   error: '',
   loading: ''
 };
-const NULL_USER = {
-  user: null,
-  uid: '',
-  email: '',
-  firstName: '',
-  lastName: '',
-  role: '',
-  year: ''
-};
 
 export default (state = FORM_INITIAL_STATE, action) => {
   switch (action.type) {
@@ -45,14 +36,11 @@ export default (state = FORM_INITIAL_STATE, action) => {
     case types.LOGGED_IN:
       console.log('LOGGED_IN:', action.payload);
       return { ...state, user: action.payload };
+    case types.LOGOUT_ATTEMPT:
+      return { ...state, loading: true, error: '' };
     case types.LOGOUT_ERROR:
       console.log('LOGOUT_ERROR:', action.payload);
-      return state;
-    /*case types.LOGGED_OUT:
-    console.log('LOGGED_OUT action.payload:', action.payload);
-      return { ...state, user: null };
-      case types.LOGOUT:
-      return { ...state, user: null };*/
+      return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }

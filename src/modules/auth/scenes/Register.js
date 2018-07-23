@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 import { clearForm, inputUpdate, register } from '../actions';
-import NavigationService from '../../../core/navigation/NavigationService';
 import { TextField, Button, Spinner } from '../../components';
 import styles from '../styles';
 
@@ -11,7 +10,7 @@ class RegisterScreen extends Component {
     this.props.clearForm();
   }
 
-  onButtonPress() {
+  onSubmit() {
     const { firstName, lastName, year, email, role, password, confirmPassword } = this.props;
     this.props.register({
       firstName,
@@ -38,7 +37,7 @@ class RegisterScreen extends Component {
     if (this.props.loading) {
       return <Spinner size="large" />;
     }
-    return <Button onPress={this.onButtonPress.bind(this)}>Register</Button>;
+    return <Button onPress={this.onSubmit.bind(this)}>Submit</Button>;
   }
 
   render() {

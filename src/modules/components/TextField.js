@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, View } from 'react-native';
+import { TextInput, View, StyleSheet } from 'react-native';
 
 const TextField = ({
   value,
@@ -25,7 +25,7 @@ const TextField = ({
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   inputStyle: {
     color: '#000',
     paddingRight: 5,
@@ -40,6 +40,6 @@ const styles = {
     justifyContent: 'flex-start',
     flex: 1
   }
-};
+});
 
 export { TextField };

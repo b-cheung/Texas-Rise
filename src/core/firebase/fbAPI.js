@@ -7,7 +7,7 @@ export function getCurrentUser() {
 }
 
 // callback(success, error)
-// Register user
+// Register and create user in firestore
 export function register(data, callback) {
   const { email, password } = data;
   auth
@@ -46,7 +46,7 @@ export function login(data, callback) {
 }
 
 // callback(success, user, error)
-// Get user in firestore
+// retrieve user doc in firestore
 export function getUser(authUser, callback) {
   console.log('getUser', authUser.uid);
   firestore

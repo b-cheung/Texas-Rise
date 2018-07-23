@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { View, Text } from 'react-native';
 import NavigationService from '../../../core/navigation/NavigationService';
 import { Card, CardSection, Button } from '../../components';
 

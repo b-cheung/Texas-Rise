@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-
 import { Spinner } from '../../components/Spinner';
 import { auth } from '../../../core/firebase/FirebaseConfig';
 
@@ -9,12 +8,12 @@ class Splash extends Component {
     this._bootstrapAsync();
   }
 
-  // Fetch the token from storage then navigate to our appropriate place
+  // check if user is authenticated
   _bootstrapAsync = async () => {
     const user = await auth.currentUser;
     console.log('_bootstrapAsync', user);
-    // This will switch to the App screen or Auth screen and this loading
-    // screen will be unmounted and thrown away.
+    
+    // switch to the App or Auth 
     this.props.navigation.navigate(user ? 'App' : 'Auth');
   };
 

@@ -33,11 +33,11 @@ const AppStack = createBottomTabNavigator(
 
 export const RootNavigator = createSwitchNavigator(
   {
-    StartUp: Splash,
+    Splash,
     Auth: AuthStack,
     App: AppStack
   },
   {
-    initialRouteName: 'StartUp'
+    initialRouteName: 'Splash'
   }
 );

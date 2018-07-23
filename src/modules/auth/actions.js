@@ -18,7 +18,7 @@ export const inputUpdate = ({ prop, value }) => {
   };
 };
 
-// callback(isLoggedIn, exists)
+// callback()
 export function checkLoginStatus() {
   return dispatch => {
     const authUser = fbAPI.getCurrentUser();
@@ -53,36 +53,18 @@ export const register = data => {
   };
 };
 
-function getUser(dispatch, authUser) {
-  console.log('getUser');
-  if (authUser !== null) {
-    fbAPI.getUser(authUser, (success, user, error) => {
-      if (success) {
-        dispatch({
-          type: types.LOGGED_IN,
-          payload: user
-        });
-        NavigationService.navigate('App');
-      } else {
-        console.log(error);
-        logout();
-      }
-    });
-  } else {
-    logout();
-  }
-}
-
 export const logout = () => {
   console.log('logout');
   return dispatch => {
+    // remove Firebase Auth State Observer
+    dispatch({ type: types.LOGOUT_ATTEMPT });
     unsubscribe();
     fbAPI.logout((success, error) => {
       if (success) {
         dispatch({
-          type: types.LOGOUT
+          type: types.LOGOUT_SUCCESS
         });
-        NavigationService.navigate('StartUp');
+        NavigationService.navigate('Splash');
       } else {
         dispatch({
           type: types.LOGOUT_ERROR,
@@ -93,7 +75,30 @@ export const logout = () => {
   };
 };
 
-function authCallback(dispatch, success, authUser, error) {
+function getUser(dispatch, authUser) {
+  console.log('getUser');
+  if (authUser !== null) {
+    fbAPI.getUser(authUser, (success, user, error) => {
+      if (success) {
+        //user authenticated and retrieved doc
+        dispatch({
+          type: types.LOGGED_IN,
+          payload: user
+        });
+        NavigationService.navigate('App');
+      } else {
+        // user authenticated, but unable to retrieve doc
+        console.log(error);
+        logout();
+      }
+    });
+  } else {
+    // user not authenticated
+    logout();
+  }
+}
+
+function authCallback(dispatch, success, error) {
   if (success) {
     authSuccess(dispatch);
   } else {
@@ -103,8 +108,7 @@ function authCallback(dispatch, success, authUser, error) {
 
 function authSuccess(dispatch) {
   console.log('authSuccess');
-  // getUser(dispatch, fbAPI.getCurrentUser());
-
+  // set Firebase Auth State Observer
   unsubscribe = auth.onAuthStateChanged(authUser => {
     console.log('onAuthStateChanged');
     getUser(dispatch, authUser);

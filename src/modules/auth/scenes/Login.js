@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { clearForm, inputUpdate, login } from '../actions';
 import { Card, CardSection, Button, Spinner, TextField } from '../../components';
 import styles from '../styles';
-import NavigationService from '../../../core/navigation/NavigationService';
 
 class Login extends Component {
   static navigationOptions = {
@@ -15,7 +14,7 @@ class Login extends Component {
     this.props.clearForm();
   }
 
-  onButtonPress() {
+  onSubmit() {
     const { email, password } = this.props;
     this.props.login({ email, password });
   }
@@ -34,7 +33,7 @@ class Login extends Component {
     if (this.props.loading) {
       return <Spinner size="large" />;
     }
-    return <Button onPress={this.onButtonPress.bind(this)}>Login</Button>;
+    return <Button onPress={this.onSubmit.bind(this)}>Login</Button>;
   }
 
   render() {
