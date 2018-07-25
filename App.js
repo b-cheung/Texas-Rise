@@ -1,33 +1,58 @@
 import React, { Component } from 'react';
-// import { Image, Text, View } from 'react-native';
-import { Asset, AppLoading } from 'expo';
+import { Image } from 'react-native';
 import { Provider } from 'react-redux';
+import { AppLoading, Asset, Font } from 'expo';
+import { FontAwesome } from '@expo/vector-icons';
 import { store } from './src/redux/store';
 import { RootNavigator } from './src/core/navigation/RouterConfig';
 import NavigationService from './src/core/navigation/NavigationService';
 
+function cacheImages(images) {
+  return images.map(image => {
+    if (typeof image === 'string') {
+      return Image.prefetch(image);
+    }
+    return Asset.fromModule(image).downloadAsync();
+  });
+}
+
+function cacheFonts(fonts) {
+  return fonts.map(font => Font.loadAsync(font));
+}
+
 export default class App extends Component {
   state = {
-    isReady: false
+    isLoadingComplete: false
   };
 
-  _loadAssetsAsync = async () => {
-    const images = [{ AppIcon: './assets/Logo.png' }];
+  async _loadAssetsAsync() {
+    const imageAssets = cacheImages([
+      // 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
+      require('./assets/Logo.png')
+    ]);
 
-    const cacheImages = images.map(image => {
-      return Asset.fromModule(image).downloadAsync();
-    });
-    return Promise.all([...cacheImages]);
+    const fontAssets = cacheFonts([FontAwesome.font]);
+
+    await Promise.all([...imageAssets, ...fontAssets]);
+  }
+
+  _handleLoadingError = error => {
+    // report the error
+    console.warn(error);
+  };
+
+  _handleFinishLoading = () => {
+    this.setState({ isLoadingComplete: true });
   };
 
   render() {
-    if (!this.state.isReady) {
+    if (!this.state.isLoadingComplete) {
       console.log('render App.js AppLoading');
       return (
         <AppLoading
           startAsync={this._loadAssetsAsync}
-          onFinish={() => this.setState({ isReady: true })}
-          onError={console.warn}
+          onError={this._handleLoadingError}
+          onFinish={this._handleFinishLoading}
         />
       );
     }

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
-import { clearForm, inputUpdate, register } from '../actions';
+import { clearForm, inputUpdate, onRegister } from '../actions';
 import { TextField, Button, Spinner } from '../../components';
 import styles from '../styles';
+import theme from '../../../styles/theme';
 
 class RegisterScreen extends Component {
   componentWillMount() {
@@ -12,7 +13,7 @@ class RegisterScreen extends Component {
 
   onSubmit() {
     const { firstName, lastName, year, email, role, password, confirmPassword } = this.props;
-    this.props.register({
+    this.props.onRegister({
       firstName,
       lastName,
       year,
@@ -42,56 +43,58 @@ class RegisterScreen extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+      <KeyboardAvoidingView style={theme.container} behavior="padding" enabled>
         <ScrollView style={{ flex: 1 }}>
           <TextField
             placeholder="First Name"
             autoCapitalize="words"
-            style={styles.input}
-            onChangeText={value => this.props.inputUpdate({ prop: 'firstName', value })}
+            style={theme.input}
             value={this.props.firstName}
+            onChangeText={value => this.props.inputUpdate({ prop: 'firstName', value })}
           />
           <TextField
             placeholder="Last Name"
             autoCapitalize="words"
-            style={styles.input}
-            onChangeText={value => this.props.inputUpdate({ prop: 'lastName', value })}
+            style={theme.input}
             value={this.props.lastName}
+            onChangeText={value => this.props.inputUpdate({ prop: 'lastName', value })}
           />
           <TextField
             placeholder="Year"
             autoCapitalize="none"
-            style={styles.input}
-            onChangeText={value => this.props.inputUpdate({ prop: 'year', value })}
+            style={theme.input}
             value={this.props.year}
+            onChangeText={value => this.props.inputUpdate({ prop: 'year', value })}
           />
           <TextField
             placeholder="Email"
             autoCapitalize="none"
-            style={styles.input}
-            onChangeText={value => this.props.inputUpdate({ prop: 'email', value })}
+            style={theme.input}
             value={this.props.email}
+            onChangeText={value => this.props.inputUpdate({ prop: 'email', value })}
           />
           <TextField
             placeholder="Role"
             autoCapitalize="none"
-            style={styles.input}
-            onChangeText={value => this.props.inputUpdate({ prop: 'role', value })}
+            style={theme.input}
             value={this.props.role}
+            onChangeText={value => this.props.inputUpdate({ prop: 'role', value })}
           />
-          <TextField
-            secureTextEntry
+          <TextField            
             placeholder="Password"
-            style={styles.input}
-            onChangeText={value => this.props.inputUpdate({ prop: 'password', value })}
+            secureTextEntry
+            autoCapitalize="none"
+            style={theme.input}
             value={this.props.password}
+            onChangeText={value => this.props.inputUpdate({ prop: 'password', value })}
           />
           <TextField
-            secureTextEntry
             placeholder="Confirm Password"
-            style={styles.input}
-            onChangeText={value => this.props.inputUpdate({ prop: 'confirmPassword', value })}
+            secureTextEntry
+            autoCapitalize="none"
+            style={theme.input}
             value={this.props.confirmPassword}
+            onChangeText={value => this.props.inputUpdate({ prop: 'confirmPassword', value })}
           />
           {this.renderError()}
           {this.renderButton()}
@@ -134,6 +137,6 @@ export default connect(
   {
     clearForm,
     inputUpdate,
-    register
+    onRegister
   }
 )(RegisterScreen);

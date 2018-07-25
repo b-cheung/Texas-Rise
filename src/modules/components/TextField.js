@@ -7,7 +7,9 @@ const TextField = ({
   placeholder,
   style,
   secureTextEntry,
-  autoCapitalize
+  autoCapitalize,
+  multiline,
+  numberOfLines
 }) => {
   const { inputStyle, containerStyle } = styles;
   return (
@@ -17,6 +19,8 @@ const TextField = ({
         secureTextEntry={secureTextEntry}
         autoCorrect={false}
         autoCapitalize={autoCapitalize}
+        multiline={multiline}
+        numberOfLines={numberOfLines}
         style={[inputStyle, style]}
         value={value}
         onChangeText={onChangeText}

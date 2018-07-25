@@ -18,28 +18,19 @@ export const inputUpdate = ({ prop, value }) => {
   };
 };
 
-// callback()
-export function checkLoginStatus() {
-  return dispatch => {
-    const authUser = fbAPI.getCurrentUser();
-    console.log('checkLoginStatus', authUser);
-    getUser(dispatch, authUser);
-  };
-}
-
-export const login = data => {
+export const onLogin = data => {
   const { email, password } = data;
   return dispatch => {
     dispatch({ type: types.AUTH_ATTEMPT });
     if (!email || !password) {
       authError(dispatch, 'Must fill in all required fields.');
     } else {
-      fbAPI.login(data, (success, error) => authCallback(dispatch, success, error));
+      fbAPI.onLogin(data, (success, error) => authCallback(dispatch, success, error));
     }
   };
 };
 
-export const register = data => {
+export const onRegister = data => {
   const { firstName, lastName, year, email, role, password, confirmPassword } = data;
   return dispatch => {
     dispatch({ type: types.AUTH_ATTEMPT });
@@ -48,18 +39,18 @@ export const register = data => {
     } else if (password !== confirmPassword) {
       authError(dispatch, 'Passwords do not match.');
     } else {
-      fbAPI.register(data, (success, error) => authCallback(dispatch, success, error));
+      fbAPI.onRegister(data, (success, error) => authCallback(dispatch, success, error));
     }
   };
 };
 
-export const logout = () => {
+export const onLogout = () => {
   console.log('logout');
   return dispatch => {
     // remove Firebase Auth State Observer
     dispatch({ type: types.LOGOUT_ATTEMPT });
     unsubscribe();
-    fbAPI.logout((success, error) => {
+    fbAPI.onLogout((success, error) => {
       if (success) {
         dispatch({
           type: types.LOGOUT_SUCCESS
@@ -75,10 +66,10 @@ export const logout = () => {
   };
 };
 
-function getUser(dispatch, authUser) {
-  console.log('getUser');
+function fetchUser(dispatch, authUser) {
+  console.log('fetchUser');
   if (authUser !== null) {
-    fbAPI.getUser(authUser, (success, user, error) => {
+    fbAPI.fetchUser(authUser, (success, user, error) => {
       if (success) {
         //user authenticated and retrieved doc
         dispatch({
@@ -89,12 +80,12 @@ function getUser(dispatch, authUser) {
       } else {
         // user authenticated, but unable to retrieve doc
         console.log(error);
-        logout();
+        onLogout();
       }
     });
   } else {
     // user not authenticated
-    logout();
+    onLogout();
   }
 }
 
@@ -111,7 +102,7 @@ function authSuccess(dispatch) {
   // set Firebase Auth State Observer
   unsubscribe = auth.onAuthStateChanged(authUser => {
     console.log('onAuthStateChanged');
-    getUser(dispatch, authUser);
+    fetchUser(dispatch, authUser);
   });
 }
 

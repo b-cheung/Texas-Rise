@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
-import { clearForm, inputUpdate, login } from '../actions';
+import { clearForm, inputUpdate, onLogin } from '../actions';
 import { Card, CardSection, Button, Spinner, TextField } from '../../components';
 import styles from '../styles';
 
@@ -16,7 +16,7 @@ class Login extends Component {
 
   onSubmit() {
     const { email, password } = this.props;
-    this.props.login({ email, password });
+    this.props.onLogin({ email, password });
   }
 
   renderError() {
@@ -43,16 +43,17 @@ class Login extends Component {
           <TextField
             placeholder="Email"
             autoCapitalize="none"
-            onChangeText={value => this.props.inputUpdate({ prop: 'email', value })}
             value={this.props.email}
+            onChangeText={value => this.props.inputUpdate({ prop: 'email', value })}
           />
         </CardSection>
         <CardSection>
           <TextField
-            secureTextEntry
             placeholder="Password"
-            onChangeText={value => this.props.inputUpdate({ prop: 'password', value })}
+            secureTextEntry
+            autoCapitalize="none"
             value={this.props.password}
+            onChangeText={value => this.props.inputUpdate({ prop: 'password', value })}
           />
         </CardSection>
         {this.renderError()}
@@ -72,6 +73,6 @@ export default connect(
   {
     clearForm,
     inputUpdate,
-    login
+    onLogin
   }
 )(Login);

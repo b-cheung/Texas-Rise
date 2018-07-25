@@ -1,18 +1,29 @@
 import * as types from './actionTypes';
 
-const FORM_INITIAL_STATE = {
+const INITIAL_STATE = {
   firstName: '',
   lastName: '',
   year: '',
-  email: '',
-  password: '',
+  email: 'admin@utexas.edu',
+  password: 'password',
   confirmPassword: '',
   user: null,
   error: '',
   loading: ''
 };
 
-export default (state = FORM_INITIAL_STATE, action) => {
+const FORM_INITIAL_STATE = {
+  firstName: '',
+  lastName: '',
+  year: '',
+  email: 'admin@utexas.edu',
+  password: 'password',
+  confirmPassword: '',
+  error: '',
+  loading: ''
+};
+
+export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case types.CLEAR_FORM:
       return { ...state, ...FORM_INITIAL_STATE };
@@ -23,7 +34,7 @@ export default (state = FORM_INITIAL_STATE, action) => {
     case types.AUTH_ATTEMPT:
       return { ...state, loading: true, error: '' };
     case types.AUTH_SUCCESS:
-      return { ...state, ...FORM_INITIAL_STATE, user: action.payload };
+      return { ...state, ...INITIAL_STATE, user: action.payload };
     case types.AUTH_ERROR:
       return {
         ...state,
