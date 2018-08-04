@@ -35,7 +35,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: true, error: '' };
     case types.AUTH_SUCCESS:
       return { ...state, ...INITIAL_STATE, user: action.payload };
-    case types.AUTH_ERROR:
+    case types.AUTH_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -45,12 +45,12 @@ export default (state = INITIAL_STATE, action) => {
       };
     
     case types.LOGGED_IN:
-      console.log('LOGGED_IN:', action.payload);
+      console.tron.log('LOGGED_IN:', action.payload);
       return { ...state, user: action.payload };
     case types.LOGOUT_ATTEMPT:
       return { ...state, loading: true, error: '' };
-    case types.LOGOUT_ERROR:
-      console.log('LOGOUT_ERROR:', action.payload);
+    case types.LOGOUT_FAILURE:
+      console.tron.log('LOGOUT_FAILURE:', action.payload);
       return { ...state, loading: false, error: action.payload };
     default:
       return state;

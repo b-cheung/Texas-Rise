@@ -3,13 +3,13 @@ import { NavigationActions } from 'react-navigation';
 let navigator;
 
 function setTopLevelNavigator(navigatorRef) {
-  console.log('setTopLevelNavigator');
+  console.tron.log('setTopLevelNavigator');
   navigator = navigatorRef;
 }
 
 function navigate(routeName, params) {
   if (navigator !== undefined) {
-    console.log('navigate to', routeName);
+    console.tron.log('navigate to', routeName);
     navigator.dispatch(
       NavigationActions.navigate({
         routeName,
@@ -17,7 +17,7 @@ function navigate(routeName, params) {
       })
     );
   } else {
-    console.log('navigator is undefined');
+    console.tron.log('navigator is undefined');
   }
 }
 

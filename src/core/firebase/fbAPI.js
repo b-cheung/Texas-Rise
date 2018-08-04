@@ -3,7 +3,7 @@ import { auth, firestore } from '../../core/firebase/FirebaseConfig';
 
 export function getCurrentUser() {
   const user = auth.currentUser;
-  console.log('getCurrentUser', user);
+  console.tron.log('getCurrentUser', user);
   return user;
 }
 
@@ -20,7 +20,7 @@ export function onRegister(data, callback) {
 // Login user
 export function onLogin(data, callback) {
   const { email, password } = data;
-  console.log(email, password);
+  console.tron.log(email, password);
   auth
     .signInWithEmailAndPassword(email, password)
     .then(user => callback(true, null))
@@ -37,7 +37,7 @@ export function onLogout(callback) {
 
 // Create user in firestore
 export function createUserDoc(data, authUser, callback) {
-  console.log('createUser', authUser.uid);
+  console.tron.log('createUser', authUser.uid);
   const { firstName, lastName, year, email, role } = data;
   firestore
     .collection('users')
@@ -79,7 +79,7 @@ export function createAnnouncementDoc(data, callback) {
 
 // retrieve user doc in firestore
 export function fetchUser(authUser, callback) {
-  console.log('fetchUser', authUser.uid);
+  console.tron.log('fetchUser', authUser.uid);
   const docRef = firestore.collection('users').doc(authUser.uid);
   getUserDoc(docRef, callback);
 }
@@ -97,16 +97,16 @@ function getUserDoc(docRef, callback) {
     .get()
     .then(doc => {
       if (doc.exists) {
-        console.log('User document exists.');
+        console.tron.log('User document exists.');
         callback(true, { ...doc.data(), uid: doc.id }, null);
       } else {
         // doc.data() will be undefined in this case
-        console.log('No such user document.');
+        console.tron.log('No such user document.');
         callback(false, null, 'No such user document.');
       }
     })
     .catch(error => {
-      console.log('Error getting user document:', error);
+      console.tron.log('Error getting user document:', error);
       callback(false, null, 'Error getting user document.');
     });
 }
@@ -116,16 +116,16 @@ function getDoc(docRef, callback) {
     .get()
     .then(doc => {
       if (doc.exists) {
-        console.log('doc exists');
+        console.tron.log('doc exists');
         callback(true, { id: doc.id, val: doc.data() }, null);
       } else {
         // doc.data() will be undefined in this case
-        console.log('No such document');
+        console.tron.log('No such document');
         callback(false, null, 'No such document.');
       }
     })
     .catch(error => {
-      console.log('Error getting document:', error);
+      console.tron.log('Error getting document:', error);
       callback(false, null, 'Error getting document.');
     });
 }
@@ -135,7 +135,7 @@ function getDocs(docsRef, callback) {
     .get()
     .then(querySnapshot => {
       if (querySnapshot.size > 0) {
-        console.log('Documents found.');
+        console.tron.log('Documents found.');
         /*Object: {
           id: Object {val},
           ...,
@@ -147,12 +147,12 @@ function getDocs(docsRef, callback) {
         });
         callback(true, data, null);
       } else {
-        console.log('No documents found.');
+        console.tron.log('No documents found.');
         callback(false, null, 'No documents found.');
       }
     })
     .catch(error => {
-      console.log('Error getting document(s):', error);
+      console.tron.log('Error getting document(s):', error);
       callback(false, null, 'Error getting document(s).');
     });
 }

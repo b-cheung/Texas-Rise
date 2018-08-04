@@ -3,18 +3,18 @@ import * as types from './actionTypes';
 import NavigationService from '../../core/navigation/NavigationService';
 
 export const fetchAnnouncements = num => {
-  console.log('fetchAnnouncements');
+  console.tron.log('fetchAnnouncements');
   return dispatch => {
     fbAPI.fetchAnnouncements(num, (success, data, error) => {
       if (success) {
-        console.log('fetchAnnouncements data:', data);
+        console.tron.log('fetchAnnouncements data:', data);
         dispatch({
           type: types.FETCH_ANNOUNCEMENTS,
           payload: data
         });
       } else {
         dispatch({
-          type: types.FETCH_ANNOUNCEMENTS_ERROR,
+          type: types.FETCH_ANNOUNCEMENTS_FAILURE,
           payload: error
         });
       }
@@ -37,7 +37,7 @@ export const inputUpdate = ({ prop, value }) => {
 
 export const toggleSelectable = ({ prop, value }) => {
   const toggledValue = !value;
-  console.log('toggleSelectable:', value, toggledValue);
+  console.tron.log('toggleSelectable:', value, toggledValue);
   return {
     type: types.TOGGLE_SELECTABLE,
     payload: { prop, toggledValue }
@@ -45,7 +45,7 @@ export const toggleSelectable = ({ prop, value }) => {
 };
 
 export const createAnnouncement = data => {
-  console.log('createAnnouncement');
+  console.tron.log('createAnnouncement');
   return dispatch => {
     fbAPI.createAnnouncementDoc(data, (success, announcement, error) => {
       if (success) {
@@ -56,7 +56,7 @@ export const createAnnouncement = data => {
         NavigationService.goBack();
       } else {
         dispatch({
-          type: types.CREATE_ANNOUNCEMENT_ERROR,
+          type: types.CREATE_ANNOUNCEMENT_FAILURE,
           payload: error
         });
       }

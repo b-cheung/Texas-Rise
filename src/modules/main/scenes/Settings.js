@@ -5,7 +5,7 @@ import { Card, CardSection, Button, Spinner } from '../../components';
 
 class SettingsScreen extends Component {
   onLogout() {
-    console.log('logout button pressed');
+    console.tron.log('logout button pressed');
     this.props.onLogout();
   }
   

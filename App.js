@@ -3,6 +3,7 @@ import { Image } from 'react-native';
 import { Provider } from 'react-redux';
 import { AppLoading, Asset, Font } from 'expo';
 import { FontAwesome } from '@expo/vector-icons';
+import './src/core/ReactotronConfig';
 import { store } from './src/redux/store';
 import { RootNavigator } from './src/core/navigation/RouterConfig';
 import NavigationService from './src/core/navigation/NavigationService';
@@ -47,7 +48,7 @@ export default class App extends Component {
 
   render() {
     if (!this.state.isLoadingComplete) {
-      console.log('render App.js AppLoading');
+      console.tron.log('render App.js AppLoading');
       return (
         <AppLoading
           startAsync={this._loadAssetsAsync}
@@ -56,7 +57,7 @@ export default class App extends Component {
         />
       );
     }
-    console.log('render App.js Provider');
+    console.tron.log('render App.js Provider');
     return (
       <Provider store={store}>
         <RootNavigator

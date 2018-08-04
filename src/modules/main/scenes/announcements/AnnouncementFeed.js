@@ -53,7 +53,6 @@ const mapStateToProps = state => {
   const announcements = _.map(state.mainReducer.announcements, (val, id) => {
     return { ...val, id };
   });
-  console.log('AnnouncementFeed mapStateToProps', user, state.mainReducer.announcements);
   return { user, announcements };
 };
 

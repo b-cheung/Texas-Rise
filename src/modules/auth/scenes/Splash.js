@@ -11,7 +11,7 @@ class Splash extends Component {
   // check if user is authenticated
   _bootstrapAsync = async () => {
     const user = await auth.currentUser;
-    console.log('_bootstrapAsync', user);
+    console.tron.log('_bootstrapAsync', user);
     
     // switch to the App or Auth 
     this.props.navigation.navigate(user ? 'App' : 'Auth');

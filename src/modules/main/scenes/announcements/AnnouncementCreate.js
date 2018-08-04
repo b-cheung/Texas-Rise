@@ -76,7 +76,6 @@ class AnnouncementCreate extends Component {
 const mapStateToProps = state => {
   const { user } = state.authReducer;
   const { title, body, membersChecked, studentsChecked } = state.mainReducer;
-  console.log('AnnouncementCreate mapStateToProps:', membersChecked, studentsChecked);
   return { title, body, membersChecked, studentsChecked, user };
 };
 

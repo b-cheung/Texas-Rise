@@ -33,7 +33,6 @@ class Home extends Component {
 
 const mapStateToProps = state => {
   const { user } = state.authReducer;
-  console.log('Home mapStateToProps:', user);
   return { user };
 };
 

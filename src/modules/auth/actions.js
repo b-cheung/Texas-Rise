@@ -45,7 +45,7 @@ export const onRegister = data => {
 };
 
 export const onLogout = () => {
-  console.log('logout');
+  console.tron.log('logout');
   return dispatch => {
     // remove Firebase Auth State Observer
     dispatch({ type: types.LOGOUT_ATTEMPT });
@@ -58,7 +58,7 @@ export const onLogout = () => {
         NavigationService.navigate('Splash');
       } else {
         dispatch({
-          type: types.LOGOUT_ERROR,
+          type: types.LOGOUT_FAILURE,
           payload: error
         });
       }
@@ -67,7 +67,7 @@ export const onLogout = () => {
 };
 
 function fetchUser(dispatch, authUser) {
-  console.log('fetchUser');
+  console.tron.log('fetchUser');
   if (authUser !== null) {
     fbAPI.fetchUser(authUser, (success, user, error) => {
       if (success) {
@@ -79,7 +79,7 @@ function fetchUser(dispatch, authUser) {
         NavigationService.navigate('App');
       } else {
         // user authenticated, but unable to retrieve doc
-        console.log(error);
+        console.tron.log(error);
         onLogout();
       }
     });
@@ -98,17 +98,17 @@ function authCallback(dispatch, success, error) {
 }
 
 function authSuccess(dispatch) {
-  console.log('authSuccess');
+  console.tron.log('authSuccess');
   // set Firebase Auth State Observer
   unsubscribe = auth.onAuthStateChanged(authUser => {
-    console.log('onAuthStateChanged');
+    console.tron.log('onAuthStateChanged');
     fetchUser(dispatch, authUser);
   });
 }
 
 function authError(dispatch, error) {
   dispatch({
-    type: types.AUTH_ERROR,
+    type: types.AUTH_FAILURE,
     payload: error
   });
 }
