@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
-import { clearForm, inputUpdate, onLogin } from '../actions';
-import { Card, CardSection, Button, Spinner, TextField } from '../../components';
+import { clearForm, inputUpdate, loginRequest } from '../actions';
+import { Button, Spinner, TextField } from '../../components';
 import styles from '../styles';
+import theme from '../../../styles/theme';
 
 class Login extends Component {
   static navigationOptions = {
@@ -16,7 +17,7 @@ class Login extends Component {
 
   onSubmit() {
     const { email, password } = this.props;
-    this.props.onLogin({ email, password });
+    this.props.loginRequest({ email, password });
   }
 
   renderError() {
@@ -38,27 +39,25 @@ class Login extends Component {
 
   render() {
     return (
-      <Card>
-        <CardSection>
-          <TextField
-            placeholder="Email"
-            autoCapitalize="none"
-            value={this.props.email}
-            onChangeText={value => this.props.inputUpdate({ prop: 'email', value })}
-          />
-        </CardSection>
-        <CardSection>
-          <TextField
-            placeholder="Password"
-            secureTextEntry
-            autoCapitalize="none"
-            value={this.props.password}
-            onChangeText={value => this.props.inputUpdate({ prop: 'password', value })}
-          />
-        </CardSection>
-        {this.renderError()}
-        <CardSection>{this.renderButton()}</CardSection>
-      </Card>
+      <KeyboardAvoidingView style={theme.container} behavior="padding" enabled>
+        <ScrollView style={{ flex: 1 }}>
+            <TextField
+              placeholder="Email"
+              autoCapitalize="none"
+              value={this.props.email}
+              onChangeText={value => this.props.inputUpdate({ prop: 'email', value })}
+            />
+            <TextField
+              placeholder="Password"
+              secureTextEntry
+              autoCapitalize="none"
+              value={this.props.password}
+              onChangeText={value => this.props.inputUpdate({ prop: 'password', value })}
+            />
+          {this.renderError()}
+          {this.renderButton()}
+        </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -73,6 +72,6 @@ export default connect(
   {
     clearForm,
     inputUpdate,
-    onLogin
+    loginRequest
   }
 )(Login);

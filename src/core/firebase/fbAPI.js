@@ -1,42 +1,92 @@
 import firebase from 'firebase';
-import { auth, firestore } from '../../core/firebase/FirebaseConfig';
+import 'firebase/firestore';
+import * as fbCred from './FirebaseCredentials';
+import NavigationService from '../navigation/NavigationService';
+
+
+// Initialize Firebase
+const config = {
+  apiKey: fbCred.FIREBASE_API_KEY,
+  authDomain: fbCred.FIREBASE_AUTH_DOMAIN,
+  databaseURL: fbCred.FIREBASE_DATABASE_URL,
+  projectId: fbCred.FIREBASE_PROJECT_ID,
+  storageBucket: fbCred.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: fbCred.FIREBASE_MESSAGING_SENDER_ID
+};
+
+let auth;
+let firestore;
+let settings;
+export function initializeFirebase() {
+  console.tron.log('Initialize Firebase');
+  firebase.initializeApp(config);
+
+  console.tron.log('Initialize Firebase auth');
+  auth = firebase.auth();
+  firestore = firebase.firestore();
+  settings = { timestampsInSnapshots: true };
+  firestore.settings(settings);
+}
 
 export function getCurrentUser() {
+  return new Promise((resolve, reject) => {
+     const unsubscribe = auth.onAuthStateChanged(user => {
+        unsubscribe();
+        resolve(user);
+     }, reject);
+  });
+}
+
+
+export function getAuthUser() {
   const user = auth.currentUser;
-  console.tron.log('getCurrentUser', user);
+  console.tron.log('getAuthUser', user);
   return user;
 }
 
+export function setAuthStateListener() {
+    console.tron.log('setAuthStateListener');
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      console.tron.log('onAuthStateChanged');
+      if (user) {
+        console.tron.log('logged in');
+      } else {
+        NavigationService.navigate('Auth');
+        unsubscribe();
+      }
+  });
+}
+
+
 // callback(success, error)
 // Register and create user in firestore
-export function onRegister(data, callback) {
+export function register(data) {
   const { email, password } = data;
-  auth
-    .createUserWithEmailAndPassword(email, password)
-    .then(user => createUserDoc(data, user.user, callback))
-    .catch(() => callback(false, 'Registration failed.'));
+  return auth.createUserWithEmailAndPassword(email, password).catch(error => {
+    throw error;
+  });
 }
 
 // Login user
-export function onLogin(data, callback) {
+export function login(data) {
   const { email, password } = data;
   console.tron.log(email, password);
-  auth
-    .signInWithEmailAndPassword(email, password)
-    .then(user => callback(true, null))
-    .catch(() => callback(false, 'Authentication failed.'));
+  return auth.signInWithEmailAndPassword(email, password).catch(error => {
+    throw error;
+  });
 }
 
 // Logout user
-export function onLogout(callback) {
+export function logout() {
   auth
     .signOut()
-    .then(() => callback(true, null))
-    .catch(() => callback(false, 'Unable to logout.'));
+    .catch(error => {
+      throw error;
+    });
 }
 
 // Create user in firestore
-export function createUserDoc(data, authUser, callback) {
+export function createUserDoc(data, authUser) {
   console.tron.log('createUser', authUser.uid);
   const { firstName, lastName, year, email, role } = data;
   firestore
@@ -49,8 +99,9 @@ export function createUserDoc(data, authUser, callback) {
       role,
       year
     })
-    .then(() => callback(true, null))
-    .catch(() => callback(false, 'Unable to create user.'));
+    .catch(error => {
+      throw error;
+    });
 }
 
 // callback(success, user, error)
@@ -78,10 +129,10 @@ export function createAnnouncementDoc(data, callback) {
 }
 
 // retrieve user doc in firestore
-export function fetchUser(authUser, callback) {
+export function fetchUser(authUser) {
   console.tron.log('fetchUser', authUser.uid);
   const docRef = firestore.collection('users').doc(authUser.uid);
-  getUserDoc(docRef, callback);
+  return getDoc(docRef);
 }
 
 export function fetchAnnouncements(num, callback) {
@@ -111,23 +162,24 @@ function getUserDoc(docRef, callback) {
     });
 }
 
-function getDoc(docRef, callback) {
-  docRef
+function getDoc(docRef) {
+  return docRef
     .get()
+    .catch(error => {
+      console.tron.log('Error getting document:', error);
+      throw error;
+    })
     .then(doc => {
       if (doc.exists) {
         console.tron.log('doc exists');
-        callback(true, { id: doc.id, val: doc.data() }, null);
-      } else {
-        // doc.data() will be undefined in this case
-        console.tron.log('No such document');
-        callback(false, null, 'No such document.');
+        return doc;
+        // callback(true, { id: doc.id, val: doc.data() }, null);
       }
-    })
-    .catch(error => {
-      console.tron.log('Error getting document:', error);
-      callback(false, null, 'Error getting document.');
+      // doc.data() will be undefined in this case
+      console.tron.log('No such document');
+      throw new Error('No such document');
     });
+  // case for null doc
 }
 
 function getDocs(docsRef, callback) {

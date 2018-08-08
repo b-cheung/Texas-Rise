@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
-import { clearForm, inputUpdate, onRegister } from '../actions';
+import { clearForm, inputUpdate, registerRequest } from '../actions';
 import { TextField, Button, Spinner } from '../../components';
 import styles from '../styles';
 import theme from '../../../styles/theme';
@@ -13,7 +13,7 @@ class RegisterScreen extends Component {
 
   onSubmit() {
     const { firstName, lastName, year, email, role, password, confirmPassword } = this.props;
-    this.props.onRegister({
+    this.props.registerRequest({
       firstName,
       lastName,
       year,
@@ -137,6 +137,6 @@ export default connect(
   {
     clearForm,
     inputUpdate,
-    onRegister
+    registerRequest
   }
 )(RegisterScreen);

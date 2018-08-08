@@ -1,4 +1,3 @@
-import { auth, firestore } from '../../core/firebase/FirebaseConfig';
 import * as fbAPI from './fbAPI';
 
 export function isAdminOrOfficer(user) {
@@ -37,7 +36,7 @@ function checkAuthorization(userRole, allowedRoles) {
 }
 
 function isLoggedIn() {
-  if (fbAPI.getCurrentUser()) {
+  if (fbAPI.getAuthUser()) {
     return true;
   } 
   return false;

@@ -31,27 +31,44 @@ export default (state = INITIAL_STATE, action) => {
       // action.payload ==== { prop: 'name', value 'jane' }
       return { ...state, [action.payload.prop]: action.payload.value };
 
-    case types.AUTH_ATTEMPT:
-      return { ...state, loading: true, error: '' };
+    case types.AUTH_REQUEST:
+      return { ...state, ...INITIAL_STATE };
     case types.AUTH_SUCCESS:
-      return { ...state, ...INITIAL_STATE, user: action.payload };
-    case types.AUTH_FAILURE:
+      return { ...state };
+
+    case types.REGISTER_REQUEST:
+      return { ...state, loading: true, error: '' };
+    case types.REGISTER_FAILURE:
       return {
         ...state,
-        error: action.payload,
+        error: action.error,
         password: '',
         confirmPassword: '',
         loading: false
       };
-    
-    case types.LOGGED_IN:
-      console.tron.log('LOGGED_IN:', action.payload);
-      return { ...state, user: action.payload };
-    case types.LOGOUT_ATTEMPT:
+    case types.LOGIN_REQUEST:
+      return { ...state, loading: true, error: '' };
+    case types.LOGIN_FAILURE:
+      return {
+        ...state,
+        error: action.error,
+        password: '',
+        loading: false
+      };
+
+    case types.FETCH_USER_SUCCESS:
+      return { ...state, user: action.user };
+    case types.FETCH_USER_FAILURE:
+      return { ...state };
+
+    // case types.LOGGED_IN:
+    //   console.tron.log('LOGGED_IN:', action.payload);
+    //   return { ...state, user: action.payload };
+
+    case types.LOGOUT_REQUEST:
       return { ...state, loading: true, error: '' };
     case types.LOGOUT_FAILURE:
-      console.tron.log('LOGOUT_FAILURE:', action.payload);
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.error };
     default:
       return state;
   }

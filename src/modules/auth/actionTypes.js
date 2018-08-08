@@ -1,13 +1,27 @@
-export const CLEAR_FORM = 'clear_form';
-export const INPUT_CHANGED = 'input_changed';
+export const INITIALIZATION_START = 'INITIALIZATION_START';
+export const INITIALIZATION_COMPLETE = 'INITIALIZATION_COMPLETE';
 
-export const AUTH_ATTEMPT = 'auth_attempt';
-export const AUTH_SUCCESS = 'auth_success';
-export const AUTH_FAILURE = 'auth_failure';
+export const CLEAR_FORM = 'CLEAR_FORM';
+export const INPUT_CHANGED = 'INPUT_CHANGED';
 
-export const LOGGED_IN = 'logged_in';
-export const LOGGED_OUT = 'logged_out';
+export const AUTH_REQUEST = 'AUTH_REQUEST';
+export const AUTH_SUCCESS = 'AUTH_SUCCESS';
+export const AUTH_FAILURE = 'AUTH_FAILURE';
 
-export const LOGOUT_ATTEMPT = 'logout_attempt';
-export const LOGOUT_SUCCESS = 'logout_success';
-export const LOGOUT_FAILURE = 'logout_failure';
+export const REGISTER_REQUEST = 'REGISTER_REQUEST';
+export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
+export const REGISTER_FAILURE = 'REGISTER_FAILURE';
+
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+
+export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
+export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE';
+
+export const LOGGED_IN = 'LOGGED_IN';
+export const LOGGED_OUT = 'LOGGED_OUT';
+
+export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { authRequest } from '../actions';
 import NavigationService from '../../../core/navigation/NavigationService';
 import { Card, CardSection, Button } from '../../components';
 
@@ -6,6 +8,10 @@ class Welcome extends Component {
   static navigationOptions = {
     title: 'Texas Rise'
   };
+
+  componentWillMount() {
+    this.props.authRequest();
+  }
 
   onLoginPress() {
     NavigationService.navigate('Login');
@@ -29,4 +35,7 @@ class Welcome extends Component {
   }
 }
 
-export default Welcome;
+export default connect(
+  null,
+  { authRequest }
+)(Welcome);
