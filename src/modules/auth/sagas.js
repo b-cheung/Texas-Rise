@@ -1,5 +1,13 @@
-import { takeLatest } from 'redux-saga';
-import { call, take, fork, cancel, put, cancelled, takeEvery } from 'redux-saga/effects';
+import {
+  call,
+  take,
+  fork,
+  cancel,
+  put,
+  cancelled,
+  takeEvery,
+  takeLatest
+} from 'redux-saga/effects';
 import firebase from 'firebase';
 import * as fbAPI from './../../core/firebase/fbAPI';
 import NavigationService from '../../core/navigation/NavigationService';
@@ -16,12 +24,14 @@ function* registerFlow(data) {
     yield call(fbAPI.createUserDoc, data, authUser);
     // when createUserDoc completes,
     // dispatch action of type REGISTER_SUCCESS with authUser
-    yield put({ type: types.REGISTER_SUCCESS, authUser, error: null });
+    // yield put({ type: types.REGISTER_SUCCESS, authUser, error: null });
+    return authUser;
   } catch (error) {
     // if api call fails,
     // dispatch action of type REGISTER_FAILURE null authUser
     console.tron.log(error);
     yield put({ type: types.REGISTER_FAILURE, authUser: null, error });
+    return null;
   } finally {
     // No matter what, if our `forked` `taskRequest` was cancelled
     // we will then just redirect them to auth
@@ -39,12 +49,14 @@ function* loginFlow(data) {
     const authUser = response.user;
     // when login completes,
     // dispatch action of type LOGIN_SUCCESS with authUser
-    yield put({ type: types.LOGIN_SUCCESS, authUser, error: null });
+    // yield put({ type: types.LOGIN_SUCCESS, authUser, error: null });
+    return authUser;
   } catch (error) {
     // if api call fails,
     // dispatch action of type LOGIN_FAILURE null authUser
     console.tron.log(error);
     yield put({ type: types.LOGIN_FAILURE, authUser: null, error });
+    return null;
   } finally {
     // No matter what, if our `forked` `taskRequest` was cancelled
     // we will then just redirect them to auth
@@ -54,31 +66,41 @@ function* loginFlow(data) {
 }
 
 function* authHandler() {
-  // watch for REGISTER_REQUEST or LOGIN_REQUEST action
-  // set action
-  const actionReq = yield take([types.REGISTER_REQUEST, types.LOGIN_REQUEST]);
-  let taskReq;
-  if (actionReq.type === types.REGISTER_REQUEST) {
-    // pass in data and run registerFlow in forked taskReq
-    taskReq = yield fork(registerFlow, actionReq.data);
-  } else if (actionReq.type === types.LOGIN_REQUEST) {
-    // pass in data and run loginFlow in forked taskReq
-    taskReq = yield fork(loginFlow, actionReq.data);
-  }
-  const actionRes = yield take([
-    types.LOGOUT_REQUEST,
-    types.REGISTER_SUCCESS,
-    types.REGISTER_FAILURE,
-    types.LOGIN_SUCCESS,
-    types.LOGIN_FAILURE
-  ]);
-  if (actionRes.type === types.LOGOUT_REQUEST) {
-    yield cancel(taskReq);
-  } else if (actionRes.type === types.REGISTER_FAILURE || actionRes.type === types.LOGIN_FAILURE) {
-    yield put({ type: types.AUTH_FAILURE, authUser: null, error: actionRes.error });
-  } else if (actionRes.type === types.REGISTER_SUCCESS || actionRes.type === types.LOGIN_SUCCESS) {
-    yield put({ type: types.AUTH_SUCCESS, authUser: actionRes.authUser });
-    //end
+  while (true) {
+    // watch for REGISTER_REQUEST or LOGIN_REQUEST action
+    // set action
+    const actionReq = yield take([types.REGISTER_REQUEST, types.LOGIN_REQUEST]);
+    let authUser;
+    if (actionReq.type === types.REGISTER_REQUEST) {
+      // pass in data and run registerFlow in forked taskReq
+      authUser = yield call(registerFlow, actionReq.data);
+    } else if (actionReq.type === types.LOGIN_REQUEST) {
+      // pass in data and run loginFlow in forked taskReq
+      authUser = yield call(loginFlow, actionReq.data);
+    }
+    // const actionRes = yield take([
+    //   types.LOGOUT_REQUEST,
+    //   types.REGISTER_SUCCESS,
+    //   types.REGISTER_FAILURE,
+    //   types.LOGIN_SUCCESS,
+    //   types.LOGIN_FAILURE
+    // ]);
+    // if (actionRes.type === types.LOGOUT_REQUEST) {
+    //   yield cancel(taskReq);
+    // } else
+    // if (actionRes.type === types.REGISTER_FAILURE || actionRes.type === types.LOGIN_FAILURE) {
+    //   yield put({ type: types.AUTH_FAILURE, authUser: null, error: actionRes.error });
+    // } else if (
+    //   actionRes.type === types.REGISTER_SUCCESS ||
+    //   actionRes.type === types.LOGIN_SUCCESS
+    // ) {
+    //   yield put({ type: types.AUTH_SUCCESS, authUser: actionRes.authUser });
+    //   unAuthed = false;
+    //   return actionRes.authUser;
+    // }
+    if (authUser) {
+      return authUser;
+    }
   }
 }
 
@@ -123,28 +145,28 @@ export function* watchAuth() {
   while (true) {
     const action = yield take([
       types.INITIALIZATION_COMPLETE,
-      types.AUTH_REQUEST,
-      types.AUTH_SUCCESS,
-      types.AUTH_FAILURE
+      types.AUTH_REQUEST
+      // types.AUTH_SUCCESS,
+      // types.AUTH_FAILURE
     ]);
     // check if user is authenticated
-    if (action.authUser == null) {
+    let authUser = action.authUser;
+    if (authUser == null) {
       if (action.type === types.AUTH_REQUEST || action.type === types.INITIALIZATION_COMPLETE) {
         // make sure navigator ref is set
         NavigationService.navigate('Auth');
       }
       // handle auth actions
-      yield fork(authHandler);
-    } else {
-      // auth success
-      // fetch user data
-      const taskFetch = yield fork(fetchUser, action.authUser);
-      const actionFetch = yield take([types.FETCH_USER_SUCCESS, types.FETCH_USER_FAILURE]);
-      if (actionFetch.type === types.FETCH_USER_SUCCESS) {
-        yield call(fbAPI.setAuthStateListener);
-        NavigationService.navigate('App');
-        yield fork(logoutFlow);
-      }
+      authUser = yield call(authHandler);
+    }
+    // auth success
+    // fetch user data
+    const taskFetch = yield fork(fetchUser, authUser);
+    const actionFetch = yield take([types.FETCH_USER_SUCCESS, types.FETCH_USER_FAILURE]);
+    if (actionFetch.type === types.FETCH_USER_SUCCESS) {
+      yield call(fbAPI.setAuthStateListener);
+      NavigationService.navigate('App');
+      yield fork(logoutFlow);
     }
   }
 }

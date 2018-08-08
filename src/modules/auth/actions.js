@@ -3,19 +3,6 @@ import * as fbAPI from './../../core/firebase/fbAPI';
 import * as types from './actionTypes';
 import NavigationService from '../../core/navigation/NavigationService';
 
-export const clearForm = () => {
-  return {
-    type: types.CLEAR_FORM
-  };
-};
-
-export const inputUpdate = ({ prop, value }) => {
-  return {
-    type: types.INPUT_CHANGED,
-    payload: { prop, value }
-  };
-};
-
 export const initializationStart = () => {
   return {
     type: types.INITIALIZATION_START
@@ -35,7 +22,7 @@ export const loginRequest = data => {
   };
 };
 
-  // data = { firstName, lastName, year, email, role, password, confirmPassword }
+// data = { firstName, lastName, year, email, role, password, confirmPassword }
 export const registerRequest = data => {
   return {
     type: types.REGISTER_REQUEST,

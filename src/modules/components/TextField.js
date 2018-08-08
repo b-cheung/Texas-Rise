@@ -2,6 +2,7 @@ import React from 'react';
 import { TextInput, View, StyleSheet } from 'react-native';
 
 const TextField = ({
+  id,
   value,
   onChangeText,
   placeholder,
@@ -22,6 +23,7 @@ const TextField = ({
         multiline={multiline}
         numberOfLines={numberOfLines}
         style={[inputStyle, style]}
+        id={id}
         value={value}
         onChangeText={onChangeText}
       />

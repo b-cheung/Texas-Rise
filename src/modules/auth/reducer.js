@@ -1,36 +1,13 @@
 import * as types from './actionTypes';
 
 const INITIAL_STATE = {
-  firstName: '',
-  lastName: '',
-  year: '',
-  email: 'admin@utexas.edu',
-  password: 'password',
-  confirmPassword: '',
   user: null,
-  error: '',
-  loading: ''
-};
-
-const FORM_INITIAL_STATE = {
-  firstName: '',
-  lastName: '',
-  year: '',
-  email: 'admin@utexas.edu',
-  password: 'password',
-  confirmPassword: '',
   error: '',
   loading: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case types.CLEAR_FORM:
-      return { ...state, ...FORM_INITIAL_STATE };
-    case types.INPUT_CHANGED:
-      // action.payload ==== { prop: 'name', value 'jane' }
-      return { ...state, [action.payload.prop]: action.payload.value };
-
     case types.AUTH_REQUEST:
       return { ...state, ...INITIAL_STATE };
     case types.AUTH_SUCCESS:
@@ -41,9 +18,7 @@ export default (state = INITIAL_STATE, action) => {
     case types.REGISTER_FAILURE:
       return {
         ...state,
-        error: action.error,
-        password: '',
-        confirmPassword: '',
+        error: `code: ${action.error.code}\nmessage: ${action.error.message}`,
         loading: false
       };
     case types.LOGIN_REQUEST:
@@ -51,8 +26,7 @@ export default (state = INITIAL_STATE, action) => {
     case types.LOGIN_FAILURE:
       return {
         ...state,
-        error: action.error,
-        password: '',
+        error: `code: ${action.error.code}\nmessage: ${action.error.message}`,
         loading: false
       };
 

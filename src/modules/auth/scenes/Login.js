@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
-import { clearForm, inputUpdate, loginRequest } from '../actions';
+import { loginRequest } from '../actions';
 import { Button, Spinner, TextField } from '../../components';
 import styles from '../styles';
 import theme from '../../../styles/theme';
@@ -11,12 +11,16 @@ class Login extends Component {
     title: 'Login'
   };
 
-  componentWillMount() {
-    this.props.clearForm();
+  constructor() {
+    super();
+    this.state = {
+      email: '',
+      password: ''
+    };
   }
 
-  onSubmit() {
-    const { email, password } = this.props;
+  handleSubmit() {
+    const { email, password } = this.state;
     this.props.loginRequest({ email, password });
   }
 
@@ -34,26 +38,30 @@ class Login extends Component {
     if (this.props.loading) {
       return <Spinner size="large" />;
     }
-    return <Button onPress={this.onSubmit.bind(this)}>Login</Button>;
+    return <Button onPress={this.handleSubmit.bind(this)}>Login</Button>;
   }
 
   render() {
     return (
       <KeyboardAvoidingView style={theme.container} behavior="padding" enabled>
         <ScrollView style={{ flex: 1 }}>
-            <TextField
-              placeholder="Email"
-              autoCapitalize="none"
-              value={this.props.email}
-              onChangeText={value => this.props.inputUpdate({ prop: 'email', value })}
-            />
-            <TextField
-              placeholder="Password"
-              secureTextEntry
-              autoCapitalize="none"
-              value={this.props.password}
-              onChangeText={value => this.props.inputUpdate({ prop: 'password', value })}
-            />
+          <TextField
+            placeholder="Email"
+            autoCapitalize="none"
+            style={theme.input}
+            id="email"
+            value={this.state.email}
+            onChangeText={email => this.setState({ email })}
+          />
+          <TextField
+            placeholder="Password"
+            secureTextEntry
+            autoCapitalize="none"
+            style={theme.input}
+            id="password"
+            value={this.state.password}
+            onChangeText={password => this.setState({ password })}
+          />
           {this.renderError()}
           {this.renderButton()}
         </ScrollView>
@@ -63,15 +71,11 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => {
-  const { email, password, error, loading, user } = state.authReducer;
-  return { email, password, error, loading, user };
+  const { error, loading, user } = state.authReducer;
+  return { error, loading, user };
 };
 
 export default connect(
   mapStateToProps,
-  {
-    clearForm,
-    inputUpdate,
-    loginRequest
-  }
+  { loginRequest }
 )(Login);

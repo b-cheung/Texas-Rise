@@ -3,7 +3,6 @@ import 'firebase/firestore';
 import * as fbCred from './FirebaseCredentials';
 import NavigationService from '../navigation/NavigationService';
 
-
 // Initialize Firebase
 const config = {
   apiKey: fbCred.FIREBASE_API_KEY,
@@ -30,13 +29,12 @@ export function initializeFirebase() {
 
 export function getCurrentUser() {
   return new Promise((resolve, reject) => {
-     const unsubscribe = auth.onAuthStateChanged(user => {
-        unsubscribe();
-        resolve(user);
-     }, reject);
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      unsubscribe();
+      resolve(user);
+    }, reject);
   });
 }
-
 
 export function getAuthUser() {
   const user = auth.currentUser;
@@ -45,18 +43,17 @@ export function getAuthUser() {
 }
 
 export function setAuthStateListener() {
-    console.tron.log('setAuthStateListener');
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      console.tron.log('onAuthStateChanged');
-      if (user) {
-        console.tron.log('logged in');
-      } else {
-        NavigationService.navigate('Auth');
-        unsubscribe();
-      }
+  console.tron.log('setAuthStateListener');
+  const unsubscribe = auth.onAuthStateChanged(user => {
+    console.tron.log('onAuthStateChanged');
+    if (user) {
+      console.tron.log('logged in');
+    } else {
+      NavigationService.navigate('Auth');
+      unsubscribe();
+    }
   });
 }
-
 
 // callback(success, error)
 // Register and create user in firestore
@@ -78,11 +75,9 @@ export function login(data) {
 
 // Logout user
 export function logout() {
-  auth
-    .signOut()
-    .catch(error => {
-      throw error;
-    });
+  auth.signOut().catch(error => {
+    throw error;
+  });
 }
 
 // Create user in firestore
