@@ -127,13 +127,13 @@ export function* watchAuth() {
       types.AUTH_SUCCESS,
       types.AUTH_FAILURE
     ]);
-    if (action.type === types.INITIALIZATION_COMPLETE) {
-      NavigationService.navigate('Auth');
-    } else if (action.authUser == null) {
-      if (action.type === types.AUTH_REQUEST) {
+    // check if user is authenticated
+    if (action.authUser == null) {
+      if (action.type === types.AUTH_REQUEST || action.type === types.INITIALIZATION_COMPLETE) {
         // make sure navigator ref is set
         NavigationService.navigate('Auth');
       }
+      // handle auth actions
       yield fork(authHandler);
     } else {
       // auth success
