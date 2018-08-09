@@ -1,14 +1,4 @@
-import {
-  call,
-  take,
-  fork,
-  cancel,
-  put,
-  cancelled,
-  takeEvery,
-  takeLatest
-} from 'redux-saga/effects';
-import firebase from 'firebase';
+import { call, take, fork, put, cancelled } from 'redux-saga/effects';
 import * as fbAPI from './../../core/firebase/fbAPI';
 import NavigationService from '../../core/navigation/NavigationService';
 import * as types from './actionTypes';
@@ -32,11 +22,6 @@ function* registerFlow(data) {
     console.tron.log(error);
     yield put({ type: types.REGISTER_FAILURE, authUser: null, error });
     return null;
-  } finally {
-    // No matter what, if our `forked` `taskRequest` was cancelled
-    // we will then just redirect them to auth
-    if (yield cancelled()) {
-    }
   }
 }
 
@@ -57,11 +42,6 @@ function* loginFlow(data) {
     console.tron.log(error);
     yield put({ type: types.LOGIN_FAILURE, authUser: null, error });
     return null;
-  } finally {
-    // No matter what, if our `forked` `taskRequest` was cancelled
-    // we will then just redirect them to auth
-    if (yield cancelled()) {
-    }
   }
 }
 
@@ -78,26 +58,6 @@ function* authHandler() {
       // pass in data and run loginFlow in forked taskReq
       authUser = yield call(loginFlow, actionReq.data);
     }
-    // const actionRes = yield take([
-    //   types.LOGOUT_REQUEST,
-    //   types.REGISTER_SUCCESS,
-    //   types.REGISTER_FAILURE,
-    //   types.LOGIN_SUCCESS,
-    //   types.LOGIN_FAILURE
-    // ]);
-    // if (actionRes.type === types.LOGOUT_REQUEST) {
-    //   yield cancel(taskReq);
-    // } else
-    // if (actionRes.type === types.REGISTER_FAILURE || actionRes.type === types.LOGIN_FAILURE) {
-    //   yield put({ type: types.AUTH_FAILURE, authUser: null, error: actionRes.error });
-    // } else if (
-    //   actionRes.type === types.REGISTER_SUCCESS ||
-    //   actionRes.type === types.LOGIN_SUCCESS
-    // ) {
-    //   yield put({ type: types.AUTH_SUCCESS, authUser: actionRes.authUser });
-    //   unAuthed = false;
-    //   return actionRes.authUser;
-    // }
     if (authUser) {
       return authUser;
     }
@@ -114,9 +74,9 @@ function* fetchUser(authUser) {
     yield put({ type: types.FETCH_USER_SUCCESS, user });
   } catch (error) {
     // if api call fails,
-    // dispatch action of type FETCH_USER_FAILURE null authUser
+    // dispatch action of type FETCH_USER_FAILURE null user
     console.tron.log(error);
-    yield put({ type: types.FETCH_USER_FAILURE, authUser: null });
+    yield put({ type: types.FETCH_USER_FAILURE, user: null, error });
   }
 }
 
@@ -134,7 +94,7 @@ function* logoutFlow() {
 }
 
 export function* initializationFlow() {
-  yield take(types.INITIALIZATION_START);
+  // yield take(types.INITIALIZATION_START);
   // initialize firebase and wait for completion
   yield call(fbAPI.initializeFirebase);
   const authUser = yield call(fbAPI.getCurrentUser);

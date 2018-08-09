@@ -33,7 +33,7 @@ export default (state = INITIAL_STATE, action) => {
     case types.FETCH_USER_SUCCESS:
       return { ...state, user: action.user };
     case types.FETCH_USER_FAILURE:
-      return { ...state };
+      return { ...state, error: `code: ${action.error.code}\nmessage: ${action.error.message}` };
 
     // case types.LOGGED_IN:
     //   console.tron.log('LOGGED_IN:', action.payload);

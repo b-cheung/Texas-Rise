@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ScrollView, FlatList } from 'react-native';
-import { fetchAnnouncements } from '../../actions';
+import { fetchAnnouncementsRequest } from '../../actions';
 import { Button, Card, CardSection, Header } from '../../../components';
 import NavigationService from '../../../../core/navigation/NavigationService';
 import * as authService from '../../../../core/firebase/authService';
@@ -10,14 +10,14 @@ import theme from '../../../../styles/theme';
 
 class AnnouncementFeed extends Component {
   componentWillMount() {
-    this.props.fetchAnnouncements(5);
+    this.props.fetchAnnouncementsRequest(5);
   }
 
   renderCreateButton() {
     return (
-      authService.isAdminOrOfficer(this.props.user) && (
+      // authService.isAdminOrOfficer(this.props.user) && (
         <Button onPress={() => NavigationService.navigate('AnnouncementCreate')}>Create</Button>
-      )
+      // )
     );
   }
 
@@ -58,5 +58,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchAnnouncements }
+  { fetchAnnouncementsRequest }
 )(AnnouncementFeed);

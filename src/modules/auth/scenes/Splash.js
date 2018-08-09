@@ -8,7 +8,7 @@ class Splash extends Component {
   componentDidMount() {
     console.tron.log('splash did mount');
     // this._bootstrapAsync();
-    this.props.initializationStart();
+    // this.props.initializationStart();
   }
 
   // check if user is authenticated
