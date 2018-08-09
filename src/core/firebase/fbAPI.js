@@ -27,7 +27,7 @@ export function initializeFirebase() {
   firestore.settings(settings);
 }
 
-export function getCurrentUser() {
+export function getAuthUser() {
   return new Promise((resolve, reject) => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       unsubscribe();
@@ -36,11 +36,11 @@ export function getCurrentUser() {
   });
 }
 
-export function getAuthUser() {
-  const user = auth.currentUser;
-  console.tron.log('getAuthUser', user);
-  return user;
-}
+// export function getAuthUser() {
+//   const user = auth.currentUser;
+//   console.tron.log('getAuthUser', user);
+//   return user;
+// }
 
 export function setAuthStateListener() {
   console.tron.log('setAuthStateListener');
@@ -102,15 +102,17 @@ export function createUserDoc(data, authUser) {
 // callback(success, user, error)
 // Create announcement in firestore
 export function createAnnouncementDoc(data) {
-  const { title, body, members, students, user } = data;
+  const { title, body, member, student, user } = data;
   return firestore
     .collection('announcements')
     .add({
       title,
       body,
       audience: {
-        members,
-        students
+        admin: true,
+        officer: true,
+        member,
+        student
       },
       author: {
         uid: user.uid,
@@ -134,20 +136,18 @@ export function fetchUser(authUser) {
   return getDoc(docRef);
 }
 
-export function fetchAnnouncement(docId) {
-  const docRef = firestore.collection('announcements').doc(docId);
-  return getDoc(docRef);
-}
-
-export function fetchAnnouncements(num) {
+export function fetchAnnouncements(data) {
+  const { num, userRole } = data;
+  console.tron.log('fetchAnnouncements', num, userRole);
   const docsRef = firestore
     .collection('announcements')
+    .where(`audience.${userRole}`, '==', true)
     .orderBy('timestamp', 'desc')
     .limit(num);
   return getDocs(docsRef);
 }
 
-export function getDoc(docRef) {
+function getDoc(docRef) {
   return docRef
     .get()
     .catch(error => {
@@ -163,14 +163,14 @@ export function getDoc(docRef) {
       console.tron.log('No such document');
       throw new Error('No such document');
     });
-  // case for null doc
+  // case for null doc`
 }
 
 function getDocs(docsRef) {
   return docsRef
     .get()
     .catch(error => {
-      console.tron.log('Error getting document(s):', error);
+      console.log('Error getting document(s):', error);
       throw error;
     })
     .then(querySnapshot => {

@@ -85,6 +85,7 @@ function* logoutFlow() {
     yield take(types.LOGOUT_REQUEST);
     // try logout()
     yield call(fbAPI.logout);
+    yield put({ type: types.LOGOUT_SUCCESS });
   } catch (error) {
     // if api call fails,
     // dispatch action of type LOGOUT_FAILURE with error
@@ -97,7 +98,7 @@ export function* initializationFlow() {
   // yield take(types.INITIALIZATION_START);
   // initialize firebase and wait for completion
   yield call(fbAPI.initializeFirebase);
-  const authUser = yield call(fbAPI.getCurrentUser);
+  const authUser = yield call(fbAPI.getAuthUser);
   yield put({ type: types.INITIALIZATION_COMPLETE, authUser });
 }
 

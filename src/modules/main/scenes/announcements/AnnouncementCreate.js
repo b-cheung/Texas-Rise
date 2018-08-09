@@ -12,19 +12,19 @@ class AnnouncementCreate extends Component {
     this.state = {
       title: '',
       body: '',
-      members: false,
-      students: false
+      member: false,
+      student: false
     };
   }
 
   handleSubmit() {
-    const { title, body, members, students } = this.state;
+    const { title, body, member, student } = this.state;
     const { user } = this.props;
     this.props.createAnnouncementRequest({
       title,
       body,
-      members,
-      students,
+      member,
+      student,
       user
     });
   }
@@ -57,13 +57,13 @@ class AnnouncementCreate extends Component {
           <Text>Audience:</Text>
           <Selectable
             label="Members"
-            value={this.state.members}
-            onPress={() => this.setState({ members: !this.state.members })}
+            value={this.state.member}
+            onPress={() => this.setState({ member: !this.state.member })}
           />
           <Selectable
             label="Students"
-            value={this.state.students}
-            onPress={() => this.setState({ students: !this.state.students })}
+            value={this.state.student}
+            onPress={() => this.setState({ student: !this.state.student })}
           />
         </ScrollView>
       </KeyboardAvoidingView>

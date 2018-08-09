@@ -1,11 +1,11 @@
 import * as types from './actionTypes';
 
-export const fetchAnnouncementsRequest = num => {
+export const fetchAnnouncementsRequest = data => {
   console.tron.log('fetchAnnouncements');
-    return {
-      type: types.FETCH_ANNOUNCEMENTS_REQUEST,
-      num
-    };
+  return {
+    type: types.FETCH_ANNOUNCEMENTS_REQUEST,
+    data
+  };
 };
 
 export const createAnnouncementRequest = data => {

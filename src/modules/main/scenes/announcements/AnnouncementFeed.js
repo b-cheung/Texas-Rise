@@ -10,7 +10,7 @@ import theme from '../../../../styles/theme';
 
 class AnnouncementFeed extends Component {
   componentWillMount() {
-    this.props.fetchAnnouncementsRequest(5);
+    this.props.fetchAnnouncementsRequest({ num: 5, userRole: this.props.user.role });
   }
 
   renderCreateButton() {

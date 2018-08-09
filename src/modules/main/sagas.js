@@ -13,9 +13,9 @@ import * as fbAPI from './../../core/firebase/fbAPI';
 import NavigationService from '../../core/navigation/NavigationService';
 import * as types from './actionTypes';
 
-function* fetchAnnouncementsFlow() {
+function* fetchAnnouncementsFlow(action) {
   try {
-    const docs = yield call(fbAPI.fetchAnnouncements, 5);
+    const docs = yield call(fbAPI.fetchAnnouncements, action.data);
     const announcements = {};
     docs.forEach(doc => {
       announcements[doc.id] = doc.data();

@@ -1,5 +1,12 @@
 import * as fbAPI from './fbAPI';
 
+export function fetchAnnouncementsAuth(userRole) {
+  switch (userRole) {
+    case 'admin':
+      return 'audience'
+  }
+}
+
 export function isAdminOrOfficer(user) {
   const allowedRoles = ['admin', 'officer'];
   return checkAuthorization(user.role, allowedRoles);
@@ -35,7 +42,7 @@ function checkAuthorization(userRole, allowedRoles) {
   return false;
 }
 
-function isLoggedIn() {
+export function isLoggedIn() {
   if (fbAPI.getAuthUser()) {
     return true;
   } 
