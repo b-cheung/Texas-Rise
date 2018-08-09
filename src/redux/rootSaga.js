@@ -10,3 +10,13 @@ export default function* rootSaga() {
     fork(watchAnnouncements)
   ]);
 }
+
+// import { sagas as authSagas } from '../modules/auth';
+// import { sagas as mainSagas } from '../modules/main';
+
+// export default function* rootSaga() {
+//   yield all([
+//     ...authSagas,
+//     ...mainSagas,
+//   ]);
+// }

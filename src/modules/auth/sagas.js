@@ -1,4 +1,4 @@
-import { call, take, fork, put, cancelled } from 'redux-saga/effects';
+import { call, take, fork, put, cancelled, takeEvery } from 'redux-saga/effects';
 import * as fbAPI from './../../core/firebase/fbAPI';
 import NavigationService from '../../core/navigation/NavigationService';
 import * as types from './actionTypes';
@@ -132,4 +132,7 @@ export function* watchAuth() {
   }
 }
 
-// export const sagas = [takeEvery('AUTH', watchAuth)];
+// export const sagas = [
+//   takeEvery(types.INITIALIZATION_START, initializationFlow),
+//   takeEvery(types.AUTH_REQUEST, watchAuth)
+// ];

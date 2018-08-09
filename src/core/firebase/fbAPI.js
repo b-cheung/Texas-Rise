@@ -119,7 +119,7 @@ export function createAnnouncementDoc(data) {
         firstName: user.firstName,
         lastName: user.lastName
       },
-      timestamp: getTimeStamp()
+      timestamp: getTimestamp()
     })
     .then(docRef => {
       return getDoc(docRef);
@@ -137,21 +137,36 @@ export function fetchUser(authUser) {
 }
 
 export function fetchAnnouncements(data) {
+  const queryRef = createAnnouncementQuery(data);
+  return getDocs(queryRef);
+}
+
+export function fetchNewAnnouncements(data) {
+  const { timestamp } = data;
+  const queryRef = createAnnouncementQuery(data).endBefore(timestamp);
+  return getDocs(queryRef);
+}
+
+export function fetchOldAnnouncements(data) {
+  const { timestamp } = data;
+  const queryRef = createAnnouncementQuery(data).startAfter(timestamp);
+  return getDocs(queryRef);
+}
+
+function createAnnouncementQuery(data) {
   const { num, userRole } = data;
-  console.tron.log('fetchAnnouncements', num, userRole);
-  const docsRef = firestore
+  return firestore
     .collection('announcements')
     .where(`audience.${userRole}`, '==', true)
     .orderBy('timestamp', 'desc')
     .limit(num);
-  return getDocs(docsRef);
 }
 
 function getDoc(docRef) {
   return docRef
     .get()
     .catch(error => {
-      console.tron.log('Error getting document:', error);
+      console.log('Error getting document:', error);
       throw error;
     })
     .then(doc => {
@@ -166,8 +181,8 @@ function getDoc(docRef) {
   // case for null doc`
 }
 
-function getDocs(docsRef) {
-  return docsRef
+function getDocs(queryRef) {
+  return queryRef
     .get()
     .catch(error => {
       console.log('Error getting document(s):', error);
@@ -181,13 +196,13 @@ function getDocs(docsRef) {
           ...,
           id: Object {val}
         }*/
-        return querySnapshot;
+        return querySnapshot.docs;
       }
       console.tron.log('No documents found.');
       throw new Error('No documents found.');
     });
 }
 
-function getTimeStamp() {
+export function getTimestamp() {
   return firebase.firestore.FieldValue.serverTimestamp();
 }

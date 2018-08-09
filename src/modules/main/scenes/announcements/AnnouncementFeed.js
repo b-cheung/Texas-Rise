@@ -2,7 +2,11 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ScrollView, FlatList } from 'react-native';
-import { fetchAnnouncementsRequest } from '../../actions';
+import {
+  fetchAnnouncementsRequest,
+  fetchNewAnnouncementsRequest,
+  fetchOldAnnouncementsRequest
+} from '../../actions';
 import { Button, Card, CardSection, Header } from '../../../components';
 import NavigationService from '../../../../core/navigation/NavigationService';
 import * as authService from '../../../../core/firebase/authService';
@@ -13,10 +17,46 @@ class AnnouncementFeed extends Component {
     this.props.fetchAnnouncementsRequest({ num: 5, userRole: this.props.user.role });
   }
 
+  renderRefreshButton() {
+    return (
+      <Button
+        onPress={() => {
+          const timestamp = this.props.announcements[0].timestamp;
+          console.tron.log('renderRefreshButton', timestamp);
+          this.props.fetchNewAnnouncementsRequest({
+            num: 5,
+            userRole: this.props.user.role,
+            timestamp
+          });
+        }}
+      >
+        Refresh
+      </Button>
+    );
+  }
+
+  renderLoadMoreButton() {
+    return (
+      <Button
+        onPress={() => {
+          const timestamp = this.props.announcements[this.props.announcements.length - 1].timestamp;
+          console.tron.log('renderLoadMoreButton', this.props.announcements.length, timestamp);
+          this.props.fetchOldAnnouncementsRequest({
+            num: 5,
+            userRole: this.props.user.role,
+            timestamp
+          });
+        }}
+      >
+        Load More
+      </Button>
+    );
+  }
+
   renderCreateButton() {
     return (
       // authService.isAdminOrOfficer(this.props.user) && (
-        <Button onPress={() => NavigationService.navigate('AnnouncementCreate')}>Create</Button>
+      <Button onPress={() => NavigationService.navigate('AnnouncementCreate')}>Create</Button>
       // )
     );
   }
@@ -37,6 +77,8 @@ class AnnouncementFeed extends Component {
     return (
       <ScrollView>
         <Header headerText="AnnouncementFeed" />
+        <View>{this.renderRefreshButton()}</View>
+        <View>{this.renderLoadMoreButton()}</View>
         <View>{this.renderCreateButton()}</View>
         <FlatList
           data={this.props.announcements}
@@ -50,13 +92,12 @@ class AnnouncementFeed extends Component {
 
 const mapStateToProps = state => {
   const { user } = state.authReducer;
-  const announcements = _.map(state.mainReducer.announcements, (val, id) => {
-    return { ...val, id };
-  });
+  const announcements = state.mainReducer.announcements;
+  console.tron.log(announcements);
   return { user, announcements };
 };
 
 export default connect(
   mapStateToProps,
-  { fetchAnnouncementsRequest }
+  { fetchAnnouncementsRequest, fetchNewAnnouncementsRequest, fetchOldAnnouncementsRequest }
 )(AnnouncementFeed);
