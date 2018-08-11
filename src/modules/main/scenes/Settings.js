@@ -4,8 +4,7 @@ import { logoutRequest } from '../../auth/actions';
 import { Card, CardSection, Button, Spinner } from '../../components';
 
 class SettingsScreen extends Component {
-  onLogout() {
-    console.tron.log('logout button pressed');
+  onLogout = () => {
     this.props.logoutRequest();
   }
   
@@ -13,7 +12,7 @@ class SettingsScreen extends Component {
     if (this.props.loading) {
       return <Spinner size="large" />;
     }
-    return <Button onPress={this.onLogout.bind(this)}>Logout</Button>;
+    return <Button onPress={this.onLogout}>Logout</Button>;
   }
 
   render() {

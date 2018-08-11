@@ -3,8 +3,24 @@ import 'firebase/firestore';
 import * as fbCred from './FirebaseCredentials';
 import NavigationService from '../navigation/NavigationService';
 
+// export class Firebase {
+//   static auth;
+//   static firestore;
+//   static settings;
+//   static init() {
+//     console.tron.log('Initialize Firebase');
+//     firebase.initializeApp(firebaseConfig);
+
+//     console.tron.log('Initialize Firebase auth');
+//     Firebase.auth = firebase.auth();
+//     Firebase.firestore = firebase.firestore();
+//     Firebase.settings = { timestampsInSnapshots: true };
+//     Firebase.firestore.settings(settings);
+//   }
+// }
+
 // Initialize Firebase
-const config = {
+const firebaseConfig = {
   apiKey: fbCred.FIREBASE_API_KEY,
   authDomain: fbCred.FIREBASE_AUTH_DOMAIN,
   databaseURL: fbCred.FIREBASE_DATABASE_URL,
@@ -18,7 +34,7 @@ let firestore;
 let settings;
 export function initializeFirebase() {
   console.tron.log('Initialize Firebase');
-  firebase.initializeApp(config);
+  firebase.initializeApp(firebaseConfig);
 
   console.tron.log('Initialize Firebase auth');
   auth = firebase.auth();
@@ -36,6 +52,24 @@ export function getAuthUser() {
   });
 }
 
+export function getIdToken() {
+  return auth.currentUser.getIdToken(true);
+}
+
+export function reloadAuthUser() {
+  auth.currentUser.reload();
+}
+
+export function sendVerificationEmail() {
+  auth.currentUser
+    .sendEmailVerification()
+    .catch((error) => {
+      // An error happened.
+      throw error;
+    });
+}
+
+
 // export function getAuthUser() {
 //   const user = auth.currentUser;
 //   console.tron.log('getAuthUser', user);
@@ -49,7 +83,7 @@ export function setAuthStateListener() {
     if (user) {
       console.tron.log('logged in');
     } else {
-      NavigationService.navigate('Auth');
+      NavigationService.navigate('Welcome');
       unsubscribe();
     }
   });
@@ -150,7 +184,9 @@ export function fetchNewAnnouncements(data) {
 
 export function fetchOldAnnouncements(data) {
   const { num, timestamp } = data;
-  const queryRef = createAnnouncementQuery(data).startAfter(timestamp).limit(num);
+  const queryRef = createAnnouncementQuery(data)
+    .startAfter(timestamp)
+    .limit(num);
   return getDocs(queryRef);
 }
 

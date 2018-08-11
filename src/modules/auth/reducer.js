@@ -14,7 +14,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state };
 
     case types.REGISTER_REQUEST:
-      return { ...state, loading: true, error: '' };
+      return { ...state, error: '', loading: true };
     case types.REGISTER_FAILURE:
       return {
         ...state,
@@ -22,8 +22,23 @@ export default (state = INITIAL_STATE, action) => {
         loading: false
       };
     case types.LOGIN_REQUEST:
-      return { ...state, loading: true, error: '' };
+      return { ...state, error: '', loading: true };
     case types.LOGIN_FAILURE:
+      return {
+        ...state,
+        error: `code: ${action.error.code}\nmessage: ${action.error.message}`,
+        loading: false
+      };
+
+    case types.SEND_VERIFICATION_EMAIL_REQUEST:
+      return { ...state, error: '', loading: true };
+    case types.SEND_VERIFICATION_EMAIL_SUCCESS:
+      return { ...state, error: '', loading: false };
+    case types.VERIFICATION_STATUS_REQUEST:
+      return { ...state, error: '', loading: true };
+      case types.VERIFICATION_STATUS_FAILURE:
+      return { ...state, error: action.error, loading: false };
+    case types.VERIFY_EMAIL_FLOW_FAILURE:
       return {
         ...state,
         error: `code: ${action.error.code}\nmessage: ${action.error.message}`,

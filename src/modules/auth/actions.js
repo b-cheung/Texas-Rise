@@ -30,6 +30,18 @@ export const registerRequest = data => {
   };
 };
 
+export const sendVerificationEmail = () => {
+  return {
+    type: types.SEND_VERIFICATION_EMAIL_REQUEST
+  };
+};
+
+export const checkVerificationStatus = () => {
+  return {
+    type: types.VERIFICATION_STATUS_REQUEST
+  };
+};
+
 export const logoutRequest = () => {
   return {
     type: types.LOGOUT_REQUEST

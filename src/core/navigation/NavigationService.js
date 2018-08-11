@@ -5,6 +5,7 @@ let navigator;
 function setTopLevelNavigator(navigatorRef) {
   console.tron.log('setTopLevelNavigator');
   navigator = navigatorRef;
+  navigate('Initialization');
 }
 
 function navigate(routeName, params) {

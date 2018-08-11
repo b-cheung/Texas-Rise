@@ -11,6 +11,7 @@ function* registerFlow(data) {
     const authUser = response.user;
     // create user doc
     yield call(fbAPI.createUserDoc, data, authUser);
+    yield call(fbAPI.sendVerificationEmail);
     // when createUserDoc completes,
     // dispatch action of type REGISTER_SUCCESS with authUser
     // yield put({ type: types.REGISTER_SUCCESS, authUser, error: null });
@@ -62,6 +63,33 @@ function* authHandler() {
   }
 }
 
+function* verifyEmailFlow() {
+  NavigationService.navigate('VerifyEmail');
+  yield fork(logoutFlow);
+  while (true) {
+    try {
+      const action = yield take([
+        types.SEND_VERIFICATION_EMAIL_REQUEST,
+        types.VERIFICATION_STATUS_REQUEST
+      ]);
+      if (action.type === types.SEND_VERIFICATION_EMAIL_REQUEST) {
+        yield call(fbAPI.sendVerificationEmail);
+        yield put({ type: types.SEND_VERIFICATION_EMAIL_SUCCESS });
+      } else if (action.type === types.VERIFICATION_STATUS_REQUEST) {
+        yield call(fbAPI.reloadAuthUser);
+        const authUser = yield call(fbAPI.getAuthUser);
+        if (authUser.emailVerified) {
+          return authUser;
+        }
+        yield put({ type: types.VERIFICATION_STATUS_FAILURE, error: 'Email not verified' });
+      }
+    } catch (error) {
+      console.tron.log(error);
+      yield put({ type: types.VERIFY_EMAIL_FLOW_FAILURE, error });
+    }
+  }
+}
+
 function* fetchUser(authUser) {
   try {
     // fetch user doc
@@ -93,7 +121,7 @@ function* logoutFlow() {
 }
 
 export function* initializationFlow() {
-  // yield take(types.INITIALIZATION_START);
+  yield take(types.INITIALIZATION_START);
   // initialize firebase and wait for completion
   yield call(fbAPI.initializeFirebase);
   const authUser = yield call(fbAPI.getAuthUser);
@@ -111,6 +139,7 @@ export function* watchAuth() {
     // check if user is authenticated
     let authUser = action.authUser;
     if (authUser == null) {
+      // console.tron.log('authUser is null');
       if (action.type === types.AUTH_REQUEST || action.type === types.INITIALIZATION_COMPLETE) {
         // make sure navigator ref is set
         NavigationService.navigate('Auth');
@@ -118,12 +147,15 @@ export function* watchAuth() {
       // handle auth actions
       authUser = yield call(authHandler);
     }
+    yield call(fbAPI.setAuthStateListener);
+    if (!authUser.emailVerified) {
+      authUser = yield call(verifyEmailFlow);
+    }
     // auth success
     // fetch user data
     const taskFetch = yield fork(fetchUser, authUser);
     const actionFetch = yield take([types.FETCH_USER_SUCCESS, types.FETCH_USER_FAILURE]);
     if (actionFetch.type === types.FETCH_USER_SUCCESS) {
-      yield call(fbAPI.setAuthStateListener);
       NavigationService.navigate('App');
       yield fork(logoutFlow);
     }

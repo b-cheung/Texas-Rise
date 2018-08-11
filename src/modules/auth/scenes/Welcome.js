@@ -13,11 +13,11 @@ class Welcome extends Component {
     this.props.authRequest();
   }
 
-  onLoginPress() {
+  onLoginPress = () => {
     NavigationService.navigate('Login');
   }
 
-  onRegisterPress() {
+  onRegisterPress = () => {
     NavigationService.navigate('Register');
   }
 
@@ -25,10 +25,10 @@ class Welcome extends Component {
     return (
       <Card>
         <CardSection>
-          <Button onPress={this.onLoginPress.bind(this)}>Login</Button>
+          <Button onPress={this.onLoginPress}>Login</Button>
         </CardSection>
         <CardSection>
-          <Button onPress={this.onRegisterPress.bind(this)}>Register</Button>
+          <Button onPress={this.onRegisterPress}>Register</Button>
         </CardSection>
       </Card>
     );
