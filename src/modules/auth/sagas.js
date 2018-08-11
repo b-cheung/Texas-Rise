@@ -4,7 +4,6 @@ import NavigationService from '../../core/navigation/NavigationService';
 import * as types from './actionTypes';
 
 function* registerFlow(data) {
-  // data = { firstName, lastName, year, email, role, password }
   try {
     // try register() with data
     // wait for register response
@@ -26,7 +25,6 @@ function* registerFlow(data) {
 }
 
 function* loginFlow(data) {
-  // data = { email, password }
   try {
     // try to call login() with data
     // wait for login response

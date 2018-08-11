@@ -17,20 +17,18 @@ class AnnouncementCreate extends Component {
     };
   }
 
-  handleSubmit() {
+  handleSubmit = () => {
     const { title, body, member, student } = this.state;
-    const { user } = this.props;
     this.props.createAnnouncementRequest({
       title,
       body,
       member,
-      student,
-      user
+      student
     });
   }
 
   renderPostButton() {
-    return <Button onPress={this.handleSubmit.bind(this)}>Post</Button>;
+    return <Button onPress={this.handleSubmit}>Post</Button>;
   }
 
   render() {
@@ -43,6 +41,7 @@ class AnnouncementCreate extends Component {
             placeholder="Title"
             autoCapitalize="words"
             style={theme.input}
+            id="title"
             value={this.state.title}
             onChangeText={title => this.setState({ title })}
           />
@@ -51,6 +50,7 @@ class AnnouncementCreate extends Component {
             autoCapitalize="sentences"
             multiline
             style={theme.input}
+            id="body"
             value={this.state.body}
             onChangeText={body => this.setState({ body })}
           />
@@ -72,7 +72,8 @@ class AnnouncementCreate extends Component {
 }
 
 const mapStateToProps = state => {
-  const { user } = state.authReducer;
+  console.tron.log('mapStateToProps AnnouncementCreate');
+  const { user } = state.auth;
   return { user };
 };
 

@@ -20,7 +20,7 @@ class RegisterScreen extends Component {
     };
   }
 
-  handleSubmit() {
+  handleSubmit = () => {
     const { firstName, lastName, year, email, role, password, confirmPassword } = this.state;
     this.props.registerRequest({
       firstName,
@@ -47,7 +47,7 @@ class RegisterScreen extends Component {
     if (this.props.loading) {
       return <Spinner size="large" />;
     }
-    return <Button onPress={this.handleSubmit.bind(this)}>Submit</Button>;
+    return <Button onPress={this.handleSubmit}>Submit</Button>;
   }
 
   render() {
@@ -122,7 +122,7 @@ class RegisterScreen extends Component {
 }
 
 const mapStateToProps = state => {
-  const { error, loading, user } = state.authReducer;
+  const { error, loading, user } = state.auth;
   return {
     error,
     loading,

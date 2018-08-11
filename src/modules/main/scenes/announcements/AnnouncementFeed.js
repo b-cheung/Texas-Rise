@@ -7,6 +7,7 @@ import {
   fetchNewAnnouncementsRequest,
   fetchOldAnnouncementsRequest
 } from '../../actions';
+import { getUser, getAnnouncements } from '../../selectors';
 import { Button, Card, CardSection, Header } from '../../../components';
 import NavigationService from '../../../../core/navigation/NavigationService';
 import * as authService from '../../../../core/firebase/authService';
@@ -14,49 +15,21 @@ import theme from '../../../../styles/theme';
 
 class AnnouncementFeed extends Component {
   componentWillMount() {
-    this.props.fetchAnnouncementsRequest({ num: 5, userRole: this.props.user.role });
+    this.props.fetchAnnouncementsRequest();
   }
 
   renderRefreshButton() {
-    return (
-      <Button
-        onPress={() => {
-          const timestamp = this.props.announcements[0].timestamp;
-          console.tron.log('renderRefreshButton', timestamp);
-          this.props.fetchNewAnnouncementsRequest({
-            num: 5,
-            userRole: this.props.user.role,
-            timestamp
-          });
-        }}
-      >
-        Refresh
-      </Button>
-    );
+    return <Button onPress={() => this.props.fetchNewAnnouncementsRequest()}>Refresh</Button>;
   }
 
   renderLoadMoreButton() {
-    return (
-      <Button
-        onPress={() => {
-          const timestamp = this.props.announcements[this.props.announcements.length - 1].timestamp;
-          console.tron.log('renderLoadMoreButton', this.props.announcements.length, timestamp);
-          this.props.fetchOldAnnouncementsRequest({
-            num: 5,
-            userRole: this.props.user.role,
-            timestamp
-          });
-        }}
-      >
-        Load More
-      </Button>
-    );
+    return <Button onPress={() => this.props.fetchOldAnnouncementsRequest()}>Load More</Button>;
   }
 
   renderCreateButton() {
     return (
       // authService.isAdminOrOfficer(this.props.user) && (
-      <Button onPress={() => NavigationService.navigate('AnnouncementCreate')}>Create</Button>
+        <Button onPress={() => NavigationService.navigate('AnnouncementCreate')}>Create</Button>
       // )
     );
   }
@@ -91,10 +64,11 @@ class AnnouncementFeed extends Component {
 }
 
 const mapStateToProps = state => {
-  const { user } = state.authReducer;
-  const announcements = state.mainReducer.announcements;
-  console.tron.log(announcements);
-  return { user, announcements };
+  console.tron.log('mapStateToProps AnnouncementFeed');
+  return {
+    user: getUser(state),
+    announcements: getAnnouncements(state)
+  };
 };
 
 export default connect(

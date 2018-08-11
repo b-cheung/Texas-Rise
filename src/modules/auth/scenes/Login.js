@@ -19,7 +19,7 @@ class Login extends Component {
     };
   }
 
-  handleSubmit() {
+  handleSubmit = () => {
     const { email, password } = this.state;
     this.props.loginRequest({ email, password });
   }
@@ -38,7 +38,7 @@ class Login extends Component {
     if (this.props.loading) {
       return <Spinner size="large" />;
     }
-    return <Button onPress={this.handleSubmit.bind(this)}>Login</Button>;
+    return <Button onPress={this.handleSubmit}>Login</Button>;
   }
 
   render() {
@@ -71,7 +71,7 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => {
-  const { error, loading, user } = state.authReducer;
+  const { error, loading, user } = state.auth;
   return { error, loading, user };
 };
 

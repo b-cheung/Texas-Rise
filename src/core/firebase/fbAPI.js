@@ -137,7 +137,8 @@ export function fetchUser(authUser) {
 }
 
 export function fetchAnnouncements(data) {
-  const queryRef = createAnnouncementQuery(data);
+  const { num } = data;
+  const queryRef = createAnnouncementQuery(data).limit(num);
   return getDocs(queryRef);
 }
 
@@ -148,18 +149,17 @@ export function fetchNewAnnouncements(data) {
 }
 
 export function fetchOldAnnouncements(data) {
-  const { timestamp } = data;
-  const queryRef = createAnnouncementQuery(data).startAfter(timestamp);
+  const { num, timestamp } = data;
+  const queryRef = createAnnouncementQuery(data).startAfter(timestamp).limit(num);
   return getDocs(queryRef);
 }
 
 function createAnnouncementQuery(data) {
-  const { num, userRole } = data;
+  const { userRole } = data;
   return firestore
     .collection('announcements')
     .where(`audience.${userRole}`, '==', true)
-    .orderBy('timestamp', 'desc')
-    .limit(num);
+    .orderBy('timestamp', 'desc');
 }
 
 function getDoc(docRef) {

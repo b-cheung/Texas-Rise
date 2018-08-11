@@ -1,24 +1,20 @@
 import * as types from './actionTypes';
 
-
-export const fetchNewAnnouncementsRequest = data => {
+export const fetchNewAnnouncementsRequest = () => {
   return {
-    type: types.FETCH_NEW_ANNOUNCEMENTS_REQUEST,
-    data
+    type: types.FETCH_NEW_ANNOUNCEMENTS_REQUEST
   };
 };
 
-export const fetchOldAnnouncementsRequest = data => {
+export const fetchOldAnnouncementsRequest = () => {
   return {
     type: types.FETCH_OLD_ANNOUNCEMENTS_REQUEST,
-    data
   };
 };
 
-export const fetchAnnouncementsRequest = data => {
+export const fetchAnnouncementsRequest = () => {
   return {
     type: types.FETCH_ANNOUNCEMENTS_REQUEST,
-    data
   };
 };
 
