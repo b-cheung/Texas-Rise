@@ -2,27 +2,33 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { CheckBox } from 'native-base';
-import { clearForm, inputUpdate, createAnnouncement, toggleSelectable } from '../../actions';
+import { createAnnouncementRequest } from '../../actions';
 import { Button, Card, CardSection, Header, TextField, Selectable } from '../../../components';
 import theme from '../../../../styles/theme';
 
 class AnnouncementCreate extends Component {
-  componentWillMount() {
-    this.props.clearForm();
+  constructor() {
+    super();
+    this.state = {
+      title: '',
+      body: '',
+      member: false,
+      student: false
+    };
   }
-  onSubmit() {
-    const { title, body, membersChecked, studentsChecked, user } = this.props;
-    this.props.createAnnouncement({
+
+  handleSubmit = () => {
+    const { title, body, member, student } = this.state;
+    this.props.createAnnouncementRequest({
       title,
       body,
-      membersChecked,
-      studentsChecked,
-      user
+      member,
+      student
     });
   }
 
   renderPostButton() {
-    return <Button onPress={this.onSubmit.bind(this)}>Post</Button>;
+    return <Button onPress={this.handleSubmit}>Post</Button>;
   }
 
   render() {
@@ -35,37 +41,29 @@ class AnnouncementCreate extends Component {
             placeholder="Title"
             autoCapitalize="words"
             style={theme.input}
-            value={this.props.title}
-            onChangeText={value => this.props.inputUpdate({ prop: 'title', value })}
+            id="title"
+            value={this.state.title}
+            onChangeText={title => this.setState({ title })}
           />
           <TextField
             placeholder="Message"
             autoCapitalize="sentences"
             multiline
             style={theme.input}
-            value={this.props.body}
-            onChangeText={value => this.props.inputUpdate({ prop: 'body', value })}
+            id="body"
+            value={this.state.body}
+            onChangeText={body => this.setState({ body })}
           />
           <Text>Audience:</Text>
           <Selectable
             label="Members"
-            value={this.props.membersChecked}
-            onPress={() =>
-              this.props.toggleSelectable({
-                prop: 'membersChecked',
-                value: this.props.membersChecked
-              })
-            }
+            value={this.state.member}
+            onPress={() => this.setState({ member: !this.state.member })}
           />
           <Selectable
             label="Students"
-            value={this.props.studentsChecked}
-            onPress={() =>
-              this.props.toggleSelectable({
-                prop: 'studentsChecked',
-                value: this.props.studentsChecked
-              })
-            }
+            value={this.state.student}
+            onPress={() => this.setState({ student: !this.state.student })}
           />
         </ScrollView>
       </KeyboardAvoidingView>
@@ -74,12 +72,12 @@ class AnnouncementCreate extends Component {
 }
 
 const mapStateToProps = state => {
-  const { user } = state.authReducer;
-  const { title, body, membersChecked, studentsChecked } = state.mainReducer;
-  return { title, body, membersChecked, studentsChecked, user };
+  console.tron.log('mapStateToProps AnnouncementCreate');
+  const { user } = state.auth;
+  return { user };
 };
 
 export default connect(
   mapStateToProps,
-  { clearForm, inputUpdate, createAnnouncement, toggleSelectable }
+  { createAnnouncementRequest }
 )(AnnouncementCreate);

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { onLogout } from '../../auth/actions';
+import { logoutRequest } from '../../auth/actions';
 import { Card, CardSection, Button, Spinner } from '../../components';
 
 class SettingsScreen extends Component {
   onLogout() {
     console.tron.log('logout button pressed');
-    this.props.onLogout();
+    this.props.logoutRequest();
   }
   
   renderButton() {
@@ -26,4 +26,4 @@ class SettingsScreen extends Component {
 }
 
 
-export default connect(null, { onLogout })(SettingsScreen);
+export default connect(null, { logoutRequest })(SettingsScreen);

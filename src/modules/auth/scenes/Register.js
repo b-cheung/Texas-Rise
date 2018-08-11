@@ -1,19 +1,28 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
-import { clearForm, inputUpdate, onRegister } from '../actions';
+import { registerRequest } from '../actions';
 import { TextField, Button, Spinner } from '../../components';
 import styles from '../styles';
 import theme from '../../../styles/theme';
 
 class RegisterScreen extends Component {
-  componentWillMount() {
-    this.props.clearForm();
+  constructor() {
+    super();
+    this.state = {
+      firstName: '',
+      lastName: '',
+      year: '',
+      email: '',
+      role: '',
+      password: '',
+      confirmPassword: ''
+    };
   }
 
-  onSubmit() {
-    const { firstName, lastName, year, email, role, password, confirmPassword } = this.props;
-    this.props.onRegister({
+  handleSubmit = () => {
+    const { firstName, lastName, year, email, role, password, confirmPassword } = this.state;
+    this.props.registerRequest({
       firstName,
       lastName,
       year,
@@ -38,7 +47,7 @@ class RegisterScreen extends Component {
     if (this.props.loading) {
       return <Spinner size="large" />;
     }
-    return <Button onPress={this.onSubmit.bind(this)}>Submit</Button>;
+    return <Button onPress={this.handleSubmit}>Submit</Button>;
   }
 
   render() {
@@ -49,52 +58,59 @@ class RegisterScreen extends Component {
             placeholder="First Name"
             autoCapitalize="words"
             style={theme.input}
-            value={this.props.firstName}
-            onChangeText={value => this.props.inputUpdate({ prop: 'firstName', value })}
+            id="firstName"
+            value={this.state.firstName}
+            onChangeText={firstName => this.setState({ firstName })}
           />
           <TextField
             placeholder="Last Name"
             autoCapitalize="words"
             style={theme.input}
-            value={this.props.lastName}
-            onChangeText={value => this.props.inputUpdate({ prop: 'lastName', value })}
+            id="lastName"
+            value={this.state.lastName}
+            onChangeText={lastName => this.setState({ lastName })}
           />
           <TextField
             placeholder="Year"
             autoCapitalize="none"
             style={theme.input}
-            value={this.props.year}
-            onChangeText={value => this.props.inputUpdate({ prop: 'year', value })}
+            id="year"
+            value={this.state.year}
+            onChangeText={year => this.setState({ year })}
           />
           <TextField
             placeholder="Email"
             autoCapitalize="none"
             style={theme.input}
-            value={this.props.email}
-            onChangeText={value => this.props.inputUpdate({ prop: 'email', value })}
+            id="email"
+            value={this.state.email}
+            onChangeText={email => this.setState({ email })}
           />
           <TextField
             placeholder="Role"
             autoCapitalize="none"
             style={theme.input}
-            value={this.props.role}
-            onChangeText={value => this.props.inputUpdate({ prop: 'role', value })}
+            id="role"
+            value={this.state.role}
+            onChangeText={role => this.setState({ role })}
           />
-          <TextField            
+          <TextField
             placeholder="Password"
             secureTextEntry
             autoCapitalize="none"
             style={theme.input}
-            value={this.props.password}
-            onChangeText={value => this.props.inputUpdate({ prop: 'password', value })}
+            id="password"
+            value={this.state.password}
+            onChangeText={password => this.setState({ password })}
           />
           <TextField
             placeholder="Confirm Password"
             secureTextEntry
             autoCapitalize="none"
             style={theme.input}
-            value={this.props.confirmPassword}
-            onChangeText={value => this.props.inputUpdate({ prop: 'confirmPassword', value })}
+            id="confirmPassword"
+            value={this.state.confirmPassword}
+            onChangeText={confirmPassword => this.setState({ confirmPassword })}
           />
           {this.renderError()}
           {this.renderButton()}
@@ -106,26 +122,8 @@ class RegisterScreen extends Component {
 }
 
 const mapStateToProps = state => {
-  const {
-    firstName,
-    lastName,
-    year,
-    email,
-    role,
-    password,
-    confirmPassword,
-    error,
-    loading,
-    user
-  } = state.authReducer;
+  const { error, loading, user } = state.auth;
   return {
-    firstName,
-    lastName,
-    year,
-    email,
-    role,
-    password,
-    confirmPassword,
     error,
     loading,
     user
@@ -135,8 +133,6 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   {
-    clearForm,
-    inputUpdate,
-    onRegister
+    registerRequest
   }
 )(RegisterScreen);

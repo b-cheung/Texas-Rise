@@ -13,12 +13,15 @@
     "react-navigation": "^2.7.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
+    "redux-saga": "^0.16.0",
     "redux-thunk": "^2.3.0",
+    "reselect": "^3.0.1",
     "url": "^0.11.0"
   },
   "devDependencies": {
     "eslint-config-rallycoding": "^3.2.0",
     "reactotron-react-native": "^2.0.0",
-    "reactotron-redux": "^2.0.0"
+    "reactotron-redux": "^2.0.0",
+    "reactotron-redux-saga": "^2.0.0"
   }
 }

@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import { connect } from 'react-redux';
+import { initializationStart } from '../actions';
 import { Spinner } from '../../components/Spinner';
-import { auth } from '../../../core/firebase/FirebaseConfig';
 
 class Splash extends Component {
   componentDidMount() {
-    this._bootstrapAsync();
+    console.tron.log('splash did mount');
+    // this._bootstrapAsync();
+    // this.props.initializationStart();
   }
 
   // check if user is authenticated
   _bootstrapAsync = async () => {
-    const user = await auth.currentUser;
-    console.tron.log('_bootstrapAsync', user);
-    
-    // switch to the App or Auth 
-    this.props.navigation.navigate(user ? 'App' : 'Auth');
+    // const user = await auth.currentUser;
+    console.tron.log('_bootstrapAsync');
   };
 
   render() {
@@ -26,4 +26,4 @@ class Splash extends Component {
   }
 }
 
-export default Splash;
+export default connect(null, { initializationStart })(Splash);

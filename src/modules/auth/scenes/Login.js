@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
-import { clearForm, inputUpdate, onLogin } from '../actions';
-import { Card, CardSection, Button, Spinner, TextField } from '../../components';
+import { loginRequest } from '../actions';
+import { Button, Spinner, TextField } from '../../components';
 import styles from '../styles';
+import theme from '../../../styles/theme';
 
 class Login extends Component {
   static navigationOptions = {
     title: 'Login'
   };
 
-  componentWillMount() {
-    this.props.clearForm();
+  constructor() {
+    super();
+    this.state = {
+      email: '',
+      password: ''
+    };
   }
 
-  onSubmit() {
-    const { email, password } = this.props;
-    this.props.onLogin({ email, password });
+  handleSubmit = () => {
+    const { email, password } = this.state;
+    this.props.loginRequest({ email, password });
   }
 
   renderError() {
@@ -33,46 +38,44 @@ class Login extends Component {
     if (this.props.loading) {
       return <Spinner size="large" />;
     }
-    return <Button onPress={this.onSubmit.bind(this)}>Login</Button>;
+    return <Button onPress={this.handleSubmit}>Login</Button>;
   }
 
   render() {
     return (
-      <Card>
-        <CardSection>
+      <KeyboardAvoidingView style={theme.container} behavior="padding" enabled>
+        <ScrollView style={{ flex: 1 }}>
           <TextField
             placeholder="Email"
             autoCapitalize="none"
-            value={this.props.email}
-            onChangeText={value => this.props.inputUpdate({ prop: 'email', value })}
+            style={theme.input}
+            id="email"
+            value={this.state.email}
+            onChangeText={email => this.setState({ email })}
           />
-        </CardSection>
-        <CardSection>
           <TextField
             placeholder="Password"
             secureTextEntry
             autoCapitalize="none"
-            value={this.props.password}
-            onChangeText={value => this.props.inputUpdate({ prop: 'password', value })}
+            style={theme.input}
+            id="password"
+            value={this.state.password}
+            onChangeText={password => this.setState({ password })}
           />
-        </CardSection>
-        {this.renderError()}
-        <CardSection>{this.renderButton()}</CardSection>
-      </Card>
+          {this.renderError()}
+          {this.renderButton()}
+        </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { email, password, error, loading, user } = state.authReducer;
-  return { email, password, error, loading, user };
+  const { error, loading, user } = state.auth;
+  return { error, loading, user };
 };
 
 export default connect(
   mapStateToProps,
-  {
-    clearForm,
-    inputUpdate,
-    onLogin
-  }
+  { loginRequest }
 )(Login);

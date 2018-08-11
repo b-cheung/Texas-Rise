@@ -2,7 +2,12 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ScrollView, FlatList } from 'react-native';
-import { fetchAnnouncements } from '../../actions';
+import {
+  fetchAnnouncementsRequest,
+  fetchNewAnnouncementsRequest,
+  fetchOldAnnouncementsRequest
+} from '../../actions';
+import { getUser, getAnnouncements } from '../../selectors';
 import { Button, Card, CardSection, Header } from '../../../components';
 import NavigationService from '../../../../core/navigation/NavigationService';
 import * as authService from '../../../../core/firebase/authService';
@@ -10,14 +15,22 @@ import theme from '../../../../styles/theme';
 
 class AnnouncementFeed extends Component {
   componentWillMount() {
-    this.props.fetchAnnouncements(5);
+    this.props.fetchAnnouncementsRequest();
+  }
+
+  renderRefreshButton() {
+    return <Button onPress={() => this.props.fetchNewAnnouncementsRequest()}>Refresh</Button>;
+  }
+
+  renderLoadMoreButton() {
+    return <Button onPress={() => this.props.fetchOldAnnouncementsRequest()}>Load More</Button>;
   }
 
   renderCreateButton() {
     return (
-      authService.isAdminOrOfficer(this.props.user) && (
+      // authService.isAdminOrOfficer(this.props.user) && (
         <Button onPress={() => NavigationService.navigate('AnnouncementCreate')}>Create</Button>
-      )
+      // )
     );
   }
 
@@ -37,6 +50,8 @@ class AnnouncementFeed extends Component {
     return (
       <ScrollView>
         <Header headerText="AnnouncementFeed" />
+        <View>{this.renderRefreshButton()}</View>
+        <View>{this.renderLoadMoreButton()}</View>
         <View>{this.renderCreateButton()}</View>
         <FlatList
           data={this.props.announcements}
@@ -49,14 +64,14 @@ class AnnouncementFeed extends Component {
 }
 
 const mapStateToProps = state => {
-  const { user } = state.authReducer;
-  const announcements = _.map(state.mainReducer.announcements, (val, id) => {
-    return { ...val, id };
-  });
-  return { user, announcements };
+  console.tron.log('mapStateToProps AnnouncementFeed');
+  return {
+    user: getUser(state),
+    announcements: getAnnouncements(state)
+  };
 };
 
 export default connect(
   mapStateToProps,
-  { fetchAnnouncements }
+  { fetchAnnouncementsRequest, fetchNewAnnouncementsRequest, fetchOldAnnouncementsRequest }
 )(AnnouncementFeed);
