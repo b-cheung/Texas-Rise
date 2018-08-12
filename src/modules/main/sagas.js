@@ -19,15 +19,13 @@ function compareAnnouncements(announcementA, announcementB) {
 }
 
 function* appendFetchedAnnouncements(fetchedAnnouncements) {
-  // retrieve existing announcements from state tree
+  // retrieve existing announcements from state tree and append fetched announcements
   let announcements = yield select(selectors.getAnnouncements);
-
   if (announcements) {
     announcements = announcements.concat(fetchedAnnouncements);
   } else {
     announcements = fetchedAnnouncements;
   }
-
   announcements.sort(compareAnnouncements);
 
   return announcements;
@@ -36,7 +34,7 @@ function* appendFetchedAnnouncements(fetchedAnnouncements) {
 function* fetchAnnouncementsFlow(action) {
   try {
     // check authorization
-    const userRole = yield select(selectors.getUserRole);
+    const userRole = yield call(fbAPI.getUserRole);
     const num = 5;
     // create data parameter with appropriate values
     let data = { userRole, num };

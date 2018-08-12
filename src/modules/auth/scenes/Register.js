@@ -14,20 +14,18 @@ class RegisterScreen extends Component {
       lastName: '',
       year: '',
       email: '',
-      role: '',
       password: '',
       confirmPassword: ''
     };
   }
 
   handleSubmit = () => {
-    const { firstName, lastName, year, email, role, password, confirmPassword } = this.state;
+    const { firstName, lastName, year, email, password, confirmPassword } = this.state;
     this.props.registerRequest({
       firstName,
       lastName,
       year,
       email,
-      role,
       password,
       confirmPassword
     });
@@ -85,14 +83,6 @@ class RegisterScreen extends Component {
             id="email"
             value={this.state.email}
             onChangeText={email => this.setState({ email })}
-          />
-          <TextField
-            placeholder="Role"
-            autoCapitalize="none"
-            style={theme.input}
-            id="role"
-            value={this.state.role}
-            onChangeText={role => this.setState({ role })}
           />
           <TextField
             placeholder="Password"

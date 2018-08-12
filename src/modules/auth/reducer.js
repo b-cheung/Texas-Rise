@@ -37,7 +37,7 @@ export default (state = INITIAL_STATE, action) => {
     case types.VERIFICATION_STATUS_REQUEST:
       return { ...state, error: '', loading: true };
       case types.VERIFICATION_STATUS_FAILURE:
-      return { ...state, error: action.error, loading: false };
+      return { ...state, loading: false };
     case types.VERIFY_EMAIL_FLOW_FAILURE:
       return {
         ...state,

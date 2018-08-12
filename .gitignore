@@ -1,5 +1,6 @@
 node_modules/**/*
 functions/node_modules/
+functions/texas-rise-service-account.json
 .expo/*
 npm-debug.*
 FirebaseCredentials.js

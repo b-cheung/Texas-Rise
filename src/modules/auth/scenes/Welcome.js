@@ -10,7 +10,7 @@ class Welcome extends Component {
   };
 
   componentWillMount() {
-    this.props.authRequest();
+    // this.props.authRequest();
   }
 
   onLoginPress = () => {

@@ -52,23 +52,30 @@ export function getAuthUser() {
   });
 }
 
-export function getIdToken() {
-  return auth.currentUser.getIdToken(true);
-}
-
 export function reloadAuthUser() {
-  auth.currentUser.reload();
-}
-
-export function sendVerificationEmail() {
-  auth.currentUser
-    .sendEmailVerification()
-    .catch((error) => {
+  return auth.currentUser
+    .reload()
+    .then(() => {
+      return getAuthUser();
+    })
+    .catch(error => {
       // An error happened.
       throw error;
     });
 }
 
+export function sendVerificationEmail() {
+  auth.currentUser.sendEmailVerification().catch(error => {
+    // An error happened.
+    throw error;
+  });
+}
+
+export function getUserRole() {
+  return auth.currentUser.getIdTokenResult(true).then(token => {
+    return token.claims.role;
+  });
+}
 
 // export function getAuthUser() {
 //   const user = auth.currentUser;
@@ -89,7 +96,6 @@ export function setAuthStateListener() {
   });
 }
 
-// callback(success, error)
 // Register and create user in firestore
 export function register(data) {
   const { email, password } = data;
@@ -117,7 +123,7 @@ export function logout() {
 // Create user in firestore
 export function createUserDoc(data, authUser) {
   console.tron.log('createUser', authUser.uid);
-  const { firstName, lastName, year, email, role } = data;
+  const { firstName, lastName, year, email } = data;
   firestore
     .collection('users')
     .doc(authUser.uid)
@@ -125,7 +131,6 @@ export function createUserDoc(data, authUser) {
       email,
       firstName,
       lastName,
-      role,
       year
     })
     .catch(error => {
@@ -133,7 +138,6 @@ export function createUserDoc(data, authUser) {
     });
 }
 
-// callback(success, user, error)
 // Create announcement in firestore
 export function createAnnouncementDoc(data) {
   const { title, body, member, student, user } = data;

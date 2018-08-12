@@ -1,4 +1,4 @@
-import { call, take, fork, put, cancelled, takeEvery } from 'redux-saga/effects';
+import { all, call, take, takeLatest, fork, put, cancelled, takeEvery } from 'redux-saga/effects';
 import * as fbAPI from './../../core/firebase/fbAPI';
 import NavigationService from '../../core/navigation/NavigationService';
 import * as types from './actionTypes';
@@ -44,11 +44,11 @@ function* loginFlow(data) {
   }
 }
 
-function* authHandler() {
+function* authHandler(actionReq) {
   while (true) {
     // watch for REGISTER_REQUEST or LOGIN_REQUEST action
     // set action
-    const actionReq = yield take([types.REGISTER_REQUEST, types.LOGIN_REQUEST]);
+    // const actionReq = yield take([types.REGISTER_REQUEST, types.LOGIN_REQUEST]);
     let authUser;
     if (actionReq.type === types.REGISTER_REQUEST) {
       // pass in data and run registerFlow in forked taskReq
@@ -58,14 +58,14 @@ function* authHandler() {
       authUser = yield call(loginFlow, actionReq.data);
     }
     if (authUser) {
-      return authUser;
+      yield put({ type: types.AUTH_REQUEST, authUser });
+      return;
     }
   }
 }
 
 function* verifyEmailFlow() {
   NavigationService.navigate('VerifyEmail');
-  yield fork(logoutFlow);
   while (true) {
     try {
       const action = yield take([
@@ -76,12 +76,11 @@ function* verifyEmailFlow() {
         yield call(fbAPI.sendVerificationEmail);
         yield put({ type: types.SEND_VERIFICATION_EMAIL_SUCCESS });
       } else if (action.type === types.VERIFICATION_STATUS_REQUEST) {
-        yield call(fbAPI.reloadAuthUser);
-        const authUser = yield call(fbAPI.getAuthUser);
+        const authUser = yield call(fbAPI.reloadAuthUser);
         if (authUser.emailVerified) {
           return authUser;
         }
-        yield put({ type: types.VERIFICATION_STATUS_FAILURE, error: 'Email not verified' });
+        yield put({ type: types.VERIFICATION_STATUS_FAILURE });
       }
     } catch (error) {
       console.tron.log(error);
@@ -94,9 +93,8 @@ function* fetchUser(authUser) {
   try {
     // fetch user doc
     const doc = yield call(fbAPI.fetchUser, authUser);
-    const user = { uid: doc.id, ...doc.data() };
-    // when fetchUser completes
-    // dispatch action of type FETCH_USER_SUCCESS with user data
+    const role = yield call(fbAPI.getUserRole);
+    const user = { uid: doc.id, role, ...doc.data() };
     yield put({ type: types.FETCH_USER_SUCCESS, user });
   } catch (error) {
     // if api call fails,
@@ -106,9 +104,29 @@ function* fetchUser(authUser) {
   }
 }
 
+function* authFlow(action) {
+  // check if user is authenticated
+  let authUser = action.authUser;
+  if (authUser == null) {
+    console.tron.log('authUser is null');
+    NavigationService.navigate('Auth');
+  } else {
+    yield call(fbAPI.setAuthStateListener);
+    if (!authUser.emailVerified) {
+      authUser = yield call(verifyEmailFlow);
+    }
+    // auth success and email verified
+    // fetch user data
+    const taskFetch = yield fork(fetchUser, authUser);
+    const actionFetch = yield take([types.FETCH_USER_SUCCESS, types.FETCH_USER_FAILURE]);
+    if (actionFetch.type === types.FETCH_USER_SUCCESS) {
+      NavigationService.navigate('App');
+    }
+  }
+}
+
 function* logoutFlow() {
   try {
-    yield take(types.LOGOUT_REQUEST);
     // try logout()
     yield call(fbAPI.logout);
     yield put({ type: types.LOGOUT_SUCCESS });
@@ -120,46 +138,20 @@ function* logoutFlow() {
   }
 }
 
-export function* initializationFlow() {
+export function* watchInitialization() {
   yield take(types.INITIALIZATION_START);
   // initialize firebase and wait for completion
   yield call(fbAPI.initializeFirebase);
   const authUser = yield call(fbAPI.getAuthUser);
-  yield put({ type: types.INITIALIZATION_COMPLETE, authUser });
+  yield put({ type: types.AUTH_REQUEST, authUser });
 }
 
-export function* watchAuth() {
-  while (true) {
-    const action = yield take([
-      types.INITIALIZATION_COMPLETE,
-      types.AUTH_REQUEST
-      // types.AUTH_SUCCESS,
-      // types.AUTH_FAILURE
-    ]);
-    // check if user is authenticated
-    let authUser = action.authUser;
-    if (authUser == null) {
-      // console.tron.log('authUser is null');
-      if (action.type === types.AUTH_REQUEST || action.type === types.INITIALIZATION_COMPLETE) {
-        // make sure navigator ref is set
-        NavigationService.navigate('Auth');
-      }
-      // handle auth actions
-      authUser = yield call(authHandler);
-    }
-    yield call(fbAPI.setAuthStateListener);
-    if (!authUser.emailVerified) {
-      authUser = yield call(verifyEmailFlow);
-    }
-    // auth success
-    // fetch user data
-    const taskFetch = yield fork(fetchUser, authUser);
-    const actionFetch = yield take([types.FETCH_USER_SUCCESS, types.FETCH_USER_FAILURE]);
-    if (actionFetch.type === types.FETCH_USER_SUCCESS) {
-      NavigationService.navigate('App');
-      yield fork(logoutFlow);
-    }
-  }
+export function* watchAuthentication() {
+  yield all([
+    takeLatest([types.REGISTER_REQUEST, types.LOGIN_REQUEST], authHandler),
+    takeLatest(types.AUTH_REQUEST, authFlow),
+    takeLatest(types.LOGOUT_REQUEST, logoutFlow)
+  ]);
 }
 
 // export const sagas = [

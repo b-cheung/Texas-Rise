@@ -11,7 +11,8 @@ export const initializationStart = () => {
 
 export const authRequest = () => {
   return {
-    type: types.AUTH_REQUEST
+    type: types.AUTH_REQUEST,
+    authUser: null
   };
 };
 
@@ -22,7 +23,7 @@ export const loginRequest = data => {
   };
 };
 
-// data = { firstName, lastName, year, email, role, password, confirmPassword }
+// data = { firstName, lastName, year, email, password, confirmPassword }
 export const registerRequest = data => {
   return {
     type: types.REGISTER_REQUEST,
