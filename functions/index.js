@@ -1,6 +1,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const assignUserRole = require('./assignUserRole');
+const AuthModule = require('./AuthModule');
+const FirestoreSheetsSync = require('./FirestoreSheetsSync');
 
 // const serviceAccount = require('./texas-rise-service-account.json')
 // admin.initializeApp({
@@ -9,5 +10,5 @@ const assignUserRole = require('./assignUserRole');
 // });
 admin.initializeApp(functions.config().firebase);
 
-// exports.assignUserRole = functions.https.onRequest(assignUserRole);
-exports.assignUserRole =functions.auth.user().onCreate(assignUserRole);
+exports.assignUserRole = AuthModule.assignUserRole(functions, admin);
+exports.appendUserToSheets = FirestoreSheetsSync.appendUserToSheets(functions);
