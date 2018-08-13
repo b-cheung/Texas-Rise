@@ -2,25 +2,61 @@ import React, { Component } from 'react';
 import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 import { registerRequest } from '../actions';
-import { TextField, Button, Spinner } from '../../components';
+import { ReduxForm, TextField, Button, Spinner } from '../../../components';
+import { required, minLength, schoolEmail, number } from '../../../core/FormValidation';
 import styles from '../styles';
 import theme from '../../../styles/theme';
 
-class RegisterScreen extends Component {
-  constructor() {
-    super();
-    this.state = {
-      firstName: '',
-      lastName: '',
-      year: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
-    };
+const FIELDS = {
+  firstName: {
+    type: 'TextField',
+    placeholder: 'First Name',
+    secureTextEntry: false,
+    autoCapitalize: 'words',
+    validate: [required]
+  },
+  lastName: {
+    type: 'TextField',
+    placeholder: 'Last Name',
+    secureTextEntry: false,
+    autoCapitalize: 'words',
+    validate: [required]
+  },
+  year: {
+    type: 'TextField',
+    placeholder: 'Year',
+    secureTextEntry: false,
+    autoCapitalize: 'none',
+    validate: [required, number]
+  },
+  email: {
+    type: 'TextField',
+    placeholder: 'Email',
+    secureTextEntry: false,
+    autoCapitalize: 'none',
+    validate: [required]
+  },
+  password: {
+    type: 'TextField',
+    placeholder: 'Password',
+    secureTextEntry: true,
+    autoCapitalize: 'none',
+    validate: [required, minLength(8)]
+  },
+  confirmPassword: {
+    type: 'TextField',
+    placeholder: 'Confirm Password',
+    secureTextEntry: true,
+    autoCapitalize: 'none',
+    validate: [required, minLength(8)]
   }
+};
 
-  handleSubmit = () => {
-    const { firstName, lastName, year, email, password, confirmPassword } = this.state;
+class RegisterScreen extends Component {
+  onSubmit = values => {
+    const { firstName, lastName, email, password, confirmPassword } = values;
+    const year = parseInt(values.year);
+    console.tron.log('onSubmit', firstName, lastName, year, email, password, confirmPassword);
     this.props.registerRequest({
       firstName,
       lastName,
@@ -29,84 +65,17 @@ class RegisterScreen extends Component {
       password,
       confirmPassword
     });
-  }
-
-  renderError() {
-    if (this.props.error) {
-      return (
-        <View style={{ backgroundColor: 'white' }}>
-          <Text style={styles.errorTextStyle}>{this.props.error}</Text>
-        </View>
-      );
-    }
-  }
-
-  renderButton() {
-    if (this.props.loading) {
-      return <Spinner size="large" />;
-    }
-    return <Button onPress={this.handleSubmit}>Submit</Button>;
-  }
+  };
 
   render() {
     return (
-      <KeyboardAvoidingView style={theme.container} behavior="padding" enabled>
-        <ScrollView style={{ flex: 1 }}>
-          <TextField
-            placeholder="First Name"
-            autoCapitalize="words"
-            style={theme.input}
-            id="firstName"
-            value={this.state.firstName}
-            onChangeText={firstName => this.setState({ firstName })}
-          />
-          <TextField
-            placeholder="Last Name"
-            autoCapitalize="words"
-            style={theme.input}
-            id="lastName"
-            value={this.state.lastName}
-            onChangeText={lastName => this.setState({ lastName })}
-          />
-          <TextField
-            placeholder="Year"
-            autoCapitalize="none"
-            style={theme.input}
-            id="year"
-            value={this.state.year}
-            onChangeText={year => this.setState({ year })}
-          />
-          <TextField
-            placeholder="Email"
-            autoCapitalize="none"
-            style={theme.input}
-            id="email"
-            value={this.state.email}
-            onChangeText={email => this.setState({ email })}
-          />
-          <TextField
-            placeholder="Password"
-            secureTextEntry
-            autoCapitalize="none"
-            style={theme.input}
-            id="password"
-            value={this.state.password}
-            onChangeText={password => this.setState({ password })}
-          />
-          <TextField
-            placeholder="Confirm Password"
-            secureTextEntry
-            autoCapitalize="none"
-            style={theme.input}
-            id="confirmPassword"
-            value={this.state.confirmPassword}
-            onChangeText={confirmPassword => this.setState({ confirmPassword })}
-          />
-          {this.renderError()}
-          {this.renderButton()}
-          <View style={{ height: 60 }} />
-        </ScrollView>
-      </KeyboardAvoidingView>
+      <ReduxForm
+        onSubmit={this.onSubmit}
+        fields={FIELDS}
+        submitName={'Register'}
+        submitError={this.props.error}
+        loading={this.props.loading}
+      />
     );
   }
 }

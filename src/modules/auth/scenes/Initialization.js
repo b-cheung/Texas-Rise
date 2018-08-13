@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { initializationStart } from '../actions';
-import { Spinner } from '../../components/Spinner';
+import { Spinner } from '../../../components';
 
 class Initialization extends Component {
   componentDidMount() {

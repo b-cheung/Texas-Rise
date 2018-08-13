@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, KeyboardAvoidingView, ScrollView } from 'react-native';
-import { CheckBox } from 'native-base';
 import { createAnnouncementRequest } from '../../actions';
-import { Button, Card, CardSection, Header, TextField, Selectable } from '../../../components';
+import { Button, Header, TextField, Selectable } from '../../../../components';
 import theme from '../../../../styles/theme';
 
 class AnnouncementCreate extends Component {

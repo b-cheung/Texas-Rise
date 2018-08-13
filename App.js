@@ -3,7 +3,7 @@ import { Image } from 'react-native';
 import { Provider } from 'react-redux';
 import { AppLoading, Asset, Font } from 'expo';
 import { FontAwesome } from '@expo/vector-icons';
-import './src/core/ReactotronConfig';
+import './src/core/reactotron/ReactotronConfig';
 import configureStore from './src/redux/configureStore';
 import { RootNavigator } from './src/core/navigation/RouterConfig';
 import NavigationService from './src/core/navigation/NavigationService';

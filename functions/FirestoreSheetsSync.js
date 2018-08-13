@@ -14,14 +14,7 @@ exports.appendUserToSheets = functions => {
       const year = docData.year;
       const uid = context.params.uid;
       const role = docData.role;
-      console.log("uid: ", uid);
-      console.log("email: ", email);
-      console.log("role: ", role);
       let sheet = getSheet(role);
-      if (sheet === "Admins") {
-        sheet = "Officers";
-      }
-      console.log("sheet: ", sheet);
 
       // perform desired operations ...
       var jwt = getJwt();

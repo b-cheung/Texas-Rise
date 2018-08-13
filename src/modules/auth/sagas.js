@@ -5,12 +5,20 @@ import * as types from './actionTypes';
 
 function* registerFlow(data) {
   try {
+    let role;
+    if (data.email.indexOf('@utexas.edu') !== -1) {
+      role = 'member';
+    } else if (data.email.indexOf('@stu.austinisd.org') !== -1) {
+      role = 'student';
+    } else {
+      role = 'guest';
+    }
     // try register() with data
     // wait for register response
     const response = yield call(fbAPI.register, data);
     const authUser = response.user;
     // create user doc
-    yield call(fbAPI.createUserDoc, data, authUser);
+    yield call(fbAPI.createUserDoc, { ...data, role }, authUser);
     yield call(fbAPI.sendVerificationEmail);
     // when createUserDoc completes,
     // dispatch action of type REGISTER_SUCCESS with authUser
@@ -45,7 +53,6 @@ function* loginFlow(data) {
 }
 
 function* authHandler(actionReq) {
-  while (true) {
     // watch for REGISTER_REQUEST or LOGIN_REQUEST action
     // set action
     // const actionReq = yield take([types.REGISTER_REQUEST, types.LOGIN_REQUEST]);
@@ -59,9 +66,7 @@ function* authHandler(actionReq) {
     }
     if (authUser) {
       yield put({ type: types.AUTH_REQUEST, authUser });
-      return;
     }
-  }
 }
 
 function* verifyEmailFlow() {
@@ -93,8 +98,7 @@ function* fetchUser(authUser) {
   try {
     // fetch user doc
     const doc = yield call(fbAPI.fetchUser, authUser);
-    const role = yield call(fbAPI.getUserRole);
-    const user = { uid: doc.id, role, ...doc.data() };
+    const user = { uid: doc.id, ...doc.data() };
     yield put({ type: types.FETCH_USER_SUCCESS, user });
   } catch (error) {
     // if api call fails,

@@ -123,15 +123,16 @@ export function logout() {
 // Create user in firestore
 export function createUserDoc(data, authUser) {
   console.tron.log('createUser', authUser.uid);
-  const { firstName, lastName, year, email } = data;
+  const { firstName, lastName, email, year, role } = data;
   firestore
     .collection('users')
     .doc(authUser.uid)
     .set({
-      email,
       firstName,
       lastName,
-      year
+      email,
+      year,
+      role
     })
     .catch(error => {
       throw error;

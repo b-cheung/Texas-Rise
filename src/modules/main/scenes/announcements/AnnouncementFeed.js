@@ -8,7 +8,7 @@ import {
   fetchOldAnnouncementsRequest
 } from '../../actions';
 import { getUser, getAnnouncements } from '../../selectors';
-import { Button, Card, CardSection, Header } from '../../../components';
+import { Button, Card, CardSection, Header } from '../../../../components';
 import NavigationService from '../../../../core/navigation/NavigationService';
 import * as authService from '../../../../core/firebase/authService';
 import theme from '../../../../styles/theme';

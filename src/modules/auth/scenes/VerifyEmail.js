@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { checkVerificationStatus, sendVerificationEmail, logoutRequest } from '../actions';
-import NavigationService from '../../../core/navigation/NavigationService';
-import { Card, CardSection, Button } from '../../components';
+import { Card, CardSection, Button } from '../../../components';
 
 class VerifyEmail extends Component {
   static navigationOptions = {

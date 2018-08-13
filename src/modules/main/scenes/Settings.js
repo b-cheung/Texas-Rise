@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { logoutRequest } from '../../auth/actions';
-import { Card, CardSection, Button, Spinner } from '../../components';
+import { Card, CardSection, Button, Spinner } from '../../../components';
 
 class SettingsScreen extends Component {
   onLogout = () => {

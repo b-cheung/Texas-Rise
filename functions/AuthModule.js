@@ -6,19 +6,15 @@ exports.assignUserRole = (functions, admin) => {
       let customClaims;
       if (user.email.indexOf("@utexas.edu") !== -1) {
         customClaims = {
-          role: "officer"
+          role: "member"
         };
-      } else if (user.email.indexOf("bcchen30") !== -1) {
+      } else if (user.email.indexOf("@stu.austinisd.org") !== -1) {
         customClaims = {
           role: "student"
         };
-      } else if (user.email.indexOf("bcheung2017")) {
-        customClaims = {
-          role: "admin"
-        };
       } else {
         customClaims = {
-          role: "member"
+          role: "guest"
         };
       }
       // Set custom user claims on this newly created user.

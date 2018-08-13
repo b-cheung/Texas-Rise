@@ -1,31 +1,25 @@
 import React from 'react';
-import { TextInput, View, StyleSheet } from 'react-native';
+import { Text, TextInput, View, StyleSheet } from 'react-native';
 
-const TextField = ({
-  id,
-  value,
-  onChangeText,
-  placeholder,
-  style,
-  secureTextEntry,
-  autoCapitalize,
-  multiline,
-  numberOfLines
-}) => {
+const TextField = props => {
   const { inputStyle, containerStyle } = styles;
+  const { style, ...input } = props;
+
   return (
     <View style={containerStyle}>
       <TextInput
-        placeholder={placeholder}
-        secureTextEntry={secureTextEntry}
-        autoCorrect={false}
-        autoCapitalize={autoCapitalize}
-        multiline={multiline}
-        numberOfLines={numberOfLines}
+        // placeholder={placeholder}
+        // secureTextEntry={secureTextEntry}
+        // autoCorrect={false}
+        // autoCapitalize={autoCapitalize}
+        // multiline={multiline}
+        // numberOfLines={numberOfLines}
+        {...input}
         style={[inputStyle, style]}
-        id={id}
-        value={value}
-        onChangeText={onChangeText}
+        value={props.value}
+        onChangeText={props.onChangeText}
+        onBlur={props.onBlur}
+        onFocus={props.onFocus}
       />
     </View>
   );
