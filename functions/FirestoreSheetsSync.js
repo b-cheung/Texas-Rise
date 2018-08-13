@@ -57,15 +57,15 @@ function appendSheetRow(jwt, apiKey, spreadsheetId, range, row) {
       key: apiKey,
       valueInputOption: "RAW",
       resource: { values: [row] }
-    })
-    .then(response => {
-      console.log(
-        `Updated sheet: ${response.result.data.updates.updatedRange}`
-      );
-      return true;
-    })
-    .catch(error => {
-      console.log(error);
-      return false;
+    }, (error, response) => {
+      if (error) {
+        console.error(error);
+        return false;
+      } else {
+        console.log(
+          `Updated sheet: ${response.result.data.updates.updatedRange}`
+        );
+        return true;
+      }
     });
 }

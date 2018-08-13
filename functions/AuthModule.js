@@ -28,9 +28,10 @@ exports.assignUserRole = (functions, admin) => {
           return true;
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
           return false;
         });
     }
+    return false;
   });
 };
