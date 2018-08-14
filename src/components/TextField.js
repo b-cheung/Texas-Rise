@@ -1,10 +1,11 @@
 import React from 'react';
 import { Text, TextInput, View, StyleSheet } from 'react-native';
+import theme from '../styles/theme.js';
 
 const TextField = props => {
   const { inputStyle, containerStyle } = styles;
-  const { style, ...input } = props;
-
+  const { multiline, ...input } = props;
+  const fieldStyle = multiline ? theme.textArea : theme.input;
   return (
     <View style={containerStyle}>
       <TextInput
@@ -12,14 +13,14 @@ const TextField = props => {
         // secureTextEntry={secureTextEntry}
         // autoCorrect={false}
         // autoCapitalize={autoCapitalize}
-        // multiline={multiline}
         // numberOfLines={numberOfLines}
+        // value={props.value}
+        // onChangeText={props.onChangeText}
+        // onBlur={props.onBlur}
+        // onFocus={props.onFocus}
         {...input}
-        style={[inputStyle, style]}
-        value={props.value}
-        onChangeText={props.onChangeText}
-        onBlur={props.onBlur}
-        onFocus={props.onFocus}
+        multiline={multiline}
+        style={[inputStyle, fieldStyle]}
       />
     </View>
   );
@@ -35,7 +36,6 @@ const styles = StyleSheet.create({
     flex: 1
   },
   containerStyle: {
-    height: 55,
     flexDirection: 'column',
     justifyContent: 'flex-start',
     flex: 1

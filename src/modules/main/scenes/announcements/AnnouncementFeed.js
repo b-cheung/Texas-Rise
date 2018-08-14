@@ -14,6 +14,10 @@ import * as authService from '../../../../core/firebase/authService';
 import theme from '../../../../styles/theme';
 
 class AnnouncementFeed extends Component {
+  static navigationOptions = {
+    title: 'Announcements'
+  };
+
   componentWillMount() {
     this.props.fetchAnnouncementsRequest();
   }
@@ -49,7 +53,7 @@ class AnnouncementFeed extends Component {
   render() {
     return (
       <ScrollView>
-        <Header headerText="AnnouncementFeed" />
+        {/* <Header headerText="AnnouncementFeed" /> */}
         <View>{this.renderRefreshButton()}</View>
         <View>{this.renderLoadMoreButton()}</View>
         <View>{this.renderCreateButton()}</View>

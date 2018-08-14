@@ -1,6 +1,6 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
-import * as fbAPI from './../../core/firebase/fbAPI';
-import * as authService from './../../core/firebase/authService';
+import * as fbAPI from '../../core/firebase/fbAPI';
+import * as authService from '../../core/firebase/authService';
 import NavigationService from '../../core/navigation/NavigationService';
 import * as selectors from './selectors';
 import * as types from './actionTypes';
@@ -71,6 +71,9 @@ function* fetchAnnouncementsFlow(action) {
 
 function* createAnnouncementFlow(action) {
   try {
+    if (!action.data.member && !action.data.student) {
+      throw new Error('Must select at least one audience');
+    }
     const user = yield select(selectors.getUser);
     const data = { ...action.data, user };
     // call createAnnouncementDoc() with data
@@ -84,11 +87,11 @@ function* createAnnouncementFlow(action) {
     yield put({ type: types.CREATE_ANNOUNCEMENT_SUCCESS, announcements });
     // watch for action to dispatch first? take(types.CREATE_ANNOUNCEMENT_SUCCESS)
     NavigationService.goBack();
-  } catch (error) {
+  } catch (submitError) {
     // if api call fails,
     // dispatch action of type CREATE_ANNOUNCEMENT_FAILURE
-    console.tron.log(error);
-    yield put({ type: types.CREATE_ANNOUNCEMENT_FAILURE, announcement: null, error });
+    console.tron.log(submitError);
+    yield put({ type: types.CREATE_ANNOUNCEMENT_FAILURE, announcement: null, submitError });
   }
 }
 

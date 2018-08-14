@@ -1,51 +1,51 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 import { registerRequest } from '../actions';
-import { ReduxForm, TextField, Button, Spinner } from '../../../components';
-import { required, minLength, schoolEmail, number } from '../../../core/FormValidation';
+import { getFormStatus } from '../../form/selectors';
+import { ReduxForm } from '../../form/ReduxForm';
+import { required, minLength, schoolEmail, emailFormat, number } from '../../form/FormValidation';
 import styles from '../styles';
 import theme from '../../../styles/theme';
 
 const FIELDS = {
   firstName: {
     type: 'TextField',
-    placeholder: 'First Name',
+    label: 'First Name',
     secureTextEntry: false,
     autoCapitalize: 'words',
     validate: [required]
   },
   lastName: {
     type: 'TextField',
-    placeholder: 'Last Name',
+    label: 'Last Name',
     secureTextEntry: false,
     autoCapitalize: 'words',
     validate: [required]
   },
   year: {
     type: 'TextField',
-    placeholder: 'Year',
+    label: 'Year',
     secureTextEntry: false,
     autoCapitalize: 'none',
     validate: [required, number]
   },
   email: {
     type: 'TextField',
-    placeholder: 'Email',
+    label: 'Email',
     secureTextEntry: false,
     autoCapitalize: 'none',
-    validate: [required]
+    validate: [required, emailFormat]
   },
   password: {
     type: 'TextField',
-    placeholder: 'Password',
+    label: 'Password',
     secureTextEntry: true,
     autoCapitalize: 'none',
     validate: [required, minLength(8)]
   },
   confirmPassword: {
     type: 'TextField',
-    placeholder: 'Confirm Password',
+    label: 'Confirm Password',
     secureTextEntry: true,
     autoCapitalize: 'none',
     validate: [required, minLength(8)]
@@ -53,10 +53,13 @@ const FIELDS = {
 };
 
 class RegisterScreen extends Component {
+  static navigationOptions = {
+    title: 'Register'
+  };
+
   onSubmit = values => {
     const { firstName, lastName, email, password, confirmPassword } = values;
     const year = parseInt(values.year);
-    console.tron.log('onSubmit', firstName, lastName, year, email, password, confirmPassword);
     this.props.registerRequest({
       firstName,
       lastName,
@@ -73,25 +76,19 @@ class RegisterScreen extends Component {
         onSubmit={this.onSubmit}
         fields={FIELDS}
         submitName={'Register'}
-        submitError={this.props.error}
-        loading={this.props.loading}
+        status={this.props.formStatus}
       />
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { error, loading, user } = state.auth;
   return {
-    error,
-    loading,
-    user
+    formStatus: getFormStatus(state)
   };
 };
 
 export default connect(
   mapStateToProps,
-  {
-    registerRequest
-  }
+  { registerRequest }
 )(RegisterScreen);

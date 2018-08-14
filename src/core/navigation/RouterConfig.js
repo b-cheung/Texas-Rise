@@ -33,8 +33,8 @@ const AnnouncementStack = createStackNavigator(
   },
   {
     initialRouteName: 'AnnouncementFeed',
-    headerMode: 'none',
-    mode: 'modal'
+    // headerMode: 'none',
+    // mode: 'modal'
   }
 );
 

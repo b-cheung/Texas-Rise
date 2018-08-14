@@ -1,79 +1,76 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { createAnnouncementRequest } from '../../actions';
-import { Button, Header, TextField, Selectable } from '../../../../components';
+import { getUser } from '../../selectors';
+import { getFormStatus } from '../../../form/selectors';
+import { ReduxForm } from '../../../form/ReduxForm';
+import { required } from '../../../form/FormValidation';
 import theme from '../../../../styles/theme';
 
-class AnnouncementCreate extends Component {
-  constructor() {
-    super();
-    this.state = {
-      title: '',
-      body: '',
-      member: false,
-      student: false
-    };
+const FIELDS = {
+  title: {
+    type: 'TextField',
+    label: 'Title',
+    secureTextEntry: false,
+    autoCapitalize: 'words',
+    validate: [required]
+  },
+  body: {
+    type: 'TextField',
+    label: 'Message',
+    multiline: true,
+    secureTextEntry: false,
+    autoCapitalize: 'sentences',
+    validate: [required]
+  },
+  audience: {
+    type: 'Select',
+    label: 'Audience',
+    fields: {
+      member: {
+        type: 'Selectable',
+        label: 'Members'
+      },
+      student: {
+        type: 'Selectable',
+        label: 'Students'
+      }
+    }
   }
+};
 
-  handleSubmit = () => {
-    const { title, body, member, student } = this.state;
+class AnnouncementCreate extends Component {
+  static navigationOptions = {
+    title: 'Create Announcement'
+  };
+
+  onSubmit = values => {
+    const { title, body, member, student } = values;
     this.props.createAnnouncementRequest({
       title,
       body,
       member,
       student
     });
-  }
-
-  renderPostButton() {
-    return <Button onPress={this.handleSubmit}>Post</Button>;
-  }
+  };
 
   render() {
     return (
-      <KeyboardAvoidingView style={theme.container} behavior="padding" enabled>
-        <ScrollView style={{ flex: 1 }}>
-          <Header headerText="AnnouncementCreate" />
-          <View>{this.renderPostButton()}</View>
-          <TextField
-            placeholder="Title"
-            autoCapitalize="words"
-            style={theme.input}
-            id="title"
-            value={this.state.title}
-            onChangeText={title => this.setState({ title })}
-          />
-          <TextField
-            placeholder="Message"
-            autoCapitalize="sentences"
-            multiline
-            style={theme.input}
-            id="body"
-            value={this.state.body}
-            onChangeText={body => this.setState({ body })}
-          />
-          <Text>Audience:</Text>
-          <Selectable
-            label="Members"
-            value={this.state.member}
-            onPress={() => this.setState({ member: !this.state.member })}
-          />
-          <Selectable
-            label="Students"
-            value={this.state.student}
-            onPress={() => this.setState({ student: !this.state.student })}
-          />
-        </ScrollView>
-      </KeyboardAvoidingView>
+        <ReduxForm
+          onSubmit={this.onSubmit}
+          fields={FIELDS}
+          submitName={'Post'}
+          status={this.props.formStatus}
+        />
     );
   }
 }
 
 const mapStateToProps = state => {
-  console.tron.log('mapStateToProps AnnouncementCreate');
-  const { user } = state.auth;
-  return { user };
+  return {
+    user: getUser(state),
+    formStatus: getFormStatus(state)
+  };
 };
 
 export default connect(

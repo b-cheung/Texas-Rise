@@ -27,6 +27,15 @@ export default StyleSheet.create({
     // paddingHorizontal: 15,
     width: SCREEN_WIDTH - 30
   },
+  textArea: {
+    height: 150,
+    backgroundColor: '#fff',
+    marginHorizontal: 10,
+    marginVertical: 5,
+    paddingVertical: 5,
+    // paddingHorizontal: 15,
+    width: SCREEN_WIDTH - 30
+  },
   errorTextStyle: {
     fontSize: 20,
     alignSelf: 'center',

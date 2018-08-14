@@ -2,11 +2,15 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { CheckBox, Body } from 'native-base';
 
-const Selectable = ({ value, color, onPress, label }) => {
+const Selectable = props => {
+  const { label, checked, onChange, ...input } = props;
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={() => onChange(!checked)}>
       <View style={styles.container}>
-        <CheckBox checked={value} color={color} />
+        <CheckBox
+          checked={checked}
+          // color={color}
+        />
         <Body>
           <Text>{label}</Text>
         </Body>

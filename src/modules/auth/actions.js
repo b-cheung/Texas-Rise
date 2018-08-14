@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import * as fbAPI from './../../core/firebase/fbAPI';
+import * as fbAPI from '../../core/firebase/fbAPI';
 import * as types from './actionTypes';
 import NavigationService from '../../core/navigation/NavigationService';
 

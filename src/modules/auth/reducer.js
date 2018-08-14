@@ -6,29 +6,13 @@ const INITIAL_STATE = {
   loading: ''
 };
 
+
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case types.AUTH_REQUEST:
       return { ...state, ...INITIAL_STATE };
     case types.AUTH_SUCCESS:
       return { ...state };
-
-    case types.REGISTER_REQUEST:
-      return { ...state, error: '', loading: true };
-    case types.REGISTER_FAILURE:
-      return {
-        ...state,
-        error: `code: ${action.error.code}\nmessage: ${action.error.message}`,
-        loading: false
-      };
-    case types.LOGIN_REQUEST:
-      return { ...state, error: '', loading: true };
-    case types.LOGIN_FAILURE:
-      return {
-        ...state,
-        error: `code: ${action.error.code}\nmessage: ${action.error.message}`,
-        loading: false
-      };
 
     case types.SEND_VERIFICATION_EMAIL_REQUEST:
       return { ...state, error: '', loading: true };
@@ -37,7 +21,7 @@ export default (state = INITIAL_STATE, action) => {
     case types.VERIFICATION_STATUS_REQUEST:
       return { ...state, error: '', loading: true };
       case types.VERIFICATION_STATUS_FAILURE:
-      return { ...state, loading: false };
+      return { ...state, error: action.error, loading: false };
     case types.VERIFY_EMAIL_FLOW_FAILURE:
       return {
         ...state,
@@ -46,7 +30,7 @@ export default (state = INITIAL_STATE, action) => {
       };
 
     case types.FETCH_USER_SUCCESS:
-      return { ...state, user: action.user };
+      return { ...state, user: action.user, error: '' };
     case types.FETCH_USER_FAILURE:
       return { ...state, error: `code: ${action.error.code}\nmessage: ${action.error.message}` };
 
@@ -55,9 +39,9 @@ export default (state = INITIAL_STATE, action) => {
     //   return { ...state, user: action.payload };
 
     case types.LOGOUT_REQUEST:
-      return { ...state, loading: true, error: '' };
+      return { ...state, error: '', loading: true };
     case types.LOGOUT_FAILURE:
-      return { ...state, loading: false, error: action.error };
+      return { ...state, error: action.error, loading: false };
     default:
       return state;
   }

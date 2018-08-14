@@ -23,19 +23,9 @@ export default (state = INITIAL_STATE, action) => {
         loading: false
       };
 
-    case types.CREATE_ANNOUNCEMENT_REQUEST:
-      return {
-        ...state,
-        loading: true
-      };
     case types.CREATE_ANNOUNCEMENT_SUCCESS:
-      return { ...state, announcements: action.announcements, loading: false };
-    case types.CREATE_ANNOUNCEMENT_FAILURE:
-      return {
-        ...state,
-        error: `code: ${action.error.code}\nmessage: ${action.error.message}`,
-        loading: false
-      };
+      return { ...state, announcements: action.announcements };
+
     default:
       return state;
   }

@@ -1,10 +1,13 @@
 import { all, call, take, takeLatest, fork, put, cancelled, takeEvery } from 'redux-saga/effects';
-import * as fbAPI from './../../core/firebase/fbAPI';
+import * as fbAPI from '../../core/firebase/fbAPI';
 import NavigationService from '../../core/navigation/NavigationService';
 import * as types from './actionTypes';
 
 function* registerFlow(data) {
   try {
+    if (data.password !== data.confirmPassord) {
+      throw new Error('Password do not match');
+    }
     let role;
     if (data.email.indexOf('@utexas.edu') !== -1) {
       role = 'member';
@@ -22,13 +25,13 @@ function* registerFlow(data) {
     yield call(fbAPI.sendVerificationEmail);
     // when createUserDoc completes,
     // dispatch action of type REGISTER_SUCCESS with authUser
-    // yield put({ type: types.REGISTER_SUCCESS, authUser, error: null });
+    // yield put({ type: types.REGISTER_SUCCESS, authUser, submitError: null });
     return authUser;
-  } catch (error) {
+  } catch (submitError) {
     // if api call fails,
     // dispatch action of type REGISTER_FAILURE null authUser
-    console.tron.log(error);
-    yield put({ type: types.REGISTER_FAILURE, authUser: null, error });
+    console.tron.log(submitError);
+    yield put({ type: types.REGISTER_FAILURE, authUser: null, submitError });
     return null;
   }
 }
@@ -41,13 +44,13 @@ function* loginFlow(data) {
     const authUser = response.user;
     // when login completes,
     // dispatch action of type LOGIN_SUCCESS with authUser
-    // yield put({ type: types.LOGIN_SUCCESS, authUser, error: null });
+    // yield put({ type: types.LOGIN_SUCCESS, authUser, submitError: null });
     return authUser;
-  } catch (error) {
+  } catch (submitError) {
     // if api call fails,
     // dispatch action of type LOGIN_FAILURE null authUser
-    console.tron.log(error);
-    yield put({ type: types.LOGIN_FAILURE, authUser: null, error });
+    console.tron.log(submitError);
+    yield put({ type: types.LOGIN_FAILURE, authUser: null, submitError });
     return null;
   }
 }

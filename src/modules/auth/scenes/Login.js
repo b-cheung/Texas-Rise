@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 import { loginRequest } from '../actions';
-import { ReduxForm, Button, Spinner, TextField } from '../../../components';
-import { required, minLength, schoolEmail } from '../../../core/FormValidation';
+import { getFormStatus } from '../../form/selectors';
+import { ReduxForm } from '../../form/ReduxForm';
+import { required, minLength, schoolEmail, emailFormat } from '../../form/FormValidation';
 import styles from '../styles';
 import theme from '../../../styles/theme';
 
 const FIELDS = {
   email: {
     type: 'TextField',
-    placeholder: 'Email',
+    label: 'Email',
     secureTextEntry: false,
     autoCapitalize: 'none',
-    validate: [required]
+    validate: [required, emailFormat]
   },
   password: {
     type: 'TextField',
-    placeholder: 'Password',
+    label: 'Password',
     secureTextEntry: true,
     autoCapitalize: 'none',
     validate: [required, minLength(8)]
@@ -31,7 +31,6 @@ class Login extends Component {
 
   onSubmit = values => {
     const { email, password } = values;
-    console.tron.log('onSubmit', email, password);
     this.props.loginRequest({ email, password });
   };
 
@@ -41,17 +40,16 @@ class Login extends Component {
         onSubmit={this.onSubmit}
         fields={FIELDS}
         submitName={'Login'}
-        submitError={this.props.error}
-        loading={this.props.loading}
+        status={this.props.formStatus}
       />
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { error, loading, user } = state.auth;
-  console.tron.log('mapStateToProps error', error);
-  return { error, loading, user };
+  return {
+    formStatus: getFormStatus(state)
+  };
 };
 
 export default connect(
