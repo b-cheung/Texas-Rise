@@ -6,12 +6,12 @@ import {
   fetchAnnouncementsRequest,
   fetchNewAnnouncementsRequest,
   fetchOldAnnouncementsRequest
-} from '../../actions';
-import { getUser, getAnnouncements } from '../../selectors';
-import { Button, Card, CardSection, Header } from '../../../../components';
-import NavigationService from '../../../../core/navigation/NavigationService';
-import * as authService from '../../../../core/firebase/authService';
-import theme from '../../../../styles/theme';
+} from '../actions';
+import { getUser, getAnnouncements } from '../selectors';
+import { Button, Card, CardSection, Header } from '../../../components';
+import NavigationService from '../../../core/navigation/NavigationService';
+import * as authService from '../../../core/firebase/authService';
+import theme from '../../../styles/theme';
 
 class AnnouncementFeed extends Component {
   static navigationOptions = {
@@ -32,9 +32,9 @@ class AnnouncementFeed extends Component {
 
   renderCreateButton() {
     return (
-      // authService.isAdminOrOfficer(this.props.user) && (
-        <Button onPress={() => NavigationService.navigate('AnnouncementCreate')}>Create</Button>
-      // )
+      authService.isAdminOrOfficer(this.props.user) && (
+      <Button onPress={() => NavigationService.navigate('AnnouncementCreate')}>Create</Button>
+      )
     );
   }
 
@@ -55,13 +55,13 @@ class AnnouncementFeed extends Component {
       <ScrollView>
         {/* <Header headerText="AnnouncementFeed" /> */}
         <View>{this.renderRefreshButton()}</View>
-        <View>{this.renderLoadMoreButton()}</View>
         <View>{this.renderCreateButton()}</View>
         <FlatList
           data={this.props.announcements}
           renderItem={this.renderAnnouncement}
           keyExtractor={announcement => announcement.id}
         />
+        <View>{this.renderLoadMoreButton()}</View>
       </ScrollView>
     );
   }

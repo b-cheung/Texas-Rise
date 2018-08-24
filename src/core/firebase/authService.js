@@ -1,27 +1,36 @@
 import * as fbAPI from './fbAPI';
 
+const roles = {
+  admin: 'admin',
+  officer: 'officer',
+  member: 'member',
+  student: 'student'
+};
+
+export const error = new Error('Unauthorized access');
+
 export function isAdminOrOfficer(user) {
-  const allowedRoles = ['admin', 'officer'];
+  const allowedRoles = [roles.admin, roles.officer];
   return checkAuthorization(user, allowedRoles);
 }
 
 export function isAdmin(user) {
-  const allowedRoles = ['admin'];
+  const allowedRoles = [roles.admin];
   return checkAuthorization(user, allowedRoles);
 }
 
 export function isOfficer(user) {
-  const allowedRoles = ['officer'];
+  const allowedRoles = [roles.officer];
   return checkAuthorization(user, allowedRoles);
 }
 
 export function isMember(user) {
-  const allowedRoles = ['member'];
+  const allowedRoles = [roles.member];
   return checkAuthorization(user, allowedRoles);
 }
 
 export function isStudent(user) {
-  const allowedRoles = ['student'];
+  const allowedRoles = [roles.student];
   return checkAuthorization(user, allowedRoles);
 }
 

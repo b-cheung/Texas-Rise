@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { createAnnouncementRequest } from '../../actions';
-import { getUser } from '../../selectors';
-import { getFormStatus } from '../../../form/selectors';
-import { ReduxForm } from '../../../form/ReduxForm';
-import { required } from '../../../form/FormValidation';
-import theme from '../../../../styles/theme';
+import { createAnnouncementRequest } from '../actions';
+import { getUser } from '../selectors';
+import { getFormStatus } from '../../form/selectors';
+import { ReduxForm } from '../../form/ReduxForm';
+import { required } from '../../form/FormValidation';
+import theme from '../../../styles/theme';
 
 const FIELDS = {
   title: {
@@ -55,13 +55,20 @@ class AnnouncementCreate extends Component {
   };
 
   render() {
+    const initialVaules = {
+      initialValues: {
+        member: false,
+        student: false
+      }
+    };
     return (
-        <ReduxForm
-          onSubmit={this.onSubmit}
-          fields={FIELDS}
-          submitName={'Post'}
-          status={this.props.formStatus}
-        />
+      <ReduxForm
+        onSubmit={this.onSubmit}
+        fields={FIELDS}
+        submitName={'Post'}
+        status={this.props.formStatus}
+        {...initialVaules}
+      />
     );
   }
 }

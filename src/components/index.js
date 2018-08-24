@@ -6,3 +6,4 @@ export * from './TextField';
 export * from './Spinner';
 export * from './ConfirmModal';
 export * from './Selectable';
+export * from './DateTimePicker';

@@ -101,6 +101,9 @@ function* fetchUser(authUser) {
   try {
     // fetch user doc
     const doc = yield call(fbAPI.fetchUser, authUser);
+    console.tron.log('fetchUser data', doc.data());
+    const claims = yield call(fbAPI.getUserClaims);
+    console.tron.log('fetchUser claims', claims);
     const user = { uid: doc.id, ...doc.data() };
     yield put({ type: types.FETCH_USER_SUCCESS, user });
   } catch (error) {
@@ -160,8 +163,3 @@ export function* watchAuthentication() {
     takeLatest(types.LOGOUT_REQUEST, logoutFlow)
   ]);
 }
-
-// export const sagas = [
-//   takeEvery(types.INITIALIZATION_START, initializationFlow),
-//   takeEvery(types.AUTH_REQUEST, watchAuth)
-// ];

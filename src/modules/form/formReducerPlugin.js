@@ -1,6 +1,6 @@
 import * as types from './actionTypes';
 import * as authTypes from '../../modules/auth/actionTypes';
-import * as mainTypes from '../../modules/main/actionTypes';
+import * as announcementTypes from '../../modules/announcement/actionTypes';
 
 const FORM_INITIAL_STATE = {
   submitError: '',
@@ -26,15 +26,15 @@ export const formReducerPlugin = {
           loading: false
         };
 
-      case mainTypes.CREATE_ANNOUNCEMENT_REQUEST:
+      case announcementTypes.CREATE_ANNOUNCEMENT_REQUEST:
         return {
           ...state,
           submitError: '',
           loading: true
         };
-      case mainTypes.CREATE_ANNOUNCEMENT_SUCCESS:
+      case announcementTypes.CREATE_ANNOUNCEMENT_SUCCESS:
         return { ...state, submitError: '', loading: false };
-      case mainTypes.CREATE_ANNOUNCEMENT_FAILURE:
+      case announcementTypes.CREATE_ANNOUNCEMENT_FAILURE:
         return {
           ...state,
           submitError: `code: ${action.submitError.code}\nmessage: ${action.submitError.message}`,

@@ -6,15 +6,15 @@ exports.assignUserRole = (functions, admin) => {
       let customClaims;
       if (user.email.indexOf("@utexas.edu") !== -1) {
         customClaims = {
-          role: "member"
+          member: true
         };
       } else if (user.email.indexOf("@stu.austinisd.org") !== -1) {
         customClaims = {
-          role: "student"
+          student: true
         };
       } else {
         customClaims = {
-          role: "guest"
+          guest: true
         };
       }
       // Set custom user claims on this newly created user.
@@ -33,5 +33,27 @@ exports.assignUserRole = (functions, admin) => {
         });
     }
     return false;
+  });
+};
+
+exports.changeUserRole = (functions, admin) => {
+  return functions.https.onRequest((req, res) => {
+    if (!req.body.uid) {
+      return res.status(422).send({ error: "Bad Input" });
+    }
+    // Set custom user claims
+    return admin
+      .auth()
+      .setCustomUserClaims(req.body.uid, { role: req.body.role })
+      .then(() => {
+        console.log(`Assigned user ${req.body.uid} the role: ${req.body.role}`);
+        res.send(`Assigned user ${req.body.uid} the role: ${req.body.role}`);
+        return true;
+      })
+      .catch(error => {
+        console.error(error);
+        res.status(422).send({ error });
+        return false;
+      });
   });
 };

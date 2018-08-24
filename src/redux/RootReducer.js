@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 
 import { reducer as formReducer } from 'redux-form';
 import { reducer as auth } from '../modules/auth';
-import { reducer as main } from '../modules/main';
+import { reducer as announcement } from '../modules/announcement';
 
 import * as authTypes from '../modules/auth/actionTypes';
 
@@ -12,7 +12,7 @@ import { formReducerPlugin } from '../modules/form/formReducerPlugin';
 // Combine all the reducers
 const appReducer = combineReducers({
   auth,
-  main,
+  announcement,
   form: formReducer.plugin(formReducerPlugin)
 });
 

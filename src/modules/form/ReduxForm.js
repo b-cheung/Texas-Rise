@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { KeyboardAvoidingView, ScrollView, Text, View } from 'react-native';
-import { TextField, Selectable, Button, Spinner } from '../../components/index.js';
+import { TextField, Selectable, Button, Spinner, DateTimePicker } from '../../components/index.js';
 import theme from '../../styles/theme.js';
 
 const renderField = ({ input, type, label, meta: { touched, error, warning }, fieldConfig }) => {
@@ -30,10 +30,19 @@ const renderField = ({ input, type, label, meta: { touched, error, warning }, fi
     case 'Selectable': {
       return (
         <View>
-          <Selectable
+          <Selectable {...input} label={fieldConfig.label} />
+        </View>
+      );
+    }
+    case 'DateTimePicker': {
+      return (
+        <View>
+          <DateTimePicker
             {...input}
             label={fieldConfig.label}
+            minuteInterval={fieldConfig.minuteInterval}
           />
+          {touched && hasError ? <Text style={theme.errorTextStyle}>{error}</Text> : <Text />}
         </View>
       );
     }

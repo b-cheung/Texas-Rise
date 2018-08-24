@@ -11,8 +11,11 @@ import Register from '../../modules/auth/scenes/Register';
 import VerifyEmail from '../../modules/auth/scenes/VerifyEmail';
 import Home from '../../modules/main/scenes/Home';
 import Settings from '../../modules/main/scenes/Settings';
-import AnnouncementFeed from '../../modules/main/scenes/announcements/AnnouncementFeed';
-import AnnouncementCreate from '../../modules/main/scenes/announcements/AnnouncementCreate';
+import AnnouncementFeed from '../../modules/announcement/scenes/AnnouncementFeed';
+import AnnouncementCreate from '../../modules/announcement/scenes/AnnouncementCreate';
+import Poll from '../../modules/polls/scenes/Poll';
+import PollResults from '../../modules/polls/scenes/PollResults';
+import PollCreate from '../../modules/polls/scenes/PollCreate';
 
 const AuthStack = createStackNavigator(
   {
@@ -32,15 +35,27 @@ const AnnouncementStack = createStackNavigator(
     AnnouncementCreate: { screen: AnnouncementCreate }
   },
   {
-    initialRouteName: 'AnnouncementFeed',
+    initialRouteName: 'AnnouncementFeed'
     // headerMode: 'none',
     // mode: 'modal'
+  }
+);
+
+const PollStack = createStackNavigator(
+  {
+    Poll: { screen: Poll },
+    PollCreate: { screen: PollCreate },
+    PollResults: { screen: PollResults }
+  },
+  {
+    initialRouteName: 'PollCreate'
   }
 );
 
 const AppStack = createBottomTabNavigator(
   {
     AnnouncementStack,
+    PollStack,
     Home: { screen: Home },
     Settings: { screen: Settings }
   },

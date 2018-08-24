@@ -1,6 +1,8 @@
 import firebase from 'firebase';
 import 'firebase/firestore';
+import moment from 'moment';
 import * as fbCred from './FirebaseCredentials';
+import * as authService from './authService';
 import NavigationService from '../navigation/NavigationService';
 
 // export class Firebase {
@@ -71,9 +73,9 @@ export function sendVerificationEmail() {
   });
 }
 
-export function getUserRole() {
+export function getUserClaims() {
   return auth.currentUser.getIdTokenResult(true).then(token => {
-    return token.claims.role;
+    return token.claims;
   });
 }
 
@@ -142,6 +144,9 @@ export function createUserDoc(data, authUser) {
 // Create announcement in firestore
 export function createAnnouncementDoc(data) {
   const { title, body, member, student, user } = data;
+  if (authService.isAdminOrOfficer(user.role)) {
+    throw authService.error;
+  }
   return firestore
     .collection('announcements')
     .add({
@@ -168,6 +173,23 @@ export function createAnnouncementDoc(data) {
     });
 }
 
+export function createPollDoc(data) {
+  console.tron.log('createPollDoc');
+  const { title, startDateTime, endDateTime } = data;
+  console.tron.log('createPollDoc', moment.unix(startDateTime).utc());
+  firestore
+    .collection('polls')
+    .add({
+      title,
+      startDateTime: moment.unix(startDateTime).utc(),
+      endDateTime: moment.unix(endDateTime).utc(),
+      active: true
+    })
+    .catch(error => {
+      throw error;
+    });
+}
+
 // retrieve user doc in firestore
 export function fetchUser(authUser) {
   console.tron.log('fetchUser', authUser.uid);
@@ -177,25 +199,25 @@ export function fetchUser(authUser) {
 
 export function fetchAnnouncements(data) {
   const { num } = data;
-  const queryRef = createAnnouncementQuery(data).limit(num);
+  const queryRef = buildAnnouncementQuery(data).limit(num);
   return getDocs(queryRef);
 }
 
 export function fetchNewAnnouncements(data) {
   const { timestamp } = data;
-  const queryRef = createAnnouncementQuery(data).endBefore(timestamp);
+  const queryRef = buildAnnouncementQuery(data).endBefore(timestamp);
   return getDocs(queryRef);
 }
 
 export function fetchOldAnnouncements(data) {
   const { num, timestamp } = data;
-  const queryRef = createAnnouncementQuery(data)
+  const queryRef = buildAnnouncementQuery(data)
     .startAfter(timestamp)
     .limit(num);
   return getDocs(queryRef);
 }
 
-function createAnnouncementQuery(data) {
+function buildAnnouncementQuery(data) {
   const { userRole } = data;
   return firestore
     .collection('announcements')
