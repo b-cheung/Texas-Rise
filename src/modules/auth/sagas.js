@@ -5,7 +5,7 @@ import * as types from './actionTypes';
 
 function* registerFlow(data) {
   try {
-    if (data.password !== data.confirmPassord) {
+    if (data.password !== data.confirmPassword) {
       throw new Error('Password do not match');
     }
     let role;

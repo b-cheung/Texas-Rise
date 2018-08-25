@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import { reducer as auth } from '../modules/auth';
 import { reducer as announcement } from '../modules/announcement';
+import { reducer as poll } from '../modules/poll';
 
 import * as authTypes from '../modules/auth/actionTypes';
 
@@ -13,6 +14,7 @@ import { formReducerPlugin } from '../modules/form/formReducerPlugin';
 const appReducer = combineReducers({
   auth,
   announcement,
+  poll,
   form: formReducer.plugin(formReducerPlugin)
 });
 

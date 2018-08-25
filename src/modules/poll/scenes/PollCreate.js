@@ -38,13 +38,19 @@ class PollCreate extends Component {
   onSubmit = values => {
     const { title, startDateTime, endDateTime } = values;
     console.tron.log('PollCreate submit', startDateTime, endDateTime);
-    this.props.createPollRequest({ title, startDateTime, endDateTime });
+    this.props.createPollRequest({
+      title,
+      startDateTime: moment(startDateTime).utc().format(),
+      endDateTime: moment(endDateTime).utc().format()
+    });
   };
 
   getCurrentDateTime = () => {
     const nearest15Min = Math.ceil(moment().minute() / 15) * 15;
-    return moment().minute(nearest15Min).second(0);
-  }
+    return moment()
+      .minute(nearest15Min)
+      .second(0);
+  };
 
   render() {
     const currentDateTime = this.getCurrentDateTime();

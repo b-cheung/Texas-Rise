@@ -2,7 +2,7 @@ import { all, fork } from 'redux-saga/effects';
 
 import { watchInitialization, watchAuthentication } from '../modules/auth/sagas';
 import { watchAnnouncements } from '../modules/announcement/sagas';
-import { watchPolls } from '../modules/polls/sagas';
+import { watchPolls } from '../modules/poll/sagas';
 
 export default function* rootSaga() {
   yield all([

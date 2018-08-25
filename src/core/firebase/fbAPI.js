@@ -176,14 +176,14 @@ export function createAnnouncementDoc(data) {
 export function createPollDoc(data) {
   console.tron.log('createPollDoc');
   const { title, startDateTime, endDateTime } = data;
-  console.tron.log('createPollDoc', moment.unix(startDateTime).utc());
   firestore
     .collection('polls')
     .add({
       title,
-      startDateTime: moment.unix(startDateTime).utc(),
-      endDateTime: moment.unix(endDateTime).utc(),
-      active: true
+      startDateTime,
+      endDateTime,
+      active: true,
+      timestamp: getTimestamp()
     })
     .catch(error => {
       throw error;
@@ -222,6 +222,25 @@ function buildAnnouncementQuery(data) {
   return firestore
     .collection('announcements')
     .where(`audience.${userRole}`, '==', true)
+    .orderBy('timestamp', 'desc');
+}
+
+export function fetchPolls(data) {
+  const { num } = data;
+  const queryRef = buildPollQuery(data).limit(num);
+  return getDocs(queryRef);
+}
+
+export function fetchNewPolls(data) {
+  const { timestamp } = data;
+  const queryRef = buildPollQuery(data).endBefore(timestamp);
+  return getDocs(queryRef);
+}
+
+function buildPollQuery() {
+  return firestore
+    .collection('polls')
+    .where('active', '==', true)
     .orderBy('timestamp', 'desc');
 }
 
