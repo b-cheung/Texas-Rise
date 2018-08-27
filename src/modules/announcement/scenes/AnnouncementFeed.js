@@ -9,6 +9,7 @@ import {
 } from '../actions';
 import { getUser, getAnnouncements } from '../selectors';
 import { Button, Card, CardSection, Header } from '../../../components';
+import AnnouncementListItem from '../components/AnnouncementListItem';
 import NavigationService from '../../../core/navigation/NavigationService';
 import * as authService from '../../../core/firebase/authService';
 import theme from '../../../styles/theme';
@@ -33,20 +34,17 @@ class AnnouncementFeed extends Component {
   renderCreateButton() {
     return (
       authService.isAdminOrOfficer(this.props.user) && (
-      <Button onPress={() => NavigationService.navigate('AnnouncementCreate')}>Create</Button>
+        <Button onPress={() => NavigationService.navigate('AnnouncementCreate')}>Create</Button>
       )
     );
   }
 
   renderAnnouncement(announcement) {
-    const { title, body } = announcement.item;
     return (
-      <Card>
-        <CardSection style={{ flexDirection: 'column' }}>
-          <Text style={{ flex: 1 }}>{title}</Text>
-          <Text style={{ flex: 1 }}>{body}</Text>
-        </CardSection>
-      </Card>
+      <AnnouncementListItem
+        onPress={() => NavigationService.navigate('AnnouncementView', { data: announcement.item })}
+        data={announcement.item}
+      />
     );
   }
 

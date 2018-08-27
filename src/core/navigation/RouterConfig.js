@@ -13,6 +13,7 @@ import Home from '../../modules/main/scenes/Home';
 import Settings from '../../modules/main/scenes/Settings';
 import AnnouncementFeed from '../../modules/announcement/scenes/AnnouncementFeed';
 import AnnouncementCreate from '../../modules/announcement/scenes/AnnouncementCreate';
+import AnnouncementView from '../../modules/announcement/scenes/AnnouncementView';
 import PollFeed from '../../modules/poll/scenes/PollFeed';
 import Poll from '../../modules/poll/scenes/Poll';
 import PollResults from '../../modules/poll/scenes/PollResults';
@@ -33,7 +34,8 @@ const AuthStack = createStackNavigator(
 const AnnouncementStack = createStackNavigator(
   {
     AnnouncementFeed: { screen: AnnouncementFeed },
-    AnnouncementCreate: { screen: AnnouncementCreate }
+    AnnouncementCreate: { screen: AnnouncementCreate },
+    AnnouncementView: { screen: AnnouncementView }
   },
   {
     initialRouteName: 'AnnouncementFeed'
