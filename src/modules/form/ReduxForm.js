@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { reduxForm, Field } from 'redux-form';
-import { KeyboardAvoidingView, ScrollView, Text, View } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, Text, View, Picker } from 'react-native';
 import { TextField, Selectable, Button, Spinner, DateTimePicker } from '../../components/index.js';
 import theme from '../../styles/theme.js';
 
@@ -31,6 +31,16 @@ const renderField = ({ input, type, label, meta: { touched, error, warning }, fi
       return (
         <View>
           <Selectable {...input} label={fieldConfig.label} />
+        </View>
+      );
+    }
+    case 'Picker': {
+      return (
+        <View>
+          <Text>{fieldConfig.label}</Text>>
+          <Picker selectedValue={input.value} onValueChange={value => input.onChange(value)}>
+            {renderPickerItems(fieldConfig.items)}
+          </Picker>
         </View>
       );
     }
@@ -80,6 +90,12 @@ const renderItem = (fieldConfig, field) => {
       validate={fieldConfig.validate}
     />
   );
+};
+
+const renderPickerItems = items => {
+  return _.map(items, (data, key) => {
+    return <Picker.Item key={key} label={data} value={key} />;
+  });
 };
 
 const renderError = submitError => {

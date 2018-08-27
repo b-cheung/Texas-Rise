@@ -5,6 +5,7 @@ import { createPollRequest } from '../actions';
 import { getFormStatus } from '../../form/selectors';
 import { ReduxForm } from '../../form/ReduxForm';
 import { required, minLength, schoolEmail, emailFormat } from '../../form/FormValidation';
+import * as pollConfigs from '../pollConfigs';
 import styles from '../styles';
 import theme from '../../../styles/theme';
 
@@ -27,6 +28,12 @@ const FIELDS = {
     label: 'End',
     minuteInterval: 15,
     validate: [required]
+  },
+  pollType: {
+    type: 'Picker',
+    label: 'Poll Type',
+    items: pollConfigs.pollTypes.items,
+    validate: [required]
   }
 };
 
@@ -36,12 +43,20 @@ class PollCreate extends Component {
   };
 
   onSubmit = values => {
-    const { title, startDateTime, endDateTime } = values;
+    const { title, startDateTime, endDateTime, pollType } = values;
     console.tron.log('PollCreate submit', startDateTime, endDateTime);
+    const pollItems = pollConfigs[pollType];
+    console.tron.log('onSubmit', pollType);
     this.props.createPollRequest({
       title,
-      startDateTime: moment(startDateTime).utc().format(),
-      endDateTime: moment(endDateTime).utc().format()
+      startDateTime: moment(startDateTime)
+        .utc()
+        .format(),
+      endDateTime: moment(endDateTime)
+        .utc()
+        .format(),
+      pollType,
+      pollItems
     });
   };
 
@@ -49,7 +64,9 @@ class PollCreate extends Component {
     const nearest15Min = Math.ceil(moment().minute() / 15) * 15;
     return moment()
       .minute(nearest15Min)
-      .second(0);
+      .second(0)
+      .utc()
+      .format();
   };
 
   render() {
@@ -57,7 +74,8 @@ class PollCreate extends Component {
     const initialVaules = {
       initialValues: {
         startDateTime: currentDateTime,
-        endDateTime: currentDateTime
+        endDateTime: currentDateTime,
+        pollType: 'classes'
       }
     };
     return (

@@ -144,7 +144,8 @@ export function createUserDoc(data, authUser) {
 // Create announcement in firestore
 export function createAnnouncementDoc(data) {
   const { title, body, member, student, user } = data;
-  if (authService.isAdminOrOfficer(user.role)) {
+  console.tron.log('createAnnouncementDoc auth', authService.isAdminOrOfficer(user.role));
+  if (!authService.isAdminOrOfficer(user)) {
     throw authService.error;
   }
   return firestore
@@ -174,16 +175,20 @@ export function createAnnouncementDoc(data) {
 }
 
 export function createPollDoc(data) {
-  console.tron.log('createPollDoc');
-  const { title, startDateTime, endDateTime } = data;
-  firestore
+  const { title, startDateTime, endDateTime, pollType, pollItems } = data;
+  return firestore
     .collection('polls')
     .add({
       title,
       startDateTime,
       endDateTime,
+      pollType,
+      pollItems,
       active: true,
       timestamp: getTimestamp()
+    })
+    .then(docRef => {
+      return getDoc(docRef);
     })
     .catch(error => {
       throw error;
@@ -225,15 +230,14 @@ function buildAnnouncementQuery(data) {
     .orderBy('timestamp', 'desc');
 }
 
-export function fetchPolls(data) {
-  const { num } = data;
-  const queryRef = buildPollQuery(data).limit(num);
+export function fetchPolls() {
+  const queryRef = buildPollQuery();
   return getDocs(queryRef);
 }
 
 export function fetchNewPolls(data) {
   const { timestamp } = data;
-  const queryRef = buildPollQuery(data).endBefore(timestamp);
+  const queryRef = buildPollQuery().endBefore(timestamp);
   return getDocs(queryRef);
 }
 

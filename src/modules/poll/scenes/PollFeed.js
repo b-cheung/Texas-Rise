@@ -60,7 +60,7 @@ class PollFeed extends Component {
 }
 
 const mapStateToProps = state => {
-  console.tron.log('mapStateToProps PollFeed');
+  console.tron.log('mapStateToProps PollFeed', getPolls(state));
   return {
     user: getUser(state),
     polls: getPolls(state)

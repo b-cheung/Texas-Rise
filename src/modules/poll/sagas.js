@@ -3,6 +3,7 @@ import * as fbAPI from '../../core/firebase/fbAPI';
 import NavigationService from '../../core/navigation/NavigationService';
 import * as selectors from './selectors';
 import * as types from './actionTypes';
+import * as pollConfigs from './pollConfigs';
 
 function comparePolls(pollA, pollB) {
   const timestampA = pollA.timestamp;
@@ -18,6 +19,7 @@ function comparePolls(pollA, pollB) {
 }
 
 function* appendFetchedPolls(fetchedPolls) {
+  console.tron.log('appendFetchedPolls');
   // retrieve existing polls from state tree and append fetched polls
   let polls = yield select(selectors.getPolls);
   if (polls) {
@@ -32,13 +34,12 @@ function* appendFetchedPolls(fetchedPolls) {
 
 function* fetchPollsFlow(action) {
   try {
-    const num = 5;
     // create data parameter with appropriate values
-    let data = { num };
+    let data = {};
     // determine fetch action and retrieve docs
     let docs;
     if (action.type === types.FETCH_POLLS_REQUEST) {
-      docs = yield call(fbAPI.fetchPolls, data);
+      docs = yield call(fbAPI.fetchPolls);
     } else if (action.type === types.FETCH_NEW_POLLS_REQUEST) {
       const timestamp = yield select(selectors.getFirstPollTimestamp);
       data = { ...data, timestamp };
@@ -64,23 +65,25 @@ function* fetchPollsFlow(action) {
 
 function* createPollFlow(action) {
   try {
+    //poll config here or in poll create?
+    //custom poll?
     const data = { ...action.data };
 
     const doc = yield call(fbAPI.createPollDoc, data);
-    /*
+        
     const fetchPoll = { id: doc.id, ...doc.data() };
 
     // append fetched polls to existing polls
     const polls = yield call(appendFetchedPolls, fetchPoll);
-    */
+    
     // dispatch action of type CREATE_POLL_SUCCESS with poll
-    yield put({ type: types.CREATE_POLL_SUCCESS });
+    yield put({ type: types.CREATE_POLL_SUCCESS, polls });
     // watch for action to dispatch first? take(types.CREATE_POLL_SUCCESS)
     NavigationService.goBack();
   } catch (submitError) {
     // if api call fails,
     // dispatch action of type CREATE_POLL_FAILURE
-    yield put({ type: types.CREATE_POLL_FAILURE, submitError });
+    yield put({ type: types.CREATE_POLL_FAILURE, poll: null, submitError });
   }
 }
 
