@@ -28,12 +28,14 @@ const TextField = props => {
 
 const styles = StyleSheet.create({
   inputStyle: {
-    color: '#000',
+    color: '#001B41',
     paddingRight: 5,
-    paddingLeft: 25,
+    paddingLeft: 10,
     fontSize: 18,
     lineHeight: 23,
-    flex: 1
+    flex: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: '#DEDEDE'
   },
   containerStyle: {
     flexDirection: 'column',

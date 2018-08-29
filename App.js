@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image } from 'react-native';
+import { Image, Animated } from 'react-native';
 import { Provider } from 'react-redux';
 import { AppLoading, Asset, Font } from 'expo';
 import { FontAwesome } from '@expo/vector-icons';
@@ -28,6 +28,21 @@ export default class App extends Component {
     isLoadingComplete: false
   };
 
+  
+  componentDidMount() {
+    Font.loadAsync({
+      'Autery': require('./assets/fonts/Autery.ttf'),
+    });
+  }
+
+  onLoad = () => {
+    Animated.timing(this.state.opacity, {
+       toValue: 1,
+       duration: 500,
+       useNativeDriver: true,
+     }).start();
+  }
+
   async _loadAssetsAsync() {
     const imageAssets = cacheImages([
       // 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
@@ -47,6 +62,7 @@ export default class App extends Component {
   _handleFinishLoading = () => {
     this.setState({ isLoadingComplete: true });
   };
+
 
   render() {
     if (!this.state.isLoadingComplete) {

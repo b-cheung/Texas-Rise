@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { View, Text } from 'react-native';
 import { loginRequest } from '../actions';
 import { getFormStatus } from '../../form/selectors';
 import { ReduxForm } from '../../form/ReduxForm';
@@ -26,7 +27,7 @@ const FIELDS = {
 
 class Login extends Component {
   static navigationOptions = {
-    title: 'Login'
+    // title: 'Login'
   };
 
   onSubmit = values => {
@@ -36,12 +37,17 @@ class Login extends Component {
 
   render() {
     return (
-      <ReduxForm
-        onSubmit={this.onSubmit}
-        fields={FIELDS}
-        submitName={'Login'}
-        status={this.props.formStatus}
-      />
+      <View
+        style={theme.container}
+      >
+        <ReduxForm
+          onSubmit={this.onSubmit}
+          title={{ label: 'Login', style: theme.titleStyle }}
+          fields={FIELDS}
+          submitName={'Login'}
+          status={this.props.formStatus}
+        />
+      </View>
     );
   }
 }
