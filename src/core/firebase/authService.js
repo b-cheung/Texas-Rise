@@ -41,6 +41,7 @@ function checkAuthorization(user, allowedRoles) {
       return true;
     }
   }
+  console.tron.log('does not match role');
   return false;
 }
 

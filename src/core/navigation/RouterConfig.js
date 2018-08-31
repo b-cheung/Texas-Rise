@@ -13,9 +13,11 @@ import Home from '../../modules/main/scenes/Home';
 import Settings from '../../modules/main/scenes/Settings';
 import AnnouncementFeed from '../../modules/announcement/scenes/AnnouncementFeed';
 import AnnouncementCreate from '../../modules/announcement/scenes/AnnouncementCreate';
-import Poll from '../../modules/polls/scenes/Poll';
-import PollResults from '../../modules/polls/scenes/PollResults';
-import PollCreate from '../../modules/polls/scenes/PollCreate';
+import AnnouncementView from '../../modules/announcement/scenes/AnnouncementView';
+import PollFeed from '../../modules/poll/scenes/PollFeed';
+import PollView from '../../modules/poll/scenes/PollView';
+import PollResults from '../../modules/poll/scenes/PollResults';
+import PollCreate from '../../modules/poll/scenes/PollCreate';
 
 const AuthStack = createStackNavigator(
   {
@@ -32,7 +34,8 @@ const AuthStack = createStackNavigator(
 const AnnouncementStack = createStackNavigator(
   {
     AnnouncementFeed: { screen: AnnouncementFeed },
-    AnnouncementCreate: { screen: AnnouncementCreate }
+    AnnouncementCreate: { screen: AnnouncementCreate },
+    AnnouncementView: { screen: AnnouncementView }
   },
   {
     initialRouteName: 'AnnouncementFeed'
@@ -43,12 +46,13 @@ const AnnouncementStack = createStackNavigator(
 
 const PollStack = createStackNavigator(
   {
-    Poll: { screen: Poll },
+    PollView: { screen: PollView },
+    PollFeed: { screen: PollFeed },
     PollCreate: { screen: PollCreate },
     PollResults: { screen: PollResults }
   },
   {
-    initialRouteName: 'PollCreate'
+    initialRouteName: 'PollFeed'
   }
 );
 
