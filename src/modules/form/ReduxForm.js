@@ -99,9 +99,14 @@ const renderButton = (handleSubmit, submitName, loading) => {
   return <Button onPress={handleSubmit}>{submitName}</Button>;
 };
 
+const renderTitle = (title) => {
+ if (title) return <Text style={title.style}>{title.label}</Text>;
+};
+
 const Form = props => {
   const {
     handleSubmit,
+    title,
     fields,
     submitName,
     status: { submitError, loading }
@@ -109,6 +114,7 @@ const Form = props => {
   return (
     <KeyboardAvoidingView style={theme.container} behavior="padding" enabled>
       <ScrollView keyboardShouldPersistTaps={'handled'}>
+        {renderTitle(title)}
         {_.map(fields, renderItem)}
         {renderError(submitError)}
         {renderButton(handleSubmit, submitName, loading)}

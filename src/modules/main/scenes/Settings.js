@@ -17,9 +17,20 @@ class SettingsScreen extends Component {
 
   render() {
     return (
-      <Card>
-        <CardSection>{this.renderButton()}</CardSection>
-      </Card>
+        <CardSection
+          style={{
+            alignSelf: 'center',
+            left: 0,
+            right: 0,
+            bottom: 40,
+            top: 250,
+            height: 200,
+            padding: 20
+          }}
+
+        >
+          {this.renderButton()}
+        </CardSection>
     );
   }
 }
