@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { registerRequest } from '../actions';
 import { getFormStatus } from '../../form/selectors';
@@ -53,9 +54,9 @@ const FIELDS = {
 };
 
 class RegisterScreen extends Component {
-  static navigationOptions = {
-    title: 'Register'
-  };
+  // static navigationOptions = {
+  //   title: 'Register'
+  // };
 
   onSubmit = values => {
     const { firstName, lastName, email, password, confirmPassword } = values;
@@ -72,12 +73,15 @@ class RegisterScreen extends Component {
 
   render() {
     return (
-      <ReduxForm
-        onSubmit={this.onSubmit}
-        fields={FIELDS}
-        submitName={'Register'}
-        status={this.props.formStatus}
-      />
+      <View style={theme.container}>
+        <ReduxForm
+          onSubmit={this.onSubmit}
+          title={{ label: 'Register', style: theme.titleStyle }}
+          fields={FIELDS}
+          submitName={'Register'}
+          status={this.props.formStatus}
+        />
+      </View>
     );
   }
 }

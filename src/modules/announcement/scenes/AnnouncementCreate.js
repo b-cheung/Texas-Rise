@@ -64,6 +64,7 @@ class AnnouncementCreate extends Component {
     return (
       <ReduxForm
         onSubmit={this.onSubmit}
+        // title={{ label: 'Create Announcement' }}
         fields={FIELDS}
         submitName={'Post'}
         status={this.props.formStatus}
