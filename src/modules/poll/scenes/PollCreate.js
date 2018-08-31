@@ -17,13 +17,13 @@ const FIELDS = {
     autoCapitalize: 'words',
     validate: [required]
   },
-  startDateTime: {
+  dateTimeStart: {
     type: 'DateTimePicker',
     label: 'Start ',
     minuteInterval: 15,
     validate: [required]
   },
-  endDateTime: {
+  dateTimeEnd: {
     type: 'DateTimePicker',
     label: 'End',
     minuteInterval: 15,
@@ -32,7 +32,7 @@ const FIELDS = {
   pollType: {
     type: 'Picker',
     label: 'Poll Type',
-    items: pollConfigs.pollTypes.items,
+    items: pollConfigs.pollTypes,
     validate: [required]
   }
 };
@@ -43,16 +43,15 @@ class PollCreate extends Component {
   };
 
   onSubmit = values => {
-    const { title, startDateTime, endDateTime, pollType } = values;
-    console.tron.log('PollCreate submit', startDateTime, endDateTime);
+    const { title, dateTimeStart, dateTimeEnd, pollType } = values;
+    console.tron.log('PollCreate submit', dateTimeStart, dateTimeEnd);
     const pollItems = pollConfigs[pollType];
-    console.tron.log('onSubmit', pollType);
     this.props.createPollRequest({
       title,
-      startDateTime: moment(startDateTime)
+      dateTimeStart: moment(dateTimeStart)
         .utc()
         .format(),
-      endDateTime: moment(endDateTime)
+      dateTimeEnd: moment(dateTimeEnd)
         .utc()
         .format(),
       pollType,
@@ -73,9 +72,9 @@ class PollCreate extends Component {
     const currentDateTime = this.getCurrentDateTime();
     const initialVaules = {
       initialValues: {
-        startDateTime: currentDateTime,
-        endDateTime: currentDateTime,
-        pollType: 'classes'
+        dateTimeStart: currentDateTime,
+        dateTimeEnd: currentDateTime,
+        pollType: Object.keys(pollConfigs.pollTypes)[0]
       }
     };
     return (

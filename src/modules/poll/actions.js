@@ -1,11 +1,5 @@
 import * as types from './actionTypes';
 
-export const fetchNewPollsRequest = () => {
-  return {
-    type: types.FETCH_NEW_POLLS_REQUEST
-  };
-};
-
 export const fetchPollsRequest = () => {
   return {
     type: types.FETCH_POLLS_REQUEST,
@@ -15,6 +9,20 @@ export const fetchPollsRequest = () => {
 export const createPollRequest = data => {
   return {
     type: types.CREATE_POLL_REQUEST,
+    data
+  };
+};
+
+export const votePollRequest = data => {
+  return {
+    type: types.VOTE_POLL_REQUEST,
+    data
+  };
+};
+
+export const fetchPollResults = data => {
+  return {
+    type: types.FETCH_POLL_RESULTS_REQUEST,
     data
   };
 };

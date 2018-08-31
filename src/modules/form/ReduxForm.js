@@ -93,8 +93,8 @@ const renderItem = (fieldConfig, field) => {
 };
 
 const renderPickerItems = items => {
-  return _.map(items, (data, key) => {
-    return <Picker.Item key={key} label={data} value={key} />;
+  return _.map(items, (value, key) => {
+    return <Picker.Item key={key} label={value} value={key} />;
   });
 };
 

@@ -12,7 +12,7 @@ class AnnouncementView extends Component {
           <Text>{title}</Text>
           <Text>{author.firstName}</Text>
           <Text>{moment.unix(timestamp.seconds).fromNow()}</Text>
-          <Text>{body}</Text>
+          <Text>{body}</Text>0
         </View>
       );
     }

@@ -18,6 +18,7 @@ export default (state = INITIAL_STATE, action) => {
     case types.FETCH_POLLS_FAILURE:
       return {
         ...state,
+        polls: action.polls,
         error: `code: ${action.error.code}\nmessage: ${action.error.message}`,
         loading: false
       };

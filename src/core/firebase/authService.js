@@ -35,14 +35,13 @@ export function isStudent(user) {
 }
 
 function checkAuthorization(user, allowedRoles) {
-  console.tron.log('checkAuthorization', user.role);
   if (!isLoggedIn || user == null) return false;
   for (const role of allowedRoles) {
     if (user.role === role) {
       return true;
     }
   }
-  console.tron.log('doesn\'t match role');
+  console.tron.log('does not match role');
   return false;
 }
 

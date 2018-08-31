@@ -2,12 +2,10 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ScrollView, FlatList } from 'react-native';
-import {
-  fetchPollsRequest,
-  fetchNewPollsRequest
-} from '../actions';
+import { fetchPollsRequest } from '../actions';
 import { getUser, getPolls } from '../selectors';
 import { Button, Card, CardSection, Header } from '../../../components';
+import PollListItem from '../components/PollListItem';
 import NavigationService from '../../../core/navigation/NavigationService';
 import * as authService from '../../../core/firebase/authService';
 import theme from '../../../styles/theme';
@@ -22,25 +20,23 @@ class PollFeed extends Component {
   }
 
   renderRefreshButton() {
-    return <Button onPress={() => this.props.fetchNewPollsRequest()}>Refresh</Button>;
+    return <Button onPress={() => this.props.fetchPollsRequest()}>Refresh</Button>;
   }
 
   renderCreateButton() {
     return (
       authService.isAdminOrOfficer(this.props.user) && (
-      <Button onPress={() => NavigationService.navigate('PollCreate')}>Create</Button>
+        <Button onPress={() => NavigationService.navigate('PollCreate')}>Create</Button>
       )
     );
   }
 
   renderPoll(poll) {
-    const { title } = poll.item;
     return (
-      <Card>
-        <CardSection style={{ flexDirection: 'column' }}>
-          <Text style={{ flex: 1 }}>{title}</Text>
-        </CardSection>
-      </Card>
+      <PollListItem
+        onPress={() => NavigationService.navigate('PollView', { data: poll.item })}
+        data={poll.item}
+      />
     );
   }
 
@@ -69,5 +65,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchPollsRequest, fetchNewPollsRequest }
+  { fetchPollsRequest }
 )(PollFeed);

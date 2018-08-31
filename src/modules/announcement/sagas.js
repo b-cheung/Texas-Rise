@@ -79,10 +79,10 @@ function* createAnnouncementFlow(action) {
     const data = { ...action.data, user };
     // call createAnnouncementDoc() with data
     const doc = yield call(fbAPI.createAnnouncementDoc, data);
-    const fetchAnnouncement = { id: doc.id, ...doc.data() };
+    const fetchedAnnouncement = { id: doc.id, ...doc.data() };
 
     // append fetched announcements to existing announcements
-    const announcements = yield call(appendFetchedAnnouncements, fetchAnnouncement);
+    const announcements = yield call(appendFetchedAnnouncements, [fetchedAnnouncement]);
 
     // dispatch action of type CREATE_ANNOUNCEMENT_SUCCESS with announcement
     yield put({ type: types.CREATE_ANNOUNCEMENT_SUCCESS, announcements });

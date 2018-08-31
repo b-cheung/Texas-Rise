@@ -15,7 +15,7 @@ import AnnouncementFeed from '../../modules/announcement/scenes/AnnouncementFeed
 import AnnouncementCreate from '../../modules/announcement/scenes/AnnouncementCreate';
 import AnnouncementView from '../../modules/announcement/scenes/AnnouncementView';
 import PollFeed from '../../modules/poll/scenes/PollFeed';
-import Poll from '../../modules/poll/scenes/Poll';
+import PollView from '../../modules/poll/scenes/PollView';
 import PollResults from '../../modules/poll/scenes/PollResults';
 import PollCreate from '../../modules/poll/scenes/PollCreate';
 
@@ -46,7 +46,7 @@ const AnnouncementStack = createStackNavigator(
 
 const PollStack = createStackNavigator(
   {
-    Poll: { screen: Poll },
+    PollView: { screen: PollView },
     PollFeed: { screen: PollFeed },
     PollCreate: { screen: PollCreate },
     PollResults: { screen: PollResults }

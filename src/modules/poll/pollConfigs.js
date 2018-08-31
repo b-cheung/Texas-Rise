@@ -1,17 +1,14 @@
 export const pollTypes = {
-  items: {
-    classes: 'Classes',
-    topics: 'Topics',
-    custom: 'Custom'
-  }
+  classes: 'Classes',
+  topics: 'Topics',
+  custom: 'Custom'
 };
+
 export const classes = {
-  items: {
-    math: 'Math',
-    engl: 'English',
-    hist: 'History',
-    sci: 'Science'
-  }
+  math: 'Math',
+  engl: 'English',
+  hist: 'History',
+  sci: 'Science'
 };
 
 export const topics = {};
