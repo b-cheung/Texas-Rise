@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { all, call, put, select, takeLatest, take } from 'redux-saga/effects';
 import * as fbAPI from '../../core/firebase/fbAPI';
 import NavigationService from '../../core/navigation/NavigationService';
@@ -37,12 +38,15 @@ function* fetchPollsFlow(action) {
   try {
     // create data parameter with appropriate values
     const data = {};
-    // determine fetch action and retrieve docs
+    // determine fetch action and retrieve array of docs
     const docs = yield call(fbAPI.fetchPolls);
-    // create new array of restructured poll objects
-    const polls = docs.map(doc => {
-      return { id: doc.id, ...doc.data() };
-    });
+    // create new object { pollId: data, ... }
+    const polls = _.keyBy(
+      docs.map(doc => {
+        return { id: doc.id, ...doc.data() };
+      }),
+      'id'
+    );
 
     // dispatch action of type FETCH_POLLS_SUCCESS with fetched polls
     yield put({ type: types.FETCH_POLLS_SUCCESS, polls });
