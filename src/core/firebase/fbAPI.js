@@ -151,10 +151,10 @@ function getDocs(queryRef) {
     .then(querySnapshot => {
       if (querySnapshot.size > 0) {
         console.tron.log('Documents found.');
-        /*Object: {
-          id: Object {val},
+        /*{
+          id: {val},
           ...,
-          id: Object {val}
+          id: {val}
         }*/
         return querySnapshot.docs;
       }
