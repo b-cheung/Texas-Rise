@@ -1,8 +1,15 @@
+import _ from 'lodash';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 import * as fbAPI from '../../core/firebase/fbAPI';
 import NavigationService from '../../core/navigation/NavigationService';
 import * as selectors from './selectors';
 import * as types from './actionTypes';
+
+function* appendFetchedAnnouncement(fetchedAnnouncement) {
+  // append fetched polls to existing polls
+  let announcement = yield select(selectors.getAnnouncement);
+  return (announcement = { ...announcement, [fetchedAnnouncement.id]: fetchedAnnouncement });
+}
 
 function* fetchAnnouncementsFlow(action) {
   try {
@@ -58,11 +65,11 @@ function* createAnnouncementFlow(action) {
     const data = { ...action.data, user };
     // call createAnnouncementDoc() with data
     const doc = yield call(fbAPI.createAnnouncementDoc, data);
+    
     const fetchedAnnouncement = { id: doc.id, ...doc.data() };
 
-    // append fetched announcements to existing announcements
-    let announcements = yield select(selectors.getAnnouncements);
-    announcements = { ...announcements, [doc.id]: fetchedAnnouncement }
+    const announcements = yield call(appendFetchedAnnouncement, fetchedAnnouncement);
+
 
     // dispatch action of type CREATE_ANNOUNCEMENT_SUCCESS with announcement
     yield put({ type: types.CREATE_ANNOUNCEMENT_SUCCESS, announcements });

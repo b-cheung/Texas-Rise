@@ -72,7 +72,6 @@ function* votePollFlow(action) {
     const fetchedPoll = { id: pollDoc.id, ...pollDoc.data() };
 
     const polls = yield call(appendFetchedPoll, fetchedPoll);
-    console.tron.log('appendFetchedPoll', polls);
     // dispatch action of type VOTE_POLL_SUCCESS with pollResults
     yield put({ type: types.VOTE_POLL_SUCCESS, polls });
   } catch (submitError) {

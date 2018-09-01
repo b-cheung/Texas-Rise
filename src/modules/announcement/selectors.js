@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { createSelector } from 'reselect';
 
 export const getUser = state => state.auth.user;
@@ -7,10 +8,10 @@ export const getUserRole = state => state.auth.user.role;
 export const getAnnouncements = state => state.announcement.announcements;
 
 export const getAnnouncementFeed = createSelector(getAnnouncements, announcements => {
-  const pollFeed = _.map(announcements, data => {
+  const announcementFeed = _.map(announcements, data => {
     return data;
   });
-  return pollFeed.sort(compareAnnouncements);
+  return announcementFeed.sort(compareAnnouncements);
 });
 
 export const getFirstAnnouncementTimestamp = createSelector(

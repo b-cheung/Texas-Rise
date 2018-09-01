@@ -1,5 +1,5 @@
-import { createSelector } from 'reselect';
 import _ from 'lodash';
+import { createSelector } from 'reselect';
 
 export const getUser = state => state.auth.user;
 
