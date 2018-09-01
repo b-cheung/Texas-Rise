@@ -6,6 +6,12 @@ import * as selectors from './selectors';
 import * as types from './actionTypes';
 import * as pollConfigs from './pollConfigs';
 
+function* appendFetchedPoll(fetchedPoll) {
+  // append fetched polls to existing polls
+  let polls = yield select(selectors.getPolls);
+  return (polls = { ...polls, [fetchedPoll.id]: fetchedPoll });
+}
+
 function* fetchPollsFlow(action) {
   try {
     // create data parameter with appropriate values
@@ -41,9 +47,7 @@ function* createPollFlow(action) {
 
     const fetchedPoll = { id: doc.id, ...doc.data() };
 
-    // append fetched polls to existing polls
-    let polls = yield select(selectors.getPolls);
-    polls = { ...polls, [doc.id]: fetchedPoll };
+    const polls = yield call(appendFetchedPoll, fetchedPoll);
 
     // dispatch action of type CREATE_POLL_SUCCESS with poll
     yield put({ type: types.CREATE_POLL_SUCCESS, polls });
@@ -67,9 +71,8 @@ function* votePollFlow(action) {
 
     const fetchedPoll = { id: pollDoc.id, ...pollDoc.data() };
 
-    let polls = yield select(selectors.getPolls);
-    polls = { ...polls, [pollDoc.id]: fetchedPoll };
-
+    const polls = yield call(appendFetchedPoll, fetchedPoll);
+    console.tron.log('appendFetchedPoll', polls);
     // dispatch action of type VOTE_POLL_SUCCESS with pollResults
     yield put({ type: types.VOTE_POLL_SUCCESS, polls });
   } catch (submitError) {
