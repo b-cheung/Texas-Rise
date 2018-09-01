@@ -13,7 +13,7 @@ import {
   fetchNewAnnouncementsRequest,
   fetchOldAnnouncementsRequest
 } from '../actions';
-import { getUser, getAnnouncements } from '../selectors';
+import { getUser, getAnnouncementFeed } from '../selectors';
 import { Button, Card, CardSection, Header } from '../../../components';
 import AnnouncementListItem from '../components/AnnouncementListItem';
 import NavigationService from '../../../core/navigation/NavigationService';
@@ -69,7 +69,7 @@ class AnnouncementFeed extends Component {
             <View>{this.renderRefreshButton()}</View>
             <View>{this.renderCreateButton()}</View>
             <FlatList
-              data={this.props.announcements}
+              data={this.props.announcementFeed}
               
               renderItem={this.renderAnnouncement}
               keyExtractor={announcement => announcement.id}
@@ -85,7 +85,7 @@ const mapStateToProps = state => {
   console.tron.log('mapStateToProps AnnouncementFeed');
   return {
     user: getUser(state),
-    announcements: getAnnouncements(state)
+    announcementFeed: getAnnouncementFeed(state)
   };
 };
 

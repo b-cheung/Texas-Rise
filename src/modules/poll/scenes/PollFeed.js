@@ -46,7 +46,7 @@ class PollFeed extends Component {
         <View>{this.renderRefreshButton()}</View>
         <View>{this.renderCreateButton()}</View>
         <FlatList
-          data={this.props.polls}
+          data={this.props.pollFeed}
           renderItem={this.renderPoll}
           keyExtractor={poll => poll.id}
         />
@@ -59,7 +59,7 @@ const mapStateToProps = state => {
   console.tron.log('mapStateToProps PollFeed', getPollFeed(state));
   return {
     user: getUser(state),
-    polls: getPollFeed(state)
+    pollFeed: getPollFeed(state)
   };
 };
 
