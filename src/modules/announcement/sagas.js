@@ -62,7 +62,7 @@ function* createAnnouncementFlow(action) {
 
     // append fetched announcements to existing announcements
     let announcements = yield select(selectors.getAnnouncements);
-    announcements = { [doc.id]: fetchedAnnouncement, ...announcements }
+    announcements = { ...announcements, [doc.id]: fetchedAnnouncement }
 
     // dispatch action of type CREATE_ANNOUNCEMENT_SUCCESS with announcement
     yield put({ type: types.CREATE_ANNOUNCEMENT_SUCCESS, announcements });

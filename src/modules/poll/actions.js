@@ -20,7 +20,7 @@ export const votePollRequest = data => {
   };
 };
 
-export const fetchPollResults = data => {
+export const fetchPollResultsRequest = data => {
   return {
     type: types.FETCH_POLL_RESULTS_REQUEST,
     data

@@ -34,7 +34,7 @@ class PollFeed extends Component {
   renderPoll(poll) {
     return (
       <PollListItem
-        onPress={() => NavigationService.navigate('PollView', { data: poll.item })}
+        onPress={() => NavigationService.navigate('PollView', { pollId: poll.item.id })}
         data={poll.item}
       />
     );

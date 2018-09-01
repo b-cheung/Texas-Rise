@@ -5,7 +5,11 @@ export const getUser = state => state.auth.user;
 
 export const getUserRole = state => state.auth.user.role;
 
+export const getPollData = (state, pollId) => state.poll.polls[pollId];
+
 export const getPolls = state => state.poll.polls;
+
+export const getPollResults = state => state.poll.pollResults;
 
 export const getPollFeed = createSelector(getPolls, polls => {
   const pollFeed = _.map(polls, data => {

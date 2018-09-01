@@ -2,16 +2,15 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { getUser } from '../selectors';
+import { getUser, getPollData } from '../selectors';
 import PollVote from './PollVote';
 import PollResults from './PollResults';
 
 class PollView extends Component {
-  state = { pollData: this.props.navigation.getParam('data', null) };
+  state = { pollId: this.props.navigation.getParam('pollId', null) };
 
   render() {
-    const pollData = this.state.pollData;
-    const user = this.props.user;
+    const { pollData, user } = this.props;
     // if voters array and user !== null
     if (pollData.voters && user) {
       for (const voterUid of pollData.voters) {
@@ -25,9 +24,11 @@ class PollView extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
+  const pollId = props.navigation.getParam('pollId', null);
   return {
-    user: getUser(state)
+    user: getUser(state),
+    pollData: getPollData(state, pollId)
   };
 };
 

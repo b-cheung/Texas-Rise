@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
-import { fetchPollResults } from '../actions';
+import { fetchPollResultsRequest } from '../actions';
+import { getUser, getPollResults } from '../selectors';
 
 class PollResults extends Component {
   componentWillMount() {
     const pollId = this.props.pollData.id;
-    this.props.fetchPollResults(pollId);
+    console.tron.log('PollResults componentWillMount', this.props.pollData, pollId);
+    this.props.fetchPollResultsRequest(pollId);
   }
 
   render() {
-    const pollData = this.props.pollData;
+    const { pollData, pollResults } = this.props;
+    console.tron.log('PollResults render', pollResults);
     return (
       <View>
         <Text>{pollData.title}</Text>
@@ -19,12 +22,14 @@ class PollResults extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const { user } = state.auth;
-  return { user };
+const mapStateToProps = (state) => {
+  return {
+    user: getUser(state),
+    pollResults: getPollResults(state)
+  };
 };
 
 export default connect(
   mapStateToProps,
-  { fetchPollResults }
+  { fetchPollResultsRequest }
 )(PollResults);
