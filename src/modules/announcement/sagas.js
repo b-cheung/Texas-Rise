@@ -4,32 +4,6 @@ import NavigationService from '../../core/navigation/NavigationService';
 import * as selectors from './selectors';
 import * as types from './actionTypes';
 
-function compareAnnouncements(announcementA, announcementB) {
-  const timestampA = announcementA.timestamp;
-  const timestampB = announcementB.timestamp;
-
-  let comparison = 0;
-  if (timestampA > timestampB) {
-    comparison = -1;
-  } else if (timestampA < timestampB) {
-    comparison = 1;
-  }
-  return comparison;
-}
-
-function* appendFetchedAnnouncements(fetchedAnnouncements) {
-  // retrieve existing announcements from state tree and append fetched announcements
-  let announcements = yield select(selectors.getAnnouncements);
-  if (announcements) {
-    announcements = announcements.concat(fetchedAnnouncements);
-  } else {
-    announcements = fetchedAnnouncements;
-  }
-  announcements.sort(compareAnnouncements);
-
-  return announcements;
-}
-
 function* fetchAnnouncementsFlow(action) {
   try {
     // check authorization
@@ -52,13 +26,18 @@ function* fetchAnnouncementsFlow(action) {
       data = { ...data, timestamp };
       docs = yield call(fbAPI.fetchOldAnnouncements, data);
     }
-    // create new array of restructured announcement objects
-    const fetchedAnnouncements = docs.map(doc => {
-      return { id: doc.id, ...doc.data() };
-    });
+
+    // create new object { announcementId: data, ... }
+    const fetchedAnnouncements = _.keyBy(
+      docs.map(doc => {
+        return { id: doc.id, ...doc.data() };
+      }),
+      'id'
+    );
 
     // append fetched announcements to existing announcements
-    const announcements = yield call(appendFetchedAnnouncements, fetchedAnnouncements);
+    let announcements = yield select(selectors.getAnnouncements);
+    announcements = { ...fetchedAnnouncements, ...announcements };
 
     // dispatch action of type FETCH_ANNOUNCEMENTS_SUCCESS with fetched announcements
     yield put({ type: types.FETCH_ANNOUNCEMENTS_SUCCESS, announcements });
@@ -82,7 +61,8 @@ function* createAnnouncementFlow(action) {
     const fetchedAnnouncement = { id: doc.id, ...doc.data() };
 
     // append fetched announcements to existing announcements
-    const announcements = yield call(appendFetchedAnnouncements, [fetchedAnnouncement]);
+    let announcements = yield select(selectors.getAnnouncements);
+    announcements = { ...announcements, [doc.id]: fetchedAnnouncement }
 
     // dispatch action of type CREATE_ANNOUNCEMENT_SUCCESS with announcement
     yield put({ type: types.CREATE_ANNOUNCEMENT_SUCCESS, announcements });
@@ -109,4 +89,3 @@ export function* watchAnnouncements() {
     takeLatest(types.CREATE_ANNOUNCEMENT_REQUEST, createAnnouncementFlow)
   ]);
 }
-

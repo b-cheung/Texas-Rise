@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, ScrollView, FlatList } from 'react-native';
 import { fetchPollsRequest } from '../actions';
-import { getUser, getPolls } from '../selectors';
+import { getUser, getPollFeed } from '../selectors';
 import { Button, Card, CardSection, Header } from '../../../components';
 import PollListItem from '../components/PollListItem';
 import NavigationService from '../../../core/navigation/NavigationService';
@@ -34,7 +34,7 @@ class PollFeed extends Component {
   renderPoll(poll) {
     return (
       <PollListItem
-        onPress={() => NavigationService.navigate('PollView', { data: poll.item })}
+        onPress={() => NavigationService.navigate('PollView', { pollId: poll.item.id })}
         data={poll.item}
       />
     );
@@ -46,7 +46,7 @@ class PollFeed extends Component {
         <View>{this.renderRefreshButton()}</View>
         <View>{this.renderCreateButton()}</View>
         <FlatList
-          data={this.props.polls}
+          data={this.props.pollFeed}
           renderItem={this.renderPoll}
           keyExtractor={poll => poll.id}
         />
@@ -56,10 +56,10 @@ class PollFeed extends Component {
 }
 
 const mapStateToProps = state => {
-  console.tron.log('mapStateToProps PollFeed', getPolls(state));
+  console.tron.log('mapStateToProps PollFeed', getPollFeed(state));
   return {
     user: getUser(state),
-    polls: getPolls(state)
+    pollFeed: getPollFeed(state)
   };
 };
 
