@@ -3,4 +3,5 @@ functions/node_modules/
 functions/credentials/
 .expo/*
 npm-debug.*
+package-lock.json
 FirebaseCredentials.js

@@ -26,6 +26,11 @@ export default (state = INITIAL_STATE, action) => {
     case types.CREATE_POLL_SUCCESS:
       return { ...state, polls: action.polls };
 
+    case types.VOTE_POLL_SUCCESS:
+      return { ...state, polls: action.polls };
+    case types.FETCH_POLL_RESULTS_SUCCESS:
+      return { ...state, pollResults: action.pollResults };
+
     default:
       return state;
   }

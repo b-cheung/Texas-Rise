@@ -142,19 +142,20 @@ function getDoc(docRef) {
 }
 
 function getDocs(queryRef) {
+  console.tron.log('getDocs');
   return queryRef
     .get()
     .catch(error => {
-      console.log('Error getting document(s):', error);
+      console.tron.log('Error getting document(s):', error);
       throw error;
     })
     .then(querySnapshot => {
       if (querySnapshot.size > 0) {
         console.tron.log('Documents found.');
-        /*Object: {
-          id: Object {val},
+        /*{
+          id: {val},
           ...,
-          id: Object {val}
+          id: {val}
         }*/
         return querySnapshot.docs;
       }
@@ -280,6 +281,11 @@ function buildAnnouncementQuery(userRole) {
     .orderBy('timestamp', 'desc');
 }
 
+export function fetchPoll(pollId) {
+  const docRef = firestore.collection('polls').doc(pollId);
+  return getDoc(docRef);
+}
+
 export function fetchPolls() {
   const queryRef = firestore
     .collection('polls')
@@ -338,6 +344,6 @@ export function votePoll(data) {
       console.tron.log('Transaction successfully committed!');
     })
     .catch(error => {
-      throw new Error(error);
+      throw error;
     });
 }
