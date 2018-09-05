@@ -5,10 +5,10 @@ import NavigationService from '../../core/navigation/NavigationService';
 import * as selectors from './selectors';
 import * as types from './actionTypes';
 
-function* appendFetchedAnnouncement(fetchedAnnouncement) {
-  // append fetched polls to existing polls
-  let announcement = yield select(selectors.getAnnouncement);
-  return (announcement = { ...announcement, [fetchedAnnouncement.id]: fetchedAnnouncement });
+function* appendFetchedAnnouncements(fetchedAnnouncements) {
+  // append fetched announcements to existing announcements
+  const announcements = yield select(selectors.getAnnouncements);
+  return { ...announcements, ...fetchedAnnouncements };
 }
 
 function* fetchAnnouncementsFlow(action) {
@@ -20,38 +20,36 @@ function* fetchAnnouncementsFlow(action) {
     const num = 5;
     // create data parameter with appropriate values
     let data = { userRole, num };
-    // determine fetch action and retrieve docs
-    let docs;
+    // determine fetch action and retrieve announcementDocs
+    let announcementDocs;
     if (action.type === types.FETCH_ANNOUNCEMENTS_REQUEST) {
-      docs = yield call(fbAPI.fetchAnnouncements, data);
+      announcementDocs = yield call(fbAPI.fetchAnnouncements, data);
     } else if (action.type === types.FETCH_NEW_ANNOUNCEMENTS_REQUEST) {
       const timestamp = yield select(selectors.getFirstAnnouncementTimestamp);
       data = { ...data, timestamp };
-      docs = yield call(fbAPI.fetchNewAnnouncements, data);
+      announcementDocs = yield call(fbAPI.fetchNewAnnouncements, data);
     } else if (action.type === types.FETCH_OLD_ANNOUNCEMENTS_REQUEST) {
       const timestamp = yield select(selectors.getLastAnnouncementTimestamp);
       data = { ...data, timestamp };
-      docs = yield call(fbAPI.fetchOldAnnouncements, data);
+      announcementDocs = yield call(fbAPI.fetchOldAnnouncements, data);
     }
 
     // create new object { announcementId: data, ... }
     const fetchedAnnouncements = _.keyBy(
-      docs.map(doc => {
+      announcementDocs.map(doc => {
         return { id: doc.id, ...doc.data() };
       }),
       'id'
     );
 
     // append fetched announcements to existing announcements
-    let announcements = yield select(selectors.getAnnouncements);
-    announcements = { ...fetchedAnnouncements, ...announcements };
+    const announcements = yield call(appendFetchedAnnouncements, fetchedAnnouncements);
 
     // dispatch action of type FETCH_ANNOUNCEMENTS_SUCCESS with fetched announcements
     yield put({ type: types.FETCH_ANNOUNCEMENTS_SUCCESS, announcements });
   } catch (error) {
     // if api call fails,
     // dispatch action of type FETCH_ANNOUNCEMENTS_FAILURE
-    console.tron.log(error);
     yield put({ type: types.FETCH_ANNOUNCEMENTS_FAILURE, announcements: null, error });
   }
 }
@@ -64,12 +62,16 @@ function* createAnnouncementFlow(action) {
     const user = yield select(selectors.getUser);
     const data = { ...action.data, user };
     // call createAnnouncementDoc() with data
-    const doc = yield call(fbAPI.createAnnouncementDoc, data);
-    
-    const fetchedAnnouncement = { id: doc.id, ...doc.data() };
+    const announcementDoc = yield call(fbAPI.createAnnouncementDoc, data);
 
-    const announcements = yield call(appendFetchedAnnouncement, fetchedAnnouncement);
+    const fetchedAnnouncement = {
+      [announcementDoc.id]: {
+        id: announcementDoc.id,
+        ...announcementDoc.data()
+      }
+    };
 
+    const announcements = yield call(appendFetchedAnnouncements, fetchedAnnouncement);
 
     // dispatch action of type CREATE_ANNOUNCEMENT_SUCCESS with announcement
     yield put({ type: types.CREATE_ANNOUNCEMENT_SUCCESS, announcements });
@@ -78,7 +80,6 @@ function* createAnnouncementFlow(action) {
   } catch (submitError) {
     // if api call fails,
     // dispatch action of type CREATE_ANNOUNCEMENT_FAILURE
-    console.tron.log(submitError);
     yield put({ type: types.CREATE_ANNOUNCEMENT_FAILURE, announcement: null, submitError });
   }
 }

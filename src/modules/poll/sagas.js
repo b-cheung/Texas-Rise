@@ -6,10 +6,10 @@ import * as selectors from './selectors';
 import * as types from './actionTypes';
 import * as pollConfigs from './pollConfigs';
 
-function* appendFetchedPoll(fetchedPoll) {
+function* appendFetchedPolls(fetchedPolls) {
   // append fetched polls to existing polls
-  let polls = yield select(selectors.getPolls);
-  return (polls = { ...polls, [fetchedPoll.id]: fetchedPoll });
+  const polls = yield select(selectors.getPolls);
+  return { ...polls, ...fetchedPolls };
 }
 
 function* fetchPollsFlow(action) {
@@ -31,7 +31,6 @@ function* fetchPollsFlow(action) {
   } catch (error) {
     // if api call fails,
     // dispatch action of type FETCH_POLLS_FAILURE
-    console.tron.log(error);
     yield put({ type: types.FETCH_POLLS_FAILURE, polls: null, error });
   }
 }
@@ -43,11 +42,16 @@ function* createPollFlow(action) {
     const user = yield select(selectors.getUser);
     const data = { ...action.data, user };
 
-    const doc = yield call(fbAPI.createPollDoc, data);
+    const pollDoc = yield call(fbAPI.createPollDoc, data);
 
-    const fetchedPoll = { id: doc.id, ...doc.data() };
+    const fetchedPoll = {
+      [pollDoc.id]: {
+        id: pollDoc.id,
+        ...pollDoc.data()
+      }
+    };
 
-    const polls = yield call(appendFetchedPoll, fetchedPoll);
+    const polls = yield call(appendFetchedPolls, fetchedPoll);
 
     // dispatch action of type CREATE_POLL_SUCCESS with poll
     yield put({ type: types.CREATE_POLL_SUCCESS, polls });
@@ -69,9 +73,14 @@ function* votePollFlow(action) {
     //fetch updated pollDoc
     const pollDoc = yield call(fbAPI.fetchPoll, data.pollId);
 
-    const fetchedPoll = { id: pollDoc.id, ...pollDoc.data() };
+    const fetchedPoll = {
+      [pollDoc.id]: {
+        id: pollDoc.id,
+        ...pollDoc.data()
+      }
+    };
 
-    const polls = yield call(appendFetchedPoll, fetchedPoll);
+    const polls = yield call(appendFetchedPolls, fetchedPoll);
     // dispatch action of type VOTE_POLL_SUCCESS with pollResults
     yield put({ type: types.VOTE_POLL_SUCCESS, polls });
   } catch (submitError) {
@@ -83,7 +92,7 @@ function* votePollFlow(action) {
 
 function* fetchPollResultsFlow(action) {
   try {
-    // determine fetch action and retrieve docs
+    // determine fetch action and retrieve 
     const pollResultDocs = yield call(fbAPI.fetchPollResults, action.data);
     // create new array of restructured pollItem objects
     const pollResults = _.keyBy(
@@ -98,7 +107,6 @@ function* fetchPollResultsFlow(action) {
   } catch (error) {
     // if api call fails,
     // dispatch action of type FETCH_POLL_RESULTS_FAILURE
-    console.tron.log(error);
     yield put({ type: types.FETCH_POLL_RESULTS_FAILURE, pollResults: null, error });
   }
 }

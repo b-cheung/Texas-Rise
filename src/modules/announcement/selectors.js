@@ -15,12 +15,12 @@ export const getAnnouncementFeed = createSelector(getAnnouncements, announcement
 });
 
 export const getFirstAnnouncementTimestamp = createSelector(
-  getAnnouncements,
+  getAnnouncementFeed,
   announcements => announcements[0].timestamp
 );
 
 export const getLastAnnouncementTimestamp = createSelector(
-  getAnnouncements,
+  getAnnouncementFeed,
   announcements => announcements[announcements.length - 1].timestamp
 );
 
