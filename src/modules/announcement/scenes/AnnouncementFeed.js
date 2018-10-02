@@ -41,7 +41,15 @@ class AnnouncementFeed extends Component {
   renderCreateButton() {
     return (
       authService.isAdminOrOfficer(this.props.user) && (
-        <Button onPress={() => NavigationService.navigate('AnnouncementCreate')}>Create</Button>
+        <Icon 
+        // DOES NOT POSITION TO RIGHT
+          name='plus' 
+          size={20} 
+          justifyContent='flex-end' 
+          flexDirection='row' 
+          onPress={() => NavigationService.navigate('AnnouncementCreate')} 
+          
+        />
       )
     );
   }
@@ -66,11 +74,10 @@ class AnnouncementFeed extends Component {
       <View style={styles.announcementStyle}>
         <ScrollView>
             {/* <Header headerText="AnnouncementFeed" /> */}
-            <View>{this.renderRefreshButton()}</View>
-            <View>{this.renderCreateButton()}</View>
+            <View style={{ paddingLeft: 5 }}>{this.renderRefreshButton()}</View>
+            <View style={{ position: 'absolute', alignSelf: 'flex-end', paddingRight: 5 }}>{this.renderCreateButton()}</View>
             <FlatList
               data={this.props.announcementFeed}
-              
               renderItem={this.renderAnnouncement}
               keyExtractor={announcement => announcement.id}
             />
@@ -80,6 +87,7 @@ class AnnouncementFeed extends Component {
     );
   }
 }
+
 
 const mapStateToProps = state => {
   console.tron.log('mapStateToProps AnnouncementFeed');

@@ -5,6 +5,7 @@ import { getUser } from '../selectors';
 import { getFormStatus } from '../../form/selectors';
 import { ReduxForm } from '../../form/ReduxForm';
 import { required } from '../../form/FormValidation';
+import ImageLoader from '../../auth/ImageLoader';
 import theme from '../../../styles/theme';
 
 const FIELDS = {
@@ -29,11 +30,11 @@ const FIELDS = {
     fields: {
       member: {
         type: 'Selectable',
-        label: 'Members'
+        label: 'Members',
       },
       student: {
         type: 'Selectable',
-        label: 'Students'
+        label: 'Students',
       }
     }
   }
@@ -65,6 +66,7 @@ class AnnouncementCreate extends Component {
       <ReduxForm
         onSubmit={this.onSubmit}
         // title={{ label: 'Create Announcement' }}
+        style={{ flex: 1, marginTop: 20 }}
         fields={FIELDS}
         submitName={'Post'}
         status={this.props.formStatus}
