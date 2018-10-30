@@ -49,5 +49,13 @@ export default StyleSheet.create({
     fontSize: 70,
     alignSelf: 'center',
     fontFamily: 'Autery'
+  },
+  smallTitleStyle: {
+    marginTop: 20, 
+    marginBottom: 20,
+    fontSize: 40,
+    alignSelf: 'center',
+    alignItems: 'center',
+    fontFamily: 'Autery'
   }
 });
