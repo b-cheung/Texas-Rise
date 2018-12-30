@@ -1,4 +1,5 @@
 import {
+	createAppContainer,
   createSwitchNavigator,
   createStackNavigator,
   createBottomTabNavigator
@@ -68,7 +69,7 @@ const AppStack = createBottomTabNavigator(
   }
 );
 
-export const RootNavigator = createSwitchNavigator(
+const RootNavigator = createSwitchNavigator(
   {
     Splash,
     Initialization,
@@ -79,3 +80,5 @@ export const RootNavigator = createSwitchNavigator(
     initialRouteName: 'Splash'
   }
 );
+
+export const AppContainer = createAppContainer(RootNavigator);

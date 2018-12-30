@@ -5,7 +5,7 @@ import { AppLoading, Asset, Font } from 'expo';
 import { FontAwesome } from '@expo/vector-icons';
 import './src/core/reactotron/ReactotronConfig';
 import configureStore from './src/redux/configureStore';
-import { RootNavigator } from './src/core/navigation/RouterConfig';
+import { AppContainer } from './src/core/navigation/RouterConfig';
 import NavigationService from './src/core/navigation/NavigationService';
 
 const store = configureStore();
@@ -78,7 +78,7 @@ export default class App extends Component {
     console.tron.log('render App.js Provider');
     return (
       <Provider store={store}>
-        <RootNavigator
+        <AppContainer
           ref={navigatorRef => {
             NavigationService.setTopLevelNavigator(navigatorRef);
           }}
