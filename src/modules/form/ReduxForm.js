@@ -5,97 +5,13 @@ import { KeyboardAvoidingView, ScrollView, Text, View, Picker } from 'react-nati
 import { TextField, Selectable, Button, Spinner, DateTimePicker } from '../../components/index.js';
 import theme from '../../styles/theme.js';
 
-const renderField = ({ input, type, label, meta: { touched, error, warning }, fieldConfig }) => {
-  let hasError = false;
-  if (error !== undefined) {
-    hasError = true;
-  }
-  switch (fieldConfig.type) {
-    case 'TextField': {
-      return (
-        <View>
-          <TextField
-            {...input}
-            placeholder={fieldConfig.label}
-            multiline={fieldConfig.multiline}
-            secureTextEntry={fieldConfig.secureTextEntry}
-            autoCapitalize={fieldConfig.autoCapitalize}
-            autoCorrect={false}
-            style={theme.input}
-          />
-          {touched && hasError ? <Text style={theme.errorTextStyle}>{error}</Text> : <Text />}
-        </View>
-      );
-    }
-    case 'Selectable': {
-      return (
-        <View>
-          <Selectable {...input} label={fieldConfig.label} />
-        </View>
-      );
-    }
-    case 'Picker': {
-      return (
-        <View>
-          <Text>{fieldConfig.label}</Text>>
-          <Picker selectedValue={input.value} onValueChange={value => input.onChange(value)}>
-            {renderPickerItems(fieldConfig.items)}
-          </Picker>
-        </View>
-      );
-    }
-    case 'DateTimePicker': {
-      return (
-        <View>
-          <DateTimePicker
-            {...input}
-            label={fieldConfig.label}
-            minuteInterval={fieldConfig.minuteInterval}
-          />
-          {touched && hasError ? <Text style={theme.errorTextStyle}>{error}</Text> : <Text />}
-        </View>
-      );
-    }
-    default:
-      return null;
-  }
-};
-
-const renderItem = (fieldConfig, field) => {
-  if (fieldConfig.type === 'Select') {
-    return (
-      <View key={field}>
-        <Text>{fieldConfig.label}</Text>
-        {_.map(fieldConfig.fields, (data, key) => {
-          return (
-            <Field
-              key={key}
-              name={key}
-              type="checkbox"
-              component={renderField}
-              fieldConfig={data}
-              validate={data.validate}
-            />
-          );
-        })}
-      </View>
-    );
-  }
+const renderItem = ({ input, type, label, meta: { touched, error, warning }, child }) => {
   return (
-    <Field
-      key={field}
-      name={field}
-      component={renderField}
-      fieldConfig={fieldConfig}
-      validate={fieldConfig.validate}
-    />
+    <View>
+      {React.cloneElement(child, { ...input })}
+      {touched && error && <Text style={theme.errorTextStyle}>{error}</Text>}
+    </View>
   );
-};
-
-const renderPickerItems = items => {
-  return _.map(items, (value, key) => {
-    return <Picker.Item key={key} label={value} value={key} />;
-  });
 };
 
 const renderError = submitError => {
@@ -115,15 +31,14 @@ const renderButton = (handleSubmit, submitName, loading) => {
   return <Button onPress={handleSubmit}>{submitName}</Button>;
 };
 
-const renderTitle = (title) => {
- if (title) return <Text style={title.style}>{title.label}</Text>;
+const renderTitle = title => {
+  if (title) return <Text style={title.style}>{title.label}</Text>;
 };
 
 const Form = props => {
   const {
     handleSubmit,
     title,
-    fields,
     submitName,
     status: { submitError, loading }
   } = props;
@@ -131,7 +46,16 @@ const Form = props => {
     <KeyboardAvoidingView style={theme.container} behavior="padding" enabled>
       <ScrollView keyboardShouldPersistTaps={'handled'}>
         {renderTitle(title)}
-        {_.map(fields, renderItem)}
+        {React.Children.map(props.children, child => {
+          return (
+            <Field
+              name={child.props.name}
+              child={child}
+              component={renderItem}
+              validate={child.props.validate}
+            />
+          );
+        })}
         {renderError(submitError)}
         {renderButton(handleSubmit, submitName, loading)}
       </ScrollView>
