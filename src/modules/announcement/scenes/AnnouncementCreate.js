@@ -8,23 +8,6 @@ import { required, requiredMulti } from '../../form/FormValidation';
 import { TextField, TextArea, ViewContainer, MultiSelect } from '../../../components';
 import theme from '../../../styles/theme';
 
-const FIELDS = {
-  audience: {
-    type: 'Select',
-    label: 'Audience',
-    fields: {
-      member: {
-        type: 'Selectable',
-        label: 'Members'
-      },
-      student: {
-        type: 'Selectable',
-        label: 'Students'
-      }
-    }
-  }
-};
-
 class AnnouncementCreate extends Component {
   static navigationOptions = {
     title: 'Create Announcement'
