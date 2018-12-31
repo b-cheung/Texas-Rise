@@ -1,30 +1,23 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { CheckBox, Body } from 'native-base';
+import { CheckBox } from 'react-native-elements';
 
 const Selectable = props => {
   const { label, checked, onChange, ...input } = props;
   return (
-    <TouchableOpacity onPress={() => onChange(!checked)}>
-      <View style={styles.container}>
-        <CheckBox
-          checked={checked}
-          // color={color}
-        />
-        <Body>
-          <Text>{label}</Text>
-        </Body>
-      </View>
-    </TouchableOpacity>
+    <CheckBox
+      title={label}
+      checked={checked}
+      onPress={() => {
+        console.tron.log('selected', input);
+        onChange(!checked);
+      }}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'flex-start',
-    flexDirection: 'row',
-    position: 'relative'
-  }
+  containerStyle: {}
 });
 
 export { Selectable };

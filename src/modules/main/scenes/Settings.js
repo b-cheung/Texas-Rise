@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { logoutRequest } from '../../auth/actions';
-import { Card, CardSection, Button, Spinner } from '../../../components';
+import { Card, CardSection, CustomButton, Spinner } from '../../../components';
 
 class SettingsScreen extends Component {
   onLogout = () => {
@@ -12,7 +12,7 @@ class SettingsScreen extends Component {
     if (this.props.loading) {
       return <Spinner size="large" />;
     }
-    return <Button onPress={this.onLogout}>Logout</Button>;
+    return <CustomButton onPress={this.onLogout}>Logout</CustomButton>;
   }
 
   render() {

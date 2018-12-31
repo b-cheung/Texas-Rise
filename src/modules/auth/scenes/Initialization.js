@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { initializationStart } from '../actions';
-import { Spinner } from '../../../components';
+import { Spinner, ViewContainer } from '../../../components';
 
 class Initialization extends Component {
   componentDidMount() {
@@ -19,9 +19,9 @@ class Initialization extends Component {
 
   render() {
     return (
-      <View>
+      <ViewContainer>
         <Spinner size="large" />
-      </View>
+      </ViewContainer>
     );
   }
 }

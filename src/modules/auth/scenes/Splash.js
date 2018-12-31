@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Spinner } from '../../../components';
+import { Spinner, ViewContainer } from '../../../components';
 
 class Splash extends Component {
   componentDidMount() {
@@ -17,9 +17,9 @@ class Splash extends Component {
 
   render() {
     return (
-      <View>
+      <ViewContainer>
         <Spinner size="large" />
-      </View>
+      </ViewContainer>
     );
   }
 }

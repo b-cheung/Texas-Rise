@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { registerRequest } from '../actions';
 import { getFormStatus } from '../../form/selectors';
-import { TextField } from '../../../components';
+import { TextField, ViewContainer } from '../../../components';
 import { ReduxForm } from '../../form/ReduxForm';
 import { required, minLength, schoolEmail, emailFormat, number } from '../../form/FormValidation';
 import styles from '../styles';
@@ -29,7 +29,7 @@ class RegisterScreen extends Component {
 
   render() {
     return (
-      <View style={theme.container}>
+      <ViewContainer style={theme.container}>
         <ReduxForm
           onSubmit={this.onSubmit}
           title={{ label: 'Register', style: theme.titleStyle }}
@@ -43,7 +43,6 @@ class RegisterScreen extends Component {
             autoCapitalize="words"
             autoCorrect={false}
             validate={[required]}
-            style={theme.input}
           />
           <TextField
             name="lastName"
@@ -52,7 +51,6 @@ class RegisterScreen extends Component {
             autoCapitalize="words"
             autoCorrect={false}
             validate={[required]}
-            style={theme.input}
           />
           <TextField
             name="year"
@@ -61,7 +59,6 @@ class RegisterScreen extends Component {
             autoCapitalize="none"
             autoCorrect={false}
             validate={[required]}
-            style={theme.input}
           />
           <TextField
             name="email"
@@ -70,7 +67,6 @@ class RegisterScreen extends Component {
             autoCapitalize="none"
             autoCorrect={false}
             validate={[required, emailFormat]}
-            style={theme.input}
           />
           <TextField
             name="password"
@@ -79,7 +75,6 @@ class RegisterScreen extends Component {
             autoCapitalize="none"
             autoCorrect={false}
             validate={[required, minLength(8)]}
-            style={theme.input}
           />
           <TextField
             name="confirmPassword"
@@ -88,10 +83,9 @@ class RegisterScreen extends Component {
             autoCapitalize="none"
             autoCorrect={false}
             validate={[required, minLength(8)]}
-            style={theme.input}
           />
         </ReduxForm>
-      </View>
+      </ViewContainer>
     );
   }
 }

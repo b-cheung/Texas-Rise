@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, Modal, StyleSheet } from 'react-native';
 import { CardSection } from './CardSection';
-import { Button } from './Button';
+import { CustomButton } from './CustomButton';
 
 const ConfirmModal = ({ children, visible, onAccept, onDecline }) => {
   const { cardSectionStyle, textStyle, containerStyle } = styles;
@@ -14,8 +14,8 @@ const ConfirmModal = ({ children, visible, onAccept, onDecline }) => {
         </CardSection>
 
         <CardSection>
-          <Button onPress={onAccept}>Yes</Button>
-          <Button onPress={onDecline}>No</Button>
+          <CustomButton onPress={onAccept}>Yes</CustomButton>
+          <CustomButton onPress={onDecline}>No</CustomButton>
         </CardSection>
       </View>
     </Modal>

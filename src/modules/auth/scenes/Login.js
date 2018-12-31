@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text } from 'react-native';
+import { Text } from 'react-native';
 import { loginRequest } from '../actions';
 import { getFormStatus } from '../../form/selectors';
-import { TextField } from '../../../components';
+import { ViewContainer, TextField } from '../../../components';
 import { ReduxForm } from '../../form/ReduxForm';
 import { required, minLength, schoolEmail, emailFormat } from '../../form/FormValidation';
 import styles from '../styles';
 import theme from '../../../styles/theme';
+
+const initialValues = {
+  initialValues: {
+    email: 'bcheung2017@gmail.com',
+    password: 'password'
+  }
+};
 
 class Login extends Component {
   static navigationOptions = {
@@ -21,12 +28,13 @@ class Login extends Component {
 
   render() {
     return (
-      <View style={theme.container}>
+      <ViewContainer style={theme.container}>
         <ReduxForm
           onSubmit={this.onSubmit}
           title={{ label: 'Login', style: theme.titleStyle }}
           submitName={'Login'}
           status={this.props.formStatus}
+          {...initialValues}
         >
           <TextField
             name="email"
@@ -35,7 +43,6 @@ class Login extends Component {
             autoCapitalize="none"
             autoCorrect={false}
             validate={[required, emailFormat]}
-            style={theme.input}
           />
           <TextField
             name="password"
@@ -44,10 +51,9 @@ class Login extends Component {
             autoCapitalize="none"
             autoCorrect={false}
             validate={[required, minLength(8)]}
-            style={theme.input}
           />
         </ReduxForm>
-      </View>
+      </ViewContainer>
     );
   }
 }

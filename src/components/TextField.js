@@ -1,13 +1,20 @@
 import React from 'react';
 import { Text, TextInput, View, StyleSheet } from 'react-native';
-import theme from '../styles/theme.js';
+import { Item, Label, Input } from 'native-base';
+import { margin } from '../styles/theme';
 
 const TextField = props => {
-  const { inputStyle, containerStyle } = styles;
-  const { multiline, ...input } = props;
-  const fieldStyle = multiline ? theme.textArea : theme.input;
+  const { containerStyle, inputStyle, labelStyle } = styles;
+  const { placeholder, ...input } = props;
   return (
-    <View style={containerStyle}>
+		<Item floatingLabel style={containerStyle}>
+      <Label style={labelStyle}>{placeholder}</Label>
+      <Input
+        {...input}
+        style={inputStyle}
+      />
+    </Item>
+    /*<View style={containerStyle}>
       <TextInput
         // placeholder={placeholder}
         // secureTextEntry={secureTextEntry}
@@ -18,30 +25,32 @@ const TextField = props => {
         // onChangeText={props.onChangeText}
         // onBlur={props.onBlur}
         // onFocus={props.onFocus}
+				// multiline={multiline}
         {...input}
-        multiline={multiline}
         style={[inputStyle, fieldStyle]}
       />
-    </View>
+    </View>*/
   );
 };
 
 const styles = StyleSheet.create({
-  inputStyle: {
-    color: '#001B41',
-    paddingRight: 5,
-    paddingLeft: 10,
-    fontSize: 18,
-    lineHeight: 23,
-    flex: 1,
-    borderBottomWidth: 1,
-    borderBottomColor: '#DEDEDE'
-  },
   containerStyle: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    flex: 1
-  }
+		margin: margin.sm
+    // flexDirection: 'column',
+    // justifyContent: 'flex-start',
+    // flex: 1
+	},
+	inputStyle: {
+    // color: '#001B41',
+    // paddingRight: 5,
+    // paddingLeft: 10,
+    // fontSize: 18,
+    // lineHeight: 23,
+    // flex: 1,
+    // borderBottomWidth: 1,
+    // borderBottomColor: '#DEDEDE'
+  },
+	labelStyle: {}
 });
 
 export { TextField };

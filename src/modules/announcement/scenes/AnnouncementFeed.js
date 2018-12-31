@@ -14,7 +14,7 @@ import {
   fetchOldAnnouncementsRequest
 } from '../actions';
 import { getUser, getAnnouncementFeed } from '../selectors';
-import { Button, Card, CardSection, Header } from '../../../components';
+import { CustomButton, Card, CardSection, Header, ViewContainer } from '../../../components';
 import AnnouncementListItem from '../components/AnnouncementListItem';
 import NavigationService from '../../../core/navigation/NavigationService';
 import * as authService from '../../../core/firebase/authService';
@@ -35,13 +35,13 @@ class AnnouncementFeed extends Component {
   }
 
   renderLoadMoreButton() {
-    return <Button onPress={() => this.props.fetchOldAnnouncementsRequest()}>Load More</Button>;
+    return <CustomButton onPress={() => this.props.fetchOldAnnouncementsRequest()}>Load More</CustomButton>;
   }
 
   renderCreateButton() {
     return (
       authService.isAdminOrOfficer(this.props.user) && (
-        <Button onPress={() => NavigationService.navigate('AnnouncementCreate')}>Create</Button>
+        <CustomButton onPress={() => NavigationService.navigate('AnnouncementCreate')}>Create</CustomButton>
       )
     );
   }
@@ -63,7 +63,7 @@ class AnnouncementFeed extends Component {
 
   render() {
     return (
-      <View style={styles.announcementStyle}>
+      <ViewContainer style={styles.announcementStyle}>
         <ScrollView>
             {/* <Header headerText="AnnouncementFeed" /> */}
             <View>{this.renderRefreshButton()}</View>
@@ -76,7 +76,7 @@ class AnnouncementFeed extends Component {
             />
             <View>{this.renderLoadMoreButton()}</View>
         </ScrollView>
-      </View>
+      </ViewContainer>
     );
   }
 }
