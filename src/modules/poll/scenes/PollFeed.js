@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { View, Text, ScrollView, FlatList } from 'react-native';
 import { fetchPollsRequest } from '../actions';
 import { getUser, getPollFeed } from '../selectors';
-import { Button, Card, CardSection, Header } from '../../../components';
+import { CustomButton, Card, CardSection, Header } from '../../../components';
 import PollListItem from '../components/PollListItem';
 import NavigationService from '../../../core/navigation/NavigationService';
-import * as authService from '../../../core/firebase/authService';
+import * as fbAuth from '../../../core/firebase/fbAuth';
 import theme from '../../../styles/theme';
 
 class PollFeed extends Component {
@@ -20,13 +20,13 @@ class PollFeed extends Component {
   }
 
   renderRefreshButton() {
-    return <Button onPress={() => this.props.fetchPollsRequest()}>Refresh</Button>;
+    return <CustomButton onPress={() => this.props.fetchPollsRequest()}>Refresh</CustomButton>;
   }
 
   renderCreateButton() {
     return (
-      authService.isAdminOrOfficer(this.props.user) && (
-        <Button onPress={() => NavigationService.navigate('PollCreate')}>Create</Button>
+      fbAuth.isAdminOrOfficer(this.props.user) && (
+        <CustomButton onPress={() => NavigationService.navigate('PollCreate')}>Create</CustomButton>
       )
     );
   }

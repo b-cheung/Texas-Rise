@@ -39,7 +39,6 @@ class RegisterScreen extends Component {
           <TextField
             name="firstName"
             placeholder="First Name"
-            secureTextEntry={false}
             autoCapitalize="words"
             autoCorrect={false}
             validate={[required]}
@@ -47,7 +46,6 @@ class RegisterScreen extends Component {
           <TextField
             name="lastName"
             placeholder="Last Name"
-            secureTextEntry
             autoCapitalize="words"
             autoCorrect={false}
             validate={[required]}
@@ -55,18 +53,18 @@ class RegisterScreen extends Component {
           <TextField
             name="year"
             placeholder="Year"
-            secureTextEntry
             autoCapitalize="none"
             autoCorrect={false}
             validate={[required]}
+						//picker with number
           />
           <TextField
             name="email"
             placeholder="Email Address"
-            secureTextEntry={false}
             autoCapitalize="none"
             autoCorrect={false}
             validate={[required, emailFormat]}
+						//change to schoolEmail validation
           />
           <TextField
             name="password"

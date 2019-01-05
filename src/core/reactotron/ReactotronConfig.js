@@ -7,7 +7,7 @@ Reactotron.configure() // controls connection & communication settings
   .useReactNative() // add all built-in react native plugins
   .use(reactotronRedux())
   .use(sagaPlugin())
-  .connect(); // let's connect!
+  .connect(); // connect
 
 console.tron = Reactotron;
 Reactotron.clear();

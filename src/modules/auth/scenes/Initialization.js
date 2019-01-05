@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { initializationStart } from '../actions';
 import { Spinner, ViewContainer } from '../../../components';
+import NavigationService from '../../../core/navigation/NavigationService';
 
 class Initialization extends Component {
   componentDidMount() {
-    console.tron.log('Initialization did mount');
-    // this._bootstrapAsync();
-    this.props.initializationStart();
+		console.tron.log('Initialization did mount');
+		this.props.initializationStart();
   }
 
   // check if user is authenticated
-  _bootstrapAsync = async () => {
+  _initAsync = async () => {
     // const user = await auth.currentUser;
-    console.tron.log('_bootstrapAsync');
+    // console.tron.log('_initAsync');
   };
 
   render() {
     return (
       <ViewContainer>
-        <Spinner size="large" />
+        <Text>Initialization</Text>
       </ViewContainer>
     );
   }

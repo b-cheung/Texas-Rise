@@ -57,6 +57,7 @@ const PollStack = createStackNavigator(
   }
 );
 
+// custom navigator??
 const AppStack = createBottomTabNavigator(
   {
     AnnouncementStack,

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { Text } from 'react-native';
 import { connect } from 'react-redux';
 import { checkVerificationStatus, sendVerificationEmail, logoutRequest } from '../actions';
-import { Card, CardSection, Button, ViewContainer } from '../../../components';
+import { Card, CardSection, CustomButton, ViewContainer } from '../../../components';
 
 class VerifyEmail extends Component {
   static navigationOptions = {
@@ -13,6 +14,7 @@ class VerifyEmail extends Component {
     this.props.checkVerificationStatus();
   }
 
+  // pulldown to refresh
   onCheckVerification = () => {
     this.props.checkVerificationStatus();
   };
@@ -29,22 +31,23 @@ class VerifyEmail extends Component {
     return (
       <ViewContainer>
         <Card>
-          <CardSection>
-            <Button onPress={this.onCheckVerification}>Check Verification Status</Button>
-          </CardSection>
-          <CardSection>
-            <Button onPress={this.onResendVerificationEmail}>Resend Verification Email</Button>
-          </CardSection>
-          <CardSection>
-            <Button onPress={this.onLogout}>Logout</Button>
-          </CardSection>
+          <Text>{this.props.error}</Text>
+          <CustomButton onPress={this.onCheckVerification}>Check Verification Status</CustomButton>
+          <CustomButton onPress={this.onResendVerificationEmail}>
+            Resend Verification Email
+          </CustomButton>
+          <CustomButton onPress={this.onLogout}>Logout</CustomButton>
         </Card>
       </ViewContainer>
     );
   }
 }
 
+const mapStateToProps = state => {
+  return { error: state.auth.error };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   { checkVerificationStatus, sendVerificationEmail, logoutRequest }
 )(VerifyEmail);

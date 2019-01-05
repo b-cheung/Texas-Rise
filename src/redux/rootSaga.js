@@ -5,6 +5,8 @@ import { watchAnnouncements } from '../modules/announcement/sagas';
 import { watchPolls } from '../modules/poll/sagas';
 
 export default function* rootSaga() {
+	console.tron.log('rootSaga');
+
   yield all([
     fork(watchInitialization),
     fork(watchAuthentication),

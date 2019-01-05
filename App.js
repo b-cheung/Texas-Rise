@@ -28,22 +28,22 @@ export default class App extends Component {
     isLoadingComplete: false
   };
 
-  
   componentDidMount() {
     Font.loadAsync({
-      'Autery': require('./assets/fonts/Autery.ttf'),
+      Autery: require('./assets/fonts/Autery.ttf')
     });
   }
 
   onLoad = () => {
     Animated.timing(this.state.opacity, {
-       toValue: 1,
-       duration: 500,
-       useNativeDriver: true,
-     }).start();
-  }
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true
+    }).start();
+  };
 
   async _loadAssetsAsync() {
+		console.tron.log('load assets');
     const imageAssets = cacheImages([
       // 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
       require('./assets/Logo.png')
@@ -56,13 +56,13 @@ export default class App extends Component {
 
   _handleLoadingError = error => {
     // report the error
-    console.warn(error);
+    console.tron.log(error);
   };
 
   _handleFinishLoading = () => {
-    this.setState({ isLoadingComplete: true });
+		console.tron.log('finished loading');
+		this.setState({ isLoadingComplete: true });
   };
-
 
   render() {
     if (!this.state.isLoadingComplete) {
@@ -78,11 +78,7 @@ export default class App extends Component {
     console.tron.log('render App.js Provider');
     return (
       <Provider store={store}>
-        <AppContainer
-          ref={navigatorRef => {
-            NavigationService.setTopLevelNavigator(navigatorRef);
-          }}
-        />
+        <AppContainer ref={navigatorRef => NavigationService.setTopLevelNavigator(navigatorRef)} />
       </Provider>
     );
   }

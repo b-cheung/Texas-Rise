@@ -17,7 +17,7 @@ import { getUser, getAnnouncementFeed } from '../selectors';
 import { CustomButton, Card, CardSection, Header, ViewContainer } from '../../../components';
 import AnnouncementListItem from '../components/AnnouncementListItem';
 import NavigationService from '../../../core/navigation/NavigationService';
-import * as authService from '../../../core/firebase/authService';
+import * as fbAuth from '../../../core/firebase/fbAuth';
 import theme from '../../../styles/theme';
 import styles from '../styles';
 
@@ -40,7 +40,7 @@ class AnnouncementFeed extends Component {
 
   renderCreateButton() {
     return (
-      authService.isAdminOrOfficer(this.props.user) && (
+      fbAuth.isAdminOrOfficer(this.props.user) && (
         <CustomButton onPress={() => NavigationService.navigate('AnnouncementCreate')}>Create</CustomButton>
       )
     );

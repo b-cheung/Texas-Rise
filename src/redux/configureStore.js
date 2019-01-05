@@ -5,6 +5,7 @@ import createSagaMiddleware from 'redux-saga';
 import rootReducer from './rootReducer'; //Import the root reducer
 import rootSaga from './rootSaga'; //Import the root saga
 
+console.log('configureStore.js');
 const sagaMonitor = Reactotron.createSagaMonitor();
 const sagaMiddleware = createSagaMiddleware({ sagaMonitor });
 export default function configureStore(initialState) {
@@ -13,6 +14,7 @@ export default function configureStore(initialState) {
     initialState,
     applyMiddleware(thunk, sagaMiddleware)
   );
-  sagaMiddleware.run(rootSaga);
+	sagaMiddleware.run(rootSaga);
+	console.tron.log('configured store');
   return store;
 }

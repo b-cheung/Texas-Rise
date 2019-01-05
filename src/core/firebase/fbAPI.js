@@ -1,10 +1,9 @@
-import firebase from 'firebase';
+// import firebase from 'firebase';
 import 'firebase/firestore';
 import moment from 'moment';
-import * as fbCred from './FirebaseCredentials';
-import * as authService from './authService';
-import NavigationService from '../navigation/NavigationService';
+import * as fbAuth from './fbAuth';
 
+const firestore = fbAuth.firestore;
 // export class Firebase {
 //   static auth;
 //   static firestore;
@@ -21,112 +20,11 @@ import NavigationService from '../navigation/NavigationService';
 //   }
 // }
 
-// Initialize Firebase
-const firebaseConfig = {
-  apiKey: fbCred.FIREBASE_API_KEY,
-  authDomain: fbCred.FIREBASE_AUTH_DOMAIN,
-  databaseURL: fbCred.FIREBASE_DATABASE_URL,
-  projectId: fbCred.FIREBASE_PROJECT_ID,
-  storageBucket: fbCred.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: fbCred.FIREBASE_MESSAGING_SENDER_ID
-};
-
-let auth;
-let firestore;
-let settings;
-export function initializeFirebase() {
-  console.tron.log('Initialize Firebase');
-  firebase.initializeApp(firebaseConfig);
-
-  console.tron.log('Initialize Firebase auth');
-  auth = firebase.auth();
-  firestore = firebase.firestore();
-  settings = { timestampsInSnapshots: true };
-  firestore.settings(settings);
-}
-
-export function getAuthUser() {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      unsubscribe();
-      resolve(user);
-    }, reject);
-  });
-}
-
-export function reloadAuthUser() {
-  return auth.currentUser
-    .reload()
-    .then(() => {
-      return getAuthUser();
-    })
-    .catch(error => {
-      // An error happened.
-      throw error;
-    });
-}
-
-export function sendVerificationEmail() {
-  auth.currentUser.sendEmailVerification().catch(error => {
-    // An error happened.
-    throw error;
-  });
-}
-
-export function getUserClaims() {
-  return auth.currentUser.getIdTokenResult(true).then(token => {
-    return token.claims;
-  });
-}
-
-// export function getAuthUser() {
-//   const user = auth.currentUser;
-//   console.tron.log('getAuthUser', user);
-//   return user;
-// }
-
-export function setAuthStateListener() {
-  console.tron.log('setAuthStateListener');
-  const unsubscribe = auth.onAuthStateChanged(user => {
-    console.tron.log('onAuthStateChanged');
-    if (user) {
-      console.tron.log('logged in');
-    } else {
-      NavigationService.navigate('Welcome');
-      unsubscribe();
-    }
-  });
-}
-
-// Register and create user in firestore
-export function register(data) {
-  const { email, password } = data;
-  return auth.createUserWithEmailAndPassword(email, password).catch(error => {
-    throw error;
-  });
-}
-
-// Login user
-export function login(data) {
-  const { email, password } = data;
-  console.tron.log(email, password);
-  return auth.signInWithEmailAndPassword(email, password).catch(error => {
-    throw error;
-  });
-}
-
-// Logout user
-export function logout() {
-  auth.signOut().catch(error => {
-    throw error;
-  });
-}
-
 function getDoc(docRef) {
   return docRef
     .get()
     .catch(error => {
-      console.log('Error getting document:', error);
+      console.tron.log('Error getting document:', error);
       throw error;
     })
     .then(doc => {
@@ -190,8 +88,8 @@ export function createUserDoc(data, authUser) {
 // Create announcement in firestore
 export function createAnnouncementDoc(data) {
   const { title, body, member, student, user } = data;
-  if (!authService.isAdminOrOfficer(user)) {
-    throw authService.error;
+  if (!fbAuth.isAdminOrOfficer(user)) {
+    throw fbAuth.authError;
   }
   return firestore
     .collection('announcements')
@@ -221,8 +119,8 @@ export function createAnnouncementDoc(data) {
 
 export function createPollDoc(data) {
   const { title, dateTimeStart, dateTimeEnd, pollType, pollItems, user } = data;
-  if (!authService.isAdminOrOfficer(user)) {
-    throw authService.error;
+  if (!fbAuth.isAdminOrOfficer(user)) {
+    throw fbAuth.authError;
   }
   return firestore
     .collection('polls')
