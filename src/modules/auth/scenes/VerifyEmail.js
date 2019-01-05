@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text } from 'react-native';
 import { connect } from 'react-redux';
 import { checkVerificationStatus, sendVerificationEmail, logoutRequest } from '../actions';
+import { getError } from '../selectors';
 import { Card, CardSection, CustomButton, ViewContainer } from '../../../components';
 
 class VerifyEmail extends Component {
@@ -44,7 +45,7 @@ class VerifyEmail extends Component {
 }
 
 const mapStateToProps = state => {
-  return { error: state.auth.error };
+  return { error: getError(state) };
 };
 
 export default connect(
