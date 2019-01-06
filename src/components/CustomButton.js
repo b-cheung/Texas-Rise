@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Button } from 'native-base';
 import { fonts, colors, dimensions, padding, margin } from '../styles/theme';
+
 const CustomButton = ({ onPress, children, style }) => {
   const { textStyle, buttonStyle } = styles;
   return (
@@ -19,7 +20,7 @@ const styles = StyleSheet.create({
     paddingVertical: padding.md - 2
   },
   buttonStyle: {
-		alignSelf: 'center',
+    alignSelf: 'center',
     margin: margin.sm,
     width: dimensions.fullWidth - 50,
     borderRadius: 8,

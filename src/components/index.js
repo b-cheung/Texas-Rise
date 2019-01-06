@@ -10,3 +10,4 @@ export * from './Selectable';
 export * from './MultiSelect';
 export * from './DateTimePicker';
 export * from './ViewContainer';
+export * from './CustomPicker';

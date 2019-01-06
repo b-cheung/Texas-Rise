@@ -6,6 +6,7 @@ import { getFormStatus } from '../../form/selectors';
 import { ReduxForm } from '../../form/ReduxForm';
 import { required, minLength, schoolEmail, emailFormat } from '../../form/FormValidation';
 import * as pollConfigs from '../pollConfigs';
+import { ViewContainer, TextField, TextArea, DateTimePicker, CustomPicker } from '../../../components';
 import styles from '../styles';
 import theme from '../../../styles/theme';
 
@@ -78,13 +79,44 @@ class PollCreate extends Component {
       }
     };
     return (
-      <ReduxForm
-        onSubmit={this.onSubmit}
-        fields={FIELDS}
-        submitName={'Create'}
-        status={this.props.formStatus}
-        {...initialVaules}
-      />
+      <ViewContainer>
+        <ReduxForm
+          onSubmit={this.onSubmit}
+					title={{ label: 'Create Poll' }}
+          submitName={'Create Poll'}
+          status={this.props.formStatus}
+          {...initialVaules}
+        >
+          <TextField
+            name="title"
+            placeholder="Title"
+            autoCapitalize="words"
+						autoCorrect
+            validate={[required]}
+          />
+          <TextArea
+            name="description"
+            placeholder="Description"
+            autoCapitalize="sentences"
+						autoCorrect
+          />
+					<CustomPicker 
+						name="pollType"
+						label="Poll Type"
+						items={pollConfigs.pollTypes}
+					/>
+					<DateTimePicker 
+            name="dateTimeStart"
+						label="Start"
+            minuteInterval={15}
+					/>
+					<DateTimePicker 
+            name="dateTimeEnd"
+						label="End"
+            minuteInterval={15}
+					/>
+        </ReduxForm>
+      </ViewContainer>
     );
   }
 }

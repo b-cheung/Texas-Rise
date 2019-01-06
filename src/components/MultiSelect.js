@@ -1,35 +1,29 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 
 class MultiSelect extends Component {
-  state = { value: [] };
+  constructor(props) {
+    super(props);
+    this.state = _.mapValues(props.options, () => false);
+  }
 
   componentDidUpdate() {
-		console.tron.log(this.state);
-		this.props.onChange(this.state.value);
+    console.tron.log(this.state);
+    this.props.onChange(this.state);
   }
 
   renderSelectables(options) {
-    return options.map(option => {
-      const checked = this.state.value.includes(option);
+    return Object.keys(options).map(key => {
+      const checked = this.state[key];
       return (
         <CheckBox
-          key={option}
-          title={option}
+          key={key}
+          title={options[key]}
           checked={checked}
           onPress={() => {
-            if (checked) {
-              this.setState({
-                value: this.state.value.filter(i => {
-                  return i !== option;
-                })
-              });
-            } else {
-              this.setState({
-                value: [...this.state.value, option]
-              });
-            }
+            this.setState({ [key]: !checked });
           }}
         />
       );

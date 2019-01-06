@@ -56,8 +56,8 @@ function* fetchAnnouncementsFlow(action) {
 
 function* createAnnouncementFlow(action) {
   try {
-    if (!action.data.member && !action.data.student) {
-      throw new Error('Must select at least one audience');
+    if (!action.data.audience.member && !action.data.audience.student) {
+      throw new Error('Must select at least one audience.');
     }
     const user = yield select(selectors.getUser);
     const data = { ...action.data, user };

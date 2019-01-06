@@ -1,4 +1,4 @@
-// import firebase from 'firebase';
+import firebase from 'firebase';
 import 'firebase/firestore';
 import moment from 'moment';
 import * as fbAuth from './fbAuth';
@@ -87,7 +87,7 @@ export function createUserDoc(data, authUser) {
 
 // Create announcement in firestore
 export function createAnnouncementDoc(data) {
-  const { title, body, member, student, user } = data;
+  const { title, body, audience, user } = data;
   if (!fbAuth.isAdminOrOfficer(user)) {
     throw fbAuth.authError;
   }
@@ -99,8 +99,7 @@ export function createAnnouncementDoc(data) {
       audience: {
         admin: true,
         officer: true,
-        member,
-        student
+        ...audience
       },
       author: {
         uid: user.uid,

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { KeyboardAvoidingView, ScrollView, Text, View, Picker } from 'react-native';
-import { TextField, Selectable, Button, Spinner, DateTimePicker } from '../../components/index.js';
+import { TextField, Selectable, Button, Spinner, DateTimePicker } from '../../components';
 import theme from '../../styles/theme.js';
 
 const renderField = ({ input, type, label, meta: { touched, error, warning }, fieldConfig }) => {
@@ -37,7 +37,7 @@ const renderField = ({ input, type, label, meta: { touched, error, warning }, fi
     case 'Picker': {
       return (
         <View>
-          <Text>{fieldConfig.label}</Text>>
+          <Text>{fieldConfig.label}</Text>
           <Picker selectedValue={input.value} onValueChange={value => input.onChange(value)}>
             {renderPickerItems(fieldConfig.items)}
           </Picker>
@@ -115,8 +115,8 @@ const renderButton = (handleSubmit, submitName, loading) => {
   return <Button onPress={handleSubmit}>{submitName}</Button>;
 };
 
-const renderTitle = (title) => {
- if (title) return <Text style={title.style}>{title.label}</Text>;
+const renderTitle = title => {
+  if (title) return <Text style={title.style}>{title.label}</Text>;
 };
 
 const Form = props => {

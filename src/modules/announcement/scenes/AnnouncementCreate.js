@@ -4,7 +4,7 @@ import { createAnnouncementRequest } from '../actions';
 import { getUser } from '../selectors';
 import { getFormStatus } from '../../form/selectors';
 import { ReduxForm } from '../../form/ReduxForm';
-import { required, requiredMulti } from '../../form/FormValidation';
+import { required, requiredMultiSelect } from '../../form/FormValidation';
 import { TextField, TextArea, ViewContainer, MultiSelect } from '../../../components';
 import theme from '../../../styles/theme';
 
@@ -14,12 +14,11 @@ class AnnouncementCreate extends Component {
   };
 
   onSubmit = values => {
-    const { title, body, member, student } = values;
+    const { title, body, audience } = values;
     this.props.createAnnouncementRequest({
       title,
       body,
-      member,
-      student
+      audience
     });
   };
 
@@ -28,7 +27,7 @@ class AnnouncementCreate extends Component {
       <ViewContainer style={theme.container}>
         <ReduxForm
           onSubmit={this.onSubmit}
-          // title={{ label: 'Create Announcement' }}
+          title={{ label: 'Create Announcement' }}
           submitName={'Post'}
           status={this.props.formStatus}
         >
@@ -48,8 +47,8 @@ class AnnouncementCreate extends Component {
           />
           <MultiSelect
             name="audience"
-            options={['Members', 'Students']}
-            validate={[requiredMulti]}
+            options={{ member: 'Members', student: 'Students' }}
+            validate={[requiredMultiSelect]}
           />
         </ReduxForm>
       </ViewContainer>

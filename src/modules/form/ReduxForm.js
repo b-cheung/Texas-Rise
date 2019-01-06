@@ -1,14 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
 import { reduxForm, Field } from 'redux-form';
-import { KeyboardAvoidingView, ScrollView, Text, View, Picker } from 'react-native';
-import {
-  TextField,
-  Selectable,
-  CustomButton,
-  Spinner,
-  DateTimePicker
-} from '../../components/index.js';
+import { KeyboardAvoidingView, ScrollView, Text, View } from 'react-native';
+import { CustomButton, Spinner } from '../../components/index.js';
 import theme, { margin } from '../../styles/theme';
 
 const renderTitle = title => {
@@ -20,7 +14,7 @@ const renderFields = children => {
     return (
       <Field
         name={child.props.name}
-				type={child.props.type}
+        type={child.props.type}
         child={child}
         component={renderItem}
         validate={child.props.validate}
