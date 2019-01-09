@@ -10,7 +10,6 @@ class MultiSelect extends Component {
   }
 
   componentDidUpdate() {
-    console.tron.log(this.state);
     this.props.onChange(this.state);
   }
 

@@ -11,7 +11,11 @@ import theme from '../../../styles/theme';
 class AnnouncementCreate extends Component {
   static navigationOptions = {
     title: 'Create Announcement'
-  };
+	};
+
+	componentDidUpdate() {
+		console.tron.log('AnnouncementCreate updated');
+	}
 
   onSubmit = values => {
     const { title, body, audience } = values;

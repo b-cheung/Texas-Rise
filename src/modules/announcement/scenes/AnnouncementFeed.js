@@ -28,7 +28,11 @@ class AnnouncementFeed extends Component {
 
   componentWillMount() {
     this.props.fetchAnnouncementsRequest();
-  }
+	}
+	
+	componentDidUpdate() {
+		console.tron.log('AnnouncementFeed updated');
+	}
 
   renderRefreshButton() {
     return <Icon name='rotate-ccw' size={20} onPress={() => this.props.fetchNewAnnouncementsRequest()} />;
@@ -52,13 +56,7 @@ class AnnouncementFeed extends Component {
         onPress={() => NavigationService.navigate('AnnouncementView', { data: announcement.item })}
         data={announcement.item}
       />
-//       <Card style={{ marginLeft: 0, marginRight: 0 }}>
-//         <CardSection>
-//           {/* <Text style={{ flex: 1 }}>{title}</Text> */}
-//           <Text style={styles.textStyle}>{body}</Text>
-//         </CardSection>
-//       </Card>
-    );
+		);
   }
 
   render() {
