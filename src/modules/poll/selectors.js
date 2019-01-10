@@ -11,6 +11,7 @@ export const getPolls = state => state.poll.polls;
 
 export const getPollResults = state => state.poll.pollResults;
 
+// array of polls [pollDoc1, pollDoc2, ...]
 export const getPollFeed = createSelector(getPolls, polls => {
   const pollFeed = _.map(polls, data => {
     return data;
@@ -18,6 +19,7 @@ export const getPollFeed = createSelector(getPolls, polls => {
   return pollFeed.sort(comparePolls);
 });
 
+// sort by timestamp (latest polls first)
 function comparePolls(pollA, pollB) {
   const timestampA = pollA.timestamp;
   const timestampB = pollB.timestamp;

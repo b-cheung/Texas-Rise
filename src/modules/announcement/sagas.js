@@ -7,7 +7,7 @@ import * as types from './actionTypes';
 
 function* fetchAnnouncementsFlow(action) {
   try {
-    // check authorization and create request
+    // get user role and create request
     const userRole = yield select(selectors.getUserRole);
     const numAnnouncements = 5;
 		let request = { userRole, numAnnouncements };

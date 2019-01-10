@@ -8,8 +8,9 @@ import * as pollConfigs from './pollConfigs';
 
 function* fetchPollsFlow(action) {
   try {
-    // determine fetch action and retrieve array of pollDocs
-    const pollDocs = yield call(fbAPI.fetchPolls);
+    // determine fetch action and retrieve pollDocs
+		const pollDocs = yield call(fbAPI.fetchPolls);
+
     // { pollId: data, ... }
     const polls = _.keyBy(
       pollDocs.map(doc => {
@@ -73,12 +74,10 @@ function* votePollFlow(action) {
       }
     };
 
-    const polls = yield call(appendFetchedPolls, fetchedPoll);
-    // dispatch action of type VOTE_POLL_SUCCESS with pollResults
+		const polls = yield call(appendFetchedPolls, fetchedPoll);
+		
     yield put({ type: types.VOTE_POLL_SUCCESS, polls });
   } catch (submitError) {
-    // if api call fails,
-    // dispatch action of type VOTE_POLL_FAILURE
     yield put({ type: types.VOTE_POLL_FAILURE, pollResults: null, submitError });
   }
 }
@@ -95,11 +94,8 @@ function* fetchPollResultsFlow(action) {
       'id'
     );
 
-    // dispatch action of type FETCH_POLL_RESULTS_SUCCESS with fetched pollResults
     yield put({ type: types.FETCH_POLL_RESULTS_SUCCESS, pollResults });
   } catch (error) {
-    // if api call fails,
-    // dispatch action of type FETCH_POLL_RESULTS_FAILURE
     yield put({ type: types.FETCH_POLL_RESULTS_FAILURE, pollResults: null, error });
   }
 }

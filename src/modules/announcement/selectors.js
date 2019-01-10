@@ -7,7 +7,7 @@ export const getUserRole = state => state.auth.user.role;
 
 export const getAnnouncements = state => state.announcement.announcements;
 
-// array of announcements [announcementData1, announcementData2, ...]
+// array of announcements [announcementDoc1, announcementDoc2, ...]
 export const getAnnouncementFeed = createSelector(getAnnouncements, announcements => {
   const announcementFeed = _.map(announcements, data => {
     return data;
