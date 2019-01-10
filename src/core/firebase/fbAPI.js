@@ -152,8 +152,8 @@ export function fetchUser(authUser) {
 }
 
 export function fetchAnnouncements(data) {
-  const { userRole, num } = data;
-  const queryRef = buildAnnouncementQuery(userRole).limit(num);
+  const { userRole, numAnnouncements } = data;
+  const queryRef = buildAnnouncementQuery(userRole).limit(numAnnouncements);
   return getDocs(queryRef);
 }
 

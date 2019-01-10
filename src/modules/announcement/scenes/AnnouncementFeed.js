@@ -68,7 +68,6 @@ class AnnouncementFeed extends Component {
             <View>{this.renderCreateButton()}</View>
             <FlatList
               data={this.props.announcementFeed}
-              
               renderItem={this.renderAnnouncement}
               keyExtractor={announcement => announcement.id}
             />

@@ -7,6 +7,7 @@ export const getUserRole = state => state.auth.user.role;
 
 export const getAnnouncements = state => state.announcement.announcements;
 
+// array of announcements [announcementData1, announcementData2, ...]
 export const getAnnouncementFeed = createSelector(getAnnouncements, announcements => {
   const announcementFeed = _.map(announcements, data => {
     return data;
@@ -24,6 +25,7 @@ export const getLastAnnouncementTimestamp = createSelector(
   announcements => announcements[announcements.length - 1].timestamp
 );
 
+// sort by timestamp (latest announcements first)
 function compareAnnouncements(announcementA, announcementB) {
   const timestampA = announcementA.timestamp;
   const timestampB = announcementB.timestamp;
