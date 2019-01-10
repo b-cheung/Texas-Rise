@@ -117,14 +117,15 @@ export function createAnnouncementDoc(data) {
 }
 
 export function createPollDoc(data) {
-  const { title, dateTimeStart, dateTimeEnd, pollType, pollItems, user } = data;
+  const { title, description, dateTimeStart, dateTimeEnd, pollType, pollItems, user } = data;
   if (!fbAuth.isAdminOrOfficer(user)) {
     throw fbAuth.authError;
   }
   return firestore
     .collection('polls')
     .add({
-      title,
+			title,
+			description,
       dateTimeStart,
       dateTimeEnd,
       pollType,

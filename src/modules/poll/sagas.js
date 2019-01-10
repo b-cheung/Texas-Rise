@@ -6,19 +6,11 @@ import * as selectors from './selectors';
 import * as types from './actionTypes';
 import * as pollConfigs from './pollConfigs';
 
-function* appendFetchedPolls(fetchedPolls) {
-  // append fetched polls to existing polls
-  const polls = yield select(selectors.getPolls);
-  return { ...polls, ...fetchedPolls };
-}
-
 function* fetchPollsFlow(action) {
   try {
-    // create data parameter with appropriate values
-    const data = {};
     // determine fetch action and retrieve array of pollDocs
     const pollDocs = yield call(fbAPI.fetchPolls);
-    // create new object { pollId: data, ... }
+    // { pollId: data, ... }
     const polls = _.keyBy(
       pollDocs.map(doc => {
         return { id: doc.id, ...doc.data() };
@@ -26,19 +18,23 @@ function* fetchPollsFlow(action) {
       'id'
     );
 
-    // dispatch action of type FETCH_POLLS_SUCCESS with fetched polls
     yield put({ type: types.FETCH_POLLS_SUCCESS, polls });
   } catch (error) {
-    // if api call fails,
-    // dispatch action of type FETCH_POLLS_FAILURE
     yield put({ type: types.FETCH_POLLS_FAILURE, polls: null, error });
   }
+}
+
+function* appendFetchedPolls(fetchedPolls) {
+  // append fetched polls to existing polls
+  const polls = yield select(selectors.getPolls);
+  return { ...polls, ...fetchedPolls };
 }
 
 function* createPollFlow(action) {
   try {
     //poll config here or in poll create?
-    //custom poll?
+		//custom poll?
+		//create poll document
     const user = yield select(selectors.getUser);
     const data = { ...action.data, user };
 
@@ -53,12 +49,9 @@ function* createPollFlow(action) {
 
     const polls = yield call(appendFetchedPolls, fetchedPoll);
 
-    // dispatch action of type CREATE_POLL_SUCCESS with poll
     yield put({ type: types.CREATE_POLL_SUCCESS, polls });
     NavigationService.goBack();
   } catch (submitError) {
-    // if api call fails,
-    // dispatch action of type CREATE_POLL_FAILURE
     yield put({ type: types.CREATE_POLL_FAILURE, polls: null, submitError });
   }
 }

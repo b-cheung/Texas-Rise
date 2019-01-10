@@ -6,37 +6,15 @@ import { getFormStatus } from '../../form/selectors';
 import { ReduxForm } from '../../form/ReduxForm';
 import { required, minLength, schoolEmail, emailFormat } from '../../form/FormValidation';
 import * as pollConfigs from '../pollConfigs';
-import { ViewContainer, TextField, TextArea, DateTimePicker, CustomPicker } from '../../../components';
+import {
+  ViewContainer,
+  TextField,
+  TextArea,
+  DateTimePicker,
+  CustomPicker
+} from '../../../components';
 import styles from '../styles';
 import theme from '../../../styles/theme';
-
-const FIELDS = {
-  title: {
-    type: 'TextField',
-    label: 'Title',
-    secureTextEntry: false,
-    autoCapitalize: 'words',
-    validate: [required]
-  },
-  dateTimeStart: {
-    type: 'DateTimePicker',
-    label: 'Start ',
-    minuteInterval: 15,
-    validate: [required]
-  },
-  dateTimeEnd: {
-    type: 'DateTimePicker',
-    label: 'End',
-    minuteInterval: 15,
-    validate: [required]
-  },
-  pollType: {
-    type: 'Picker',
-    label: 'Poll Type',
-    items: pollConfigs.pollTypes,
-    validate: [required]
-  }
-};
 
 class PollCreate extends Component {
   static navigationOptions = {
@@ -44,11 +22,12 @@ class PollCreate extends Component {
   };
 
   onSubmit = values => {
-    const { title, dateTimeStart, dateTimeEnd, pollType } = values;
+    const { title, description, dateTimeStart, dateTimeEnd, pollType } = values;
     console.tron.log('PollCreate submit', dateTimeStart, dateTimeEnd);
     const pollItems = pollConfigs[pollType];
     this.props.createPollRequest({
-      title,
+			title,
+			description,
       dateTimeStart: moment(dateTimeStart)
         .utc()
         .format(),
@@ -73,6 +52,7 @@ class PollCreate extends Component {
     const currentDateTime = this.getCurrentDateTime();
     const initialVaules = {
       initialValues: {
+        description: '',
         dateTimeStart: currentDateTime,
         dateTimeEnd: currentDateTime,
         pollType: Object.keys(pollConfigs.pollTypes)[0]
@@ -82,7 +62,7 @@ class PollCreate extends Component {
       <ViewContainer>
         <ReduxForm
           onSubmit={this.onSubmit}
-					title={{ label: 'Create Poll' }}
+          title={{ label: 'Create Poll' }}
           submitName={'Create Poll'}
           status={this.props.formStatus}
           {...initialVaules}
@@ -91,30 +71,18 @@ class PollCreate extends Component {
             name="title"
             placeholder="Title"
             autoCapitalize="words"
-						autoCorrect
+            autoCorrect
             validate={[required]}
           />
           <TextArea
             name="description"
-            placeholder="Description"
+            placeholder="Description (optional)"
             autoCapitalize="sentences"
-						autoCorrect
+            autoCorrect
           />
-					<CustomPicker 
-						name="pollType"
-						label="Poll Type"
-						items={pollConfigs.pollTypes}
-					/>
-					<DateTimePicker 
-            name="dateTimeStart"
-						label="Start"
-            minuteInterval={15}
-					/>
-					<DateTimePicker 
-            name="dateTimeEnd"
-						label="End"
-            minuteInterval={15}
-					/>
+          <CustomPicker name="pollType" label="Poll Type" items={pollConfigs.pollTypes} />
+          <DateTimePicker name="dateTimeStart" label="Start" minuteInterval={15} />
+          <DateTimePicker name="dateTimeEnd" label="End" minuteInterval={15} />
         </ReduxForm>
       </ViewContainer>
     );
