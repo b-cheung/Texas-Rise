@@ -9,7 +9,7 @@ import * as pollConfigs from './pollConfigs';
 function* fetchPollsFlow(action) {
   try {
     // determine fetch action and retrieve pollDocs
-		const pollDocs = yield call(fbAPI.fetchPolls);
+    const pollDocs = yield call(fbAPI.fetchPolls);
 
     // { pollId: data, ... }
     const polls = _.keyBy(
@@ -25,17 +25,11 @@ function* fetchPollsFlow(action) {
   }
 }
 
-function* appendFetchedPolls(fetchedPolls) {
-  // append fetched polls to existing polls
-  const polls = yield select(selectors.getPolls);
-  return { ...polls, ...fetchedPolls };
-}
-
 function* createPollFlow(action) {
   try {
     //poll config here or in poll create?
-		//custom poll?
-		//create poll document
+    //custom poll?
+    //create poll document
     const user = yield select(selectors.getUser);
     const data = { ...action.data, user };
 
@@ -64,18 +58,9 @@ function* votePollFlow(action) {
 
     yield call(fbAPI.votePoll, data);
 
-    //fetch updated pollDoc
-    const pollDoc = yield call(fbAPI.fetchPoll, data.pollId);
+    //fetch and append updated pollDoc
+    const polls = yield call(fetchAppendPoll, action.data);
 
-    const fetchedPoll = {
-      [pollDoc.id]: {
-        id: pollDoc.id,
-        ...pollDoc.data()
-      }
-    };
-
-		const polls = yield call(appendFetchedPolls, fetchedPoll);
-		
     yield put({ type: types.VOTE_POLL_SUCCESS, polls });
   } catch (submitError) {
     yield put({ type: types.VOTE_POLL_FAILURE, pollResults: null, submitError });
@@ -84,8 +69,10 @@ function* votePollFlow(action) {
 
 function* fetchPollResultsFlow(action) {
   try {
-    // determine fetch action and retrieve 
+    const polls = yield call(fetchAppendPoll, action.data);
+
     const pollResultDocs = yield call(fbAPI.fetchPollResults, action.data);
+
     // create new array of restructured pollItem objects
     const pollResults = _.keyBy(
       pollResultDocs.map(doc => {
@@ -94,10 +81,29 @@ function* fetchPollResultsFlow(action) {
       'id'
     );
 
-    yield put({ type: types.FETCH_POLL_RESULTS_SUCCESS, pollResults });
+    yield put({ type: types.FETCH_POLL_RESULTS_SUCCESS, polls, pollResults });
   } catch (error) {
     yield put({ type: types.FETCH_POLL_RESULTS_FAILURE, pollResults: null, error });
   }
+}
+
+function* fetchAppendPoll(pollId) {
+  const pollDoc = yield call(fbAPI.fetchPoll, pollId);
+
+  const fetchedPoll = {
+    [pollDoc.id]: {
+      id: pollDoc.id,
+      ...pollDoc.data()
+    }
+  };
+
+  return yield call(appendFetchedPolls, fetchedPoll);
+}
+
+function* appendFetchedPolls(fetchedPolls) {
+  // append fetched polls to existing polls
+  const polls = yield select(selectors.getPolls);
+  return { ...polls, ...fetchedPolls };
 }
 
 export function* watchPolls() {

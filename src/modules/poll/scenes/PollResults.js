@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { fetchPollResultsRequest } from '../actions';
-import { getUser, getPollResults } from '../selectors';
+import { getUser, getPollData, getPollResults } from '../selectors';
 
 class PollResults extends Component {
   componentWillMount() {
-    const pollId = this.props.pollData.id;
-    console.tron.log('PollResults componentWillMount', this.props.pollData, pollId);
+    const pollId = this.props.pollId;
     this.props.fetchPollResultsRequest(pollId);
   }
 
@@ -22,9 +21,10 @@ class PollResults extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
   return {
     user: getUser(state),
+    pollData: getPollData(state, props.pollId),
     pollResults: getPollResults(state)
   };
 };

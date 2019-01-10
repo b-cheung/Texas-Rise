@@ -2,32 +2,34 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { getUser, getPollData } from '../selectors';
+import { getUid, getPollData } from '../selectors';
 import PollVote from './PollVote';
 import PollResults from './PollResults';
 
 class PollView extends Component {
-  state = { pollId: this.props.navigation.getParam('pollId', null) };
+  state = {
+    pollId: this.props.navigation.getParam('pollId', null)
+  };
 
   render() {
-    const { pollData, user } = this.props;
+    const { pollData, uid } = this.props;
     // if voters array and user !== null
-    if (pollData.voters && user) {
+    if (pollData.voters) {
       for (const voterUid of pollData.voters) {
         // if user voted, display results
-        if (user.uid === voterUid) {
-          return <PollResults pollData={pollData} />;
+        if (uid === voterUid) {
+          return <PollResults pollId={this.state.pollId} />;
         }
       }
     }
-    return <PollVote pollData={pollData} />;
+    return <PollVote pollData={this.props.pollData} />;
   }
 }
 
 const mapStateToProps = (state, props) => {
   const pollId = props.navigation.getParam('pollId', null);
   return {
-    user: getUser(state),
+    uid: getUid(state),
     pollData: getPollData(state, pollId)
   };
 };

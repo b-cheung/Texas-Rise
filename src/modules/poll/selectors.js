@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { createSelector } from 'reselect';
 
 export const getUser = state => state.auth.user;
+export const getUid = state => state.auth.user.uid;
 
 export const getUserRole = state => state.auth.user.role;
 
