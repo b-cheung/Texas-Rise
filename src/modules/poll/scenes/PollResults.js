@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { fetchPollResultsRequest } from '../actions';
 import { getUser, getPollData, getPollResults } from '../selectors';
+import { ViewContainer } from '../../../components';
 
 class PollResults extends Component {
   componentWillMount() {
@@ -10,13 +11,22 @@ class PollResults extends Component {
     this.props.fetchPollResultsRequest(pollId);
   }
 
+  renderPollResults() {
+    if (this.props.pollResults) {
+      return Object.values(this.props.pollResults).map(item => {
+        return <Text key={item.id}>{`${item.itemName}: ${item.votes}`}</Text>;
+      });
+    }
+  }
+
   render() {
     const { pollData, pollResults } = this.props;
     console.tron.log('PollResults render', pollResults);
     return (
-      <View>
+      <ViewContainer>
         <Text>{pollData.title}</Text>
-      </View>
+        {this.renderPollResults()}
+      </ViewContainer>
     );
   }
 }
