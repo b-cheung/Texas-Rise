@@ -26,3 +26,10 @@ export const fetchPollResultsRequest = data => {
     data
   };
 };
+
+export const togglePollState = data => {
+	return {
+		type: types.TOGGLE_POLL_STATE_REQUEST,
+		data
+	};
+};

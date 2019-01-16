@@ -30,6 +30,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, polls: action.polls };
     case types.FETCH_POLL_RESULTS_SUCCESS:
       return { ...state, pollResults: action.pollResults };
+    case types.TOGGLE_POLL_STATE_SUCCESS:
+      return { ...state, polls: action.polls };
 
     default:
       return state;

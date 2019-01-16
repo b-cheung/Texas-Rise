@@ -7,7 +7,7 @@ import { getUser, getPollFeed } from '../selectors';
 import { CustomButton, Card, CardSection, Header } from '../../../components';
 import PollListItem from '../components/PollListItem';
 import NavigationService from '../../../core/navigation/NavigationService';
-import * as fbAuth from '../../../core/firebase/fbAuth';
+import { isAdminOrOfficer } from '../../../core/firebase/fbAuth';
 import theme from '../../../styles/theme';
 
 class PollFeed extends Component {
@@ -25,7 +25,7 @@ class PollFeed extends Component {
 
   renderCreateButton() {
     return (
-      fbAuth.isAdminOrOfficer(this.props.user) && (
+      isAdminOrOfficer(this.props.user) && (
         <CustomButton onPress={() => NavigationService.navigate('PollCreate')}>Create</CustomButton>
       )
     );

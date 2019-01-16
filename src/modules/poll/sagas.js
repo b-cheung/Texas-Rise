@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { all, call, put, select, takeLatest, take } from 'redux-saga/effects';
 import * as fbAPI from '../../core/firebase/fbAPI';
+import * as fbAuth from '../../core/firebase/fbAuth';
 import NavigationService from '../../core/navigation/NavigationService';
 import * as selectors from './selectors';
 import * as types from './actionTypes';
@@ -8,9 +9,22 @@ import * as pollConfigs from './pollConfigs';
 
 function* fetchPollsFlow(action) {
   try {
-    // determine fetch action and retrieve pollDocs
-    const pollDocs = yield call(fbAPI.fetchPolls);
+		// determine fetch action and retrieve pollDocs
+		const user = yield select(selectors.getUser);
+		const numPolls = 5;
+		let request = { numPolls };
 
+		let pollDocs;
+		if (fbAuth.isAdminOrOfficer(user)) {
+			pollDocs = yield call(fbAPI.fetchPolls, request);
+		} else {
+			pollDocs = yield call(fbAPI.fetchActivePolls);
+		}
+
+		const data = pollDocs.map(doc => {
+			return { id: doc.id, ...doc.data() };
+		});
+		console.tron.log('fetchPollsFlow', data);
     // { pollId: data, ... }
     const polls = _.keyBy(
       pollDocs.map(doc => {
@@ -106,11 +120,25 @@ function* appendFetchedPolls(fetchedPolls) {
   return { ...polls, ...fetchedPolls };
 }
 
+function* togglePollState(action) {
+	try {
+    yield call(fbAPI.togglePollState, action.data);
+
+    //fetch and append updated pollDoc
+    const polls = yield call(fetchAppendPoll, action.data.pollId);
+
+    yield put({ type: types.TOGGLE_POLL_STATE_SUCCESS, polls });
+  } catch (submitError) {
+    yield put({ type: types.TOGGLE_POLL_STATE_FAILURE, pollResults: null, submitError });
+  }
+}
+
 export function* watchPolls() {
   yield all([
     takeLatest(types.FETCH_POLLS_REQUEST, fetchPollsFlow),
     takeLatest(types.CREATE_POLL_REQUEST, createPollFlow),
     takeLatest(types.VOTE_POLL_REQUEST, votePollFlow),
-    takeLatest(types.FETCH_POLL_RESULTS_REQUEST, fetchPollResultsFlow)
+    takeLatest(types.FETCH_POLL_RESULTS_REQUEST, fetchPollResultsFlow),
+    takeLatest(types.TOGGLE_POLL_STATE_REQUEST, togglePollState)
   ]);
 }

@@ -124,8 +124,8 @@ export function createPollDoc(data) {
   return firestore
     .collection('polls')
     .add({
-			title,
-			description,
+      title,
+      description,
       dateTimeStart,
       dateTimeEnd,
       pollType,
@@ -165,10 +165,10 @@ export function fetchNewAnnouncements(data) {
 }
 
 export function fetchOldAnnouncements(data) {
-  const { userRole, num, timestamp } = data;
+  const { userRole, numAnnouncements, timestamp } = data;
   const queryRef = buildAnnouncementQuery(userRole)
     .startAfter(timestamp)
-    .limit(num);
+    .limit(numAnnouncements);
   return getDocs(queryRef);
 }
 
@@ -184,7 +184,16 @@ export function fetchPoll(pollId) {
   return getDoc(docRef);
 }
 
-export function fetchPolls() {
+export function fetchPolls(data) {
+  const { numPolls } = data;
+  const queryRef = firestore
+    .collection('polls')
+    .orderBy('timestamp', 'desc')
+    .limit(numPolls);
+  return getDocs(queryRef);
+}
+
+export function fetchActivePolls() {
   const queryRef = firestore
     .collection('polls')
     .where('active', '==', true)
@@ -240,6 +249,20 @@ export function votePoll(data) {
     })
     .then(() => {
       console.tron.log('Transaction successfully committed!');
+    })
+    .catch(error => {
+      throw error;
+    });
+}
+
+export function togglePollState(data) {
+  const { pollId, active } = data;
+  const pollRef = firestore.collection('polls').doc(pollId);
+
+  return pollRef
+    .update({ active })
+    .then(() => {
+      console.tron.log('Document successfully updated!');
     })
     .catch(error => {
       throw error;
